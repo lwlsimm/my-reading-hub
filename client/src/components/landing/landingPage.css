@@ -1,6 +1,5 @@
 .landingPage-container  {
   display: flex;
-  height: 100%;
 }
 
 .landing-box {
@@ -8,16 +7,17 @@
 }
 
 .landing-image {
-  max-width:100%;
-  height:100%;
-  width: auto;
   border-radius: 5px;
+  width: 100%;
 }
 
 .landing-text {
+  display: flex;
+  flex-direction: column;
   padding: 30px;
   text-align: center;
   font-family: 'Poppins', sans-serif;
+  
 }
 
 .landing-text p {
