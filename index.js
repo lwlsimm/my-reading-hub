@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const PORT = process.env.PORT || 5500;
-const pool = require('./server/database/db')
 
 //Middleware//
   //Cors allows cross-origin resoucres
