@@ -1,38 +1,84 @@
-.App {
+:root {
+  --danger: #db5461;
+  --danger-selected: #d83747;
+  --blue-light: #dbeefa;
+  --blue: #aac7db;
+  --blue-selected: #89b0ce;
+  --green: #45c03e;
+  --green-selected: #24a11d;
+  --olive-light: #dfecb3;
+  --olive: #BADA55;
+  --olive-selected: #a6c443;
+  --yellow: #FFCA3A;
+  --yellow-selected: #dfae27;
+  --ruby: #A65089;
+  --ruby-selected:#8F3C73;
+}
+
+body{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0; 
+  font-family: 'Poppins', sans-serif;
+}
+
+.AppPage {
+  max-width: 1200px;
+  align-items: center;
+  margin: auto;
+}
+
+.Page {
+  width: 100%;
+  height: 88vh;
+}
+
+.btn {
+  font-size: 1em;
   text-align: center;
+  width: 200px;
+  color: white;
+  background-color: var(--ruby);
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin: 5px 5px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.btn:hover{
+  background-color: var(--ruby-selected);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.form {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.input {
+  width: 80%;
+  margin: 15px 0;
+  height: 2em;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.submit-btn {
+  padding: 0;
+  border: 0;
+  height: 40px;
+  width: 80%;
+  margin: 20px 0px;
+  background-color: var(--green);
+}
+.submit-btn:hover {
+  background-color: var(--green-selected);
+}
+
+@media only screen and (max-width: 650px) {
+  .Page {
+    margin-top: 10px;
   }
 }

@@ -1,0 +1,59 @@
+.landingPage-container  {
+  display: flex;
+  height: 100%;
+}
+
+.landing-box {
+  width: 50%;
+}
+
+.landing-image {
+  max-width:100%;
+  height:100%;
+  width: auto;
+  border-radius: 5px;
+}
+
+.landing-text {
+  padding: 30px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.landing-text p {
+  text-align: justify;
+}
+
+.landing-title {
+  margin-top: 50px;
+}
+
+.bookPileImg {
+  width: 200px;
+  border-radius: 20px;
+}
+
+.started {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  background-color: var(--olive-light);
+}
+
+.started:hover {
+  background-color: var(--olive-selected);
+}
+
+@media only screen and (max-width: 800px) {
+  .landing-pic-conatiner {
+    display: none;
+  }
+  .landing-text {
+    width: 100%;
+  }
+  .credit {
+    display: none;
+  }
+}

@@ -1,0 +1,33 @@
+.account-page-grid {
+  display: grid;
+  grid-template-columns: 1fr / 3fr;
+}
+
+.account-sidebar {
+  grid-column: 1 / span 1;
+  border-right: black 1px solid;
+  width: 280px;
+}
+
+.account-book-container {
+  grid-column: 2 / span 1;
+}
+
+.account-page-btn {
+  width: 260px;
+  background-color: var(--blue);
+  margin-top: 40px;
+  margin-bottom: 40px;
+  text-align: left;
+  justify-content: left;
+  padding-left: 10px;
+}
+.account-page-btn:hover {
+  background-color: var(--blue-selected);
+}
+
+.sidebar-icon {
+  margin-right: 15px;
+}
+
+

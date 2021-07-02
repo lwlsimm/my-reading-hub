@@ -1,0 +1,80 @@
+.LoginPage {
+  display: flex;
+}
+
+.halfPage {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.loginContainer {
+  border-right: 1px black solid;
+}
+
+.sectionDivider {
+  width: 90%;
+  border-top: 1.5px black solid;
+  align-self: center;
+}
+
+.googleIcon {
+  width: 200px;
+  border-radius: 50%;
+  background-color: var(--blue);
+}
+
+.googleIcon:hover {
+  background-color: var(--blue-selected);
+}
+
+.regIcon {
+  background-color: var(--olive);
+}
+
+.regIcon:hover {
+  background-color: var(--olive-selected);
+}
+
+.loginBookImg {
+  height: 75px;
+}
+
+.registrationPasswordContainer {
+  display: flex;
+  width: 82%;
+  justify-content: center;
+}
+.input-registration-pw {
+  width: 50%;
+  margin-right: 5px;
+}
+
+
+@media only screen and (max-width: 750px) {
+  .halfPage {
+    width: 100%;
+  }
+  .LoginPage {
+    flex-direction: column;
+  }
+  .loginContainer {
+    border-right: none;
+  }
+  .sectionDivider {
+    border-top: none;
+  }
+  .regDivider {
+    border-top: 1px black solid;
+    width: 75%;
+    align-self: center;
+  }
+  .googleIcon {
+    width: 100px;
+    margin-bottom: 30px;
+  }
+}
+
+
+
