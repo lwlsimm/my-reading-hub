@@ -5,7 +5,7 @@ const pool = new Pool({
   password: "2151",
   host: "localhost",
   port: 5432,
-  database: 'e_comm_app_may21'
+  database: 'my-reading-hub'
 });
 
 module.exports = pool;
