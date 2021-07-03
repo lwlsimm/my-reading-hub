@@ -1,15 +1,46 @@
 const pool = require('../database/db');
+const { sendMail } = require('../email/email');
+const { registrationEmailPlainText, registrationHTML } = require('../email/emailText')
 
 const isValidationStillValid = async (email, code) => {
-  const timeNow = Date.now();
-  const validationData = await pool.query('SELECT user_email, expiry FROM email_verification WHERE verification_code = $1', [code]);
-  const { user_email, expiry } = await validationData.rows[0];
-  if (user_email === email && timeNow < expiry) {
-    const updatingValidation = await pool.query('UPDATE users SET verified = true WHERE email = $1',[email])
-    return true;
+  try {
+    const timeNow = Date.now();
+    const validationData = await pool.query('SELECT user_email, expiry FROM email_verification WHERE verification_code = $1', [code]);
+    const { user_email, expiry } = await validationData.rows[0];
+    if (user_email === email && timeNow < expiry) {
+      const updatingValidation = await pool.query('UPDATE users SET verified = true WHERE email = $1 RETURNING id',[email]);
+      console.log(await updatingValidation.rows[0]['id'])
+      if(await updatingValidation.rows[0]['id']) {
+        return true;
+      } else {
+        return false
+      }
+    } else {
+      return false;
+    }
+  } catch (error) {
+    return false;
   }
-  return false;
 };
 
+async function resendVerificationEmail (email) {
+  try {
+    const expiry = Date.now() + (1000 * 60 * 60 *2);
+    const code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    const addEmailVerificationToDb = await pool.query("UPDATE email_verification SET expiry = $1, verification_code = $2 WHERE user_email = $3 RETURNING id", [expiry, code, email]);
+    console.log(await addEmailVerificationToDb.rows[0])
+    const verificationId = await addEmailVerificationToDb.rows[0]
+    
+    if(!verificationId) {
+      throw new Error;
+    }
+    const verificationLink = `http://localhost:5500/api/verify/${email}/${code}`;
+    sendMail(email, registrationEmailPlainText(verificationLink), registrationHTML(verificationLink));
+    return
+  } catch (error) {
+    return new Error
+  }
+}
 
-module.exports = { isValidationStillValid }
+
+module.exports = { isValidationStillValid, resendVerificationEmail }

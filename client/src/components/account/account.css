@@ -5,7 +5,6 @@
 
 .account-sidebar {
   grid-column: 1 / span 1;
-  border-right: black 1px solid;
   width: 280px;
 }
 

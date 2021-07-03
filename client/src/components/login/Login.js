@@ -1,9 +1,9 @@
-import './login.css'
+import './login.css';
 import google from '../../assets/images/google-plus.png';
 import { useState } from 'react'
 
 
-import registerUser from '../../functions/registrationFunctions';
+const { registerUser } = require('../../functions/registrationFunctions');
 
 function Login () {
 

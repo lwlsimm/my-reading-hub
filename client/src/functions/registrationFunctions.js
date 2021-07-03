@@ -8,7 +8,7 @@ const validateEmail = (email) => {
   return false
 }
 
-const registerUser = async (e) => {
+async function registerUser (e) {
   const email = e.target.email.value;
   const password = e.target.password.value;
   const reenteredPassword = e.target.reenteredpassword.value;
@@ -38,5 +38,16 @@ const registerUser = async (e) => {
   }
 }
 
+async function resendVerificationEmail (email) {
+  const path = keys.REVERIFY_PATH + email;
+  axios({
+    method: 'POST',
+    url: path,
+    data: {
+      email: email
+    }
+  })
+}
 
-export default registerUser
+
+export { registerUser, resendVerificationEmail }

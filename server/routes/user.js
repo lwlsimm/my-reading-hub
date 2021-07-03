@@ -1,8 +1,5 @@
 const userRouter = require('express').Router();
-const pool = require('../database/db');
 require('dotenv').config();
-const nodemailer = require("nodemailer");
-const { google } = require('googleapis');
 const { sendMail } = require('../email/email')
 
 module.exports = userRouter;

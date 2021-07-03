@@ -21,10 +21,10 @@ function Nav() {
       <img className="bookImg" src={bookImg} alt="stack of books" onClick={()=> history.push(landingPath)}/>
       <h1 className="navTitle" onClick={()=> history.push(landingPath)}><span>M</span>Y <span>R</span>EADING <span>H</span>UB</h1>
       <div className="navButtonContainer">
-        <div className="btn" onClick={()=> history.push(loginOrMyAccountPath)}>
+        <div className="btn nav-btn" onClick={()=> history.push(loginOrMyAccountPath)}>
           {accountButtonWording}
         </div>
-        <div className="btn">
+        <div className="btn nav-btn">
           ABOUT
         </div>
       </div>

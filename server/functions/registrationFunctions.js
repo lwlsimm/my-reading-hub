@@ -3,6 +3,7 @@ require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const pool = require('../database/db');
 
+
 //Check if the user already exists
 async function checkUserExists (req, res, next) {
   try {

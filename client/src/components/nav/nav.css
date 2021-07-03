@@ -1,11 +1,9 @@
 .NavBar {
   width: 100%;
-  height: 10vh;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
@@ -51,6 +49,22 @@
     margin-right: 10px;
   }
   .NavBar {
-    justify-content: center;
+    justify-content: space-evenly;
+  }
+  .nav-btn {
+    width: 100px;
+    font-size: 0.75em;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .NavBar {
+    display: grid;
+    grid-template: 1fr 1fr / 1fr 2fr;
+    align-items: center;
+    justify-items: center;
+  }
+  .navButtonContainer {
+    grid-column: 1 / span 2;
   }
 }
