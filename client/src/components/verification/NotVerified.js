@@ -4,7 +4,8 @@ const { resendVerificationEmail } = require('../../functions/registrationFunctio
 
 const NotVerified = () => {
 
-  const email = "lwlsimmons@gmail.com"
+  const searchparams = new URLSearchParams(window.location.search);
+  const email = searchparams.get('email');
 
   return (
     <div className="verifyPage">

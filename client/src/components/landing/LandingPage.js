@@ -2,15 +2,27 @@ import './landingPage.css'
 import landingbg from '../../assets/images/landing-bg.jpg';
 import books from '../../assets/images/book-pile.png';
 import { useHistory } from 'react-router-dom';
-import {useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { axios } from 'axios';
+import { authenticateSession } from '../../functions/loginFunctions';
+import { logout } from '../../state/actions';
 
 function LandingPage () {
 
-  //Need to add logic to check if logged in or not
-  const [loggedIn, setloggedIn] = useState(false);
+  const loggedIn = useSelector(state => state.loginReducer.loggedIn);
+  const token = useSelector(state => state.loginReducer.token);
+  const dispatch = useDispatch();
 
   const history = useHistory();
   const loginOrMyAccountPath = loggedIn? "/account" : "/login";
+
+  useEffect(async ()=> {
+    const isSessionVald = await authenticateSession(token);
+    if(await isSessionVald === false) {
+      dispatch(logout());
+    }
+  },[])
 
   return (
     <div className="Page">

@@ -1,12 +1,10 @@
 const verifyRouter = require('express').Router();
 const pool = require('../database/db');
-const {resendVerificationEmail} = require('../functions/verificationFunctions')
+const {resendVerificationEmail} = require('../functions/verificationFunctions');
+const { keys } = require('../keys/keys')
 module.exports = verifyRouter;
 
 const { isValidationStillValid } = require('../functions/verificationFunctions')
-
-const successRoute = 'http://localhost:3000/verificationsuccess';
-const failRoute = 'http://localhost:3000/verificationfail';
 
 verifyRouter.post('/resend/:email', async(req, res)=> {
   try {
@@ -23,14 +21,14 @@ verifyRouter.get('/:email/:code', async(req, res)=> {
     const { email, code } = req.params;
     const isVerificationValid = await isValidationStillValid(email,code);
     if(await isVerificationValid) {
-      res.redirect(successRoute).send()
+      res.redirect(keys.SUCCESS_ROUTE).send()
     } else {
       resendVerificationEmail(email)
-      res.redirect(failRoute)
+      res.redirect(keys.FAIL_ROUTE)
     }
   } catch (error) {
     resendVerificationEmail(email)
-    res.redirect(failRoute)
+    res.redirect(keys.FAIL_ROUTE)
   }
 });
 

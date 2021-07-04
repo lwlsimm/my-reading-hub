@@ -1,12 +1,7 @@
 import axios from 'axios';
 import { keys } from '../assets/keys/keys';
+const { validateEmail } = require('./commonFunctions')
 
-const validateEmail = (email) => {
- if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)){
-    return true
-  }
-  return false
-}
 
 async function registerUser (e) {
   const email = e.target.email.value;
@@ -32,6 +27,8 @@ async function registerUser (e) {
         password: password
       }
     })
+    const response = await data;
+    return response;
   } catch (err) {
     errorMessage = "There was problem registering.  Perhaps you already have an account? If not, please contact us via the About button above."
     throw Error(errorMessage)

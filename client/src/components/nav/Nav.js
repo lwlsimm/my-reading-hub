@@ -1,20 +1,17 @@
 import bookImg from '../../assets/images/bookshelf.png'
 import './nav.css';
-import {useState} from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function Nav() {
 
-
-  const [loggedIn, setloggedIn] = useState(true);
-
-  //Links
   const history = useHistory();
-  const landingPath = "/"
-  const loginOrMyAccountPath = loggedIn? "/account" : "/login";
+  const landingPath = "/";
 
-  //Need to add functionality to check whether logged in or not
-  const accountButtonWording = loggedIn ? 'MY ACCOUNT': "LOGIN OR REGISTER"
+  const loggedIn = useSelector(state => state.loginReducer.loggedIn);
+
+  const loginOrMyAccountPath = loggedIn? "/account" : "/login";
+  const accountButtonWording = loggedIn ? 'MY ACCOUNT': "LOGIN OR REGISTER";
 
   return (
     <div className="NavBar">
