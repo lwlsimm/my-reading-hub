@@ -1,6 +1,9 @@
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addSelectedBook } from '../../state/actions';
+import bookImg from '../../assets/images/defaultSmallBook.png'
+import './book.css'
+import { extractItemFromObject } from '../../functions/commonFunctions';
 
 function BookSearchResult (props) {
 
@@ -9,22 +12,17 @@ function BookSearchResult (props) {
   const selectedBookPath = '/selectedBook'
 
   const selectBook = () => {
-    dispatch(addSelectedBook(props.item))
+    dispatch(addSelectedBook(props.item));
     history.push(selectedBookPath)
   }
 
+  const thumbnail = extractItemFromObject([`imageLinks`,`smallThumbnail`],props.item,bookImg)
   
-  let thumbnail
-  try {
-    thumbnail = props.item.imageLinks['smallThumbnail']
-  } catch {
-    thumbnail = null
-  }
 
   return (
-    <div key={props.item.key} className="BookSearchResult">
+    <div key={props.item.key} className="BookSearchResult" onClick={()=>{selectBook()}}>
       {/* <div className="btn bookSearchBtn" onClick={()=>selectBook()}>Select Book</div> */}
-      <img src={thumbnail}/>
+      <img className="smallBookImg" src={thumbnail}/>
       <div className="searchResultText">
         <p>{props.item.title}</p>
         <p>{props.item.authors}</p>

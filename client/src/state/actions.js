@@ -24,3 +24,16 @@ export const deleteSelectedBook = () => {
   }
 }
 
+export const loadSearchItems = item => {
+  return {
+    type: 'search/loadSearchItems',
+    payload: item
+  }
+}
+
+export const deleteSearchItems = () => {
+  return {
+    type: 'search/deleteSearchItems'
+  }
+}
+

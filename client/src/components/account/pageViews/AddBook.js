@@ -3,22 +3,26 @@ import './addBook.css';
 import { useState } from 'react';
 import BookSearchResult from '../../book/BookSearchResult';
 import { returnSearchResults } from '../../../functions/externalApiFunctions'
-
+import { covertSearchString } from '../../../functions/commonFunctions'
+import { useSelector, useDispatch } from 'react-redux';
+import { loadSearchItems, deleteSearchItems } from '../../../state/actions'
 
 function AddBook () {
 
-  const [ searchResults,setSearchResults ] = useState({})
+  const dispatch = useDispatch();
+
+  const searchResults = useSelector(state => state.searchReducer);
 
   const handleOpenLibrarySearch = async (e) => {
     e.preventDefault()
-    setSearchResults({})
+    dispatch(deleteSearchItems())
     try {
-      const title = e.target.search_title.value.replaceAll(" ", "+")
-      const author = e.target.search_author.value.replaceAll(" ", "+")
+      const title = covertSearchString(e.target.search_title.value);
+      const author = covertSearchString(e.target.search_author.value);
       const results = await returnSearchResults(title, author);
-      setSearchResults(await results)
+      dispatch(loadSearchItems(await results))
     } catch (error) {
-      setSearchResults({})
+      return
     }
   }
 
@@ -37,7 +41,7 @@ function AddBook () {
           </form>
         </div>
         <div className="openLibraryAddView addBookSection">
-        <h3>From Open Libarary</h3>
+        <h3>From Google Books</h3>
           <form className="addBookForm" onSubmit={e=>handleOpenLibrarySearch(e)}>
             <label for="search_title">Book Title</label>
             <input className="input" name="search_title" id="search_title" placeholder="Enter book title" required/>

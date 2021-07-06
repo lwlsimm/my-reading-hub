@@ -76,6 +76,29 @@ body{
   background-color: var(--green-selected);
 }
 
+.flexBoxByCols {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.flexBoxByRows {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.mainBookImg {
+  min-height: 120px;
+  max-height: 250px;
+  max-width: 40vw;
+}
+
+
 @media only screen and (max-width: 650px) {
   .Page {
     margin-top: 10px;
