@@ -2,3 +2,4 @@ client/node_modules/
 .vscode/
 node_modules/
 .env
+client/src/assets/keys/privateKeys

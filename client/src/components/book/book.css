@@ -1,0 +1,71 @@
+.bookPage-row1-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  width: 50%;
+}
+.bookPage-row1{
+  width: 100%;
+  justify-content: space-evenly;
+}
+.additionalCover {
+  max-width: 125px;
+  margin: 5px;
+}
+.additionalCover:active {
+  box-shadow: 5px 5px var(--ruby-selected);
+  transform: translateY(10px);
+}
+
+.selectedCover {
+  height: 200px;
+}
+
+.additionalCoverText{
+  margin: 0;
+  padding: 0;
+}
+
+.additionalArtContainer {
+  width: 100%;
+  padding: 10px;
+  border: black 1px solid;
+}
+
+.backToResults {
+  margin-bottom: 30px;
+  background-color: white;
+  color: black;
+  font-size: 0.75em;
+}
+.backToResults:hover{
+  color: white;
+  background-color: black;
+}
+
+.backArrow {
+  height: 25px;
+  padding: 5px;
+}
+
+.btn-smaller-text {
+  font-size: 0.85em;
+  text-decoration: none;
+}
+
+.book-main-details-text{
+  margin: 5px 0;
+  padding: 0;
+}
+
+.rp-Container{
+  width: 100%;
+}
+
+.rp-Col {
+  width: 50%;
+}
+.rp-Row{
+  width: 100%;
+}
