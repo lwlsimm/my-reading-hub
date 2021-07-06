@@ -8,7 +8,8 @@ import VerificationSuccess from './components/verification/VerifticationSuccess'
 import VerificationFail from './components/verification/VerifticationFail';
 import NotVerified from './components/verification/NotVerified'
 import FourOhFour from './components/404/FourOhFour';
-import RegisterSuccess from './components/login/registerPages/RegisterSuccess'
+import RegisterSuccess from './components/login/registerPages/RegisterSuccess';
+import Book from './components/book/Book'
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/404" exact component={FourOhFour}/>
         <Route path="/notverified" component={NotVerified}/>
         <Route path="/registersuccess" exact component={RegisterSuccess}/>
+        <Route path="/selectedBook" exact component={Book}/>
       </Switch>
     </div>
     </Router>

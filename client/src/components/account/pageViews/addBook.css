@@ -1,0 +1,94 @@
+/* AddBook */
+.addBookPage {
+  display: flex;
+  padding: 10px;
+}
+
+.addBookSection {
+  padding: 5px;
+  text-align: center;
+  min-height: 500px;
+  min-width: 30vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.manualAddView {
+  border-right: black 1px solid;
+}
+
+.openLibraryAddView {
+  
+}
+
+.addBookForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.addBookForm input {
+  margin: 2px 0;
+}
+.addBookForm label {
+  margin: 8px 0;
+}
+
+.add-book-submit-btn {
+  margin: 20px 0 !important;
+}
+
+.searchResultsBox {
+  width: 100%;
+  margin: 2px;
+  padding: 10px 0;
+  border: black 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Book Search Results */
+
+.BookSearchResult {
+  width: 100%;
+  border-bottom: black 1px solid;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.BookSearchResult:hover {
+  background-color: var(--yellow);
+}
+
+.smallBookImg {
+  height: 75px
+}
+
+.bookSearchBtn {
+  font-size: 14px;
+}
+
+.searchResultText {
+  text-align: center;
+  justify-self: center;
+  width: 100%;
+  padding: 0 5px;
+}
+
+@media only screen and (max-width: 800px) {
+  .addBookPage {
+    flex-direction: column;
+  }
+  .manualAddView {
+    border-right: none;
+  }
+  .addBookSection {
+    width: 100%;
+    min-height: 0;
+  }
+}
+
