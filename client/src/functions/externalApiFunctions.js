@@ -18,20 +18,22 @@ const returnSearchResults = async(title, author) => {
   }
 }
 
-const OLAdditionalCoverArtFinder = async (title, author) => {
+const OLAdditionalCoverArtFinder = async (title) => {
   try {
     const isbnArray = []
     const verifiedLinks = []
-    const path = keys.OL_SEARCH_PATH + title + "&author=" + author;
+    const path = keys.OL_SEARCH_PATH + title;
     const results = await axios.get(path);
     const resultsArray = await results.data.docs;
     await resultsArray.forEach(element => {
-      const elementIsbnArray = element.isbn;
-      elementIsbnArray.forEach(isbn => {
-        if(!isbnArray.includes(isbn)) {
-          isbnArray.push(isbn)
-        }
-      })
+      if(element.isbn) {
+       const elementIsbnArray = element.isbn;
+        elementIsbnArray.forEach(isbn => {
+          if(!isbnArray.includes(isbn)) {
+            isbnArray.push(isbn)
+          }
+        }) 
+      }
     });
     isbnArray.forEach(isbn => {
       const img = new Image();

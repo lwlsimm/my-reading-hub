@@ -1,17 +1,12 @@
-.bookPage-row1-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  align-items: center;
-  width: 50%;
-}
+
 .bookPage-row1{
   width: 100%;
   justify-content: space-evenly;
 }
+
 .additionalCover {
-  max-width: 125px;
-  margin: 5px;
+  max-width: 50px;
+  margin: 3px;
 }
 .additionalCover:active {
   box-shadow: 5px 5px var(--ruby-selected);
@@ -31,6 +26,7 @@
   width: 100%;
   padding: 10px;
   border: black 1px solid;
+  margin: 10px 0;
 }
 
 .backToResults {
@@ -41,7 +37,6 @@
 }
 .backToResults:hover{
   color: white;
-  background-color: black;
 }
 
 .backArrow {
@@ -59,13 +54,110 @@
   padding: 0;
 }
 
-.rp-Container{
-  width: 100%;
+.book-details-col {
+  margin-bottom: 20px !important;
 }
 
-.rp-Col {
-  width: 50%;
-}
-.rp-Row{
+.form-section {
   width: 100%;
+  justify-content: space-evenly;
+  margin-bottom: 20px;
+  align-items: flex-start;
+}
+.radio-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 5px 0;
+  align-items: center;
+}
+.radio-column {
+  justify-content: space-evenly;
+  width: ;
+}
+.book-page-input {
+  width: 150px;
+  margin: 0;
+}
+
+.book-page-label {
+  width: 125px;
+  font-size: 0.8em;
+  text-align: right;
+  margin-right: 15px;
+}
+
+.or{
+  font-weight: bold;
+}
+.radio-title {
+  margin: 0;
+}
+.rp-error-msg {
+  max-width: 700px;
+  text-align: center;
+  margin: 0 auto;
+  font-weight: bold;
+}
+
+.reading-plan-explanation {
+  font-size: 12px;
+  padding: 5px;
+  max-width: 800px;
+  text-align: center;
+}
+
+.book-page-submit {
+  justify-self: center;
+  margin: auto;
+
+}
+
+.rp-form {
+  margin-bottom: 25px;
+  background-color: var(--yellow-light);
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 800px;
+}
+
+.breakLine {
+  margin: 20px 0;
+  width: 150px;
+  border-bottom: 1px black solid;
+}
+
+.makeFirstLetterUpper {
+  text-transform: capitalize;
+}
+
+.mediaOnly {
+  display: none;
+}
+
+.red-border {
+  border: var(--danger) 2px solid;
+}
+.listItem-problem {
+  color: var(--danger-selected);
+  font-weight: bold;
+  list-style: none;
+}
+.problem-list {
+  max-width: 100%;
+  max-width: 800px;
+}
+
+@media only screen and (max-width: 800px) {
+  .form-section {
+
+  }
+  .radio-column {
+    margin-bottom: 15px;
+    text-align: center;
+    justify-content: center;
+  }
+  .mediaOnly {
+    display: block;
+  }
 }

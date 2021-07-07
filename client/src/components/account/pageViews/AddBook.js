@@ -1,29 +1,37 @@
 import './pageViews.css';
 import './addBook.css';
-import { useState } from 'react';
 import BookSearchResult from '../../book/BookSearchResult';
-import { returnSearchResults } from '../../../functions/externalApiFunctions'
-import { covertSearchString } from '../../../functions/commonFunctions'
+import { returnSearchResults } from '../../../functions/externalApiFunctions';
+import { covertSearchString } from '../../../functions/commonFunctions';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadSearchItems, deleteSearchItems } from '../../../state/actions'
+import { loadSearchItems, deleteSearchItems } from '../../../state/actions';
+import { useState } from 'react';
 
 function AddBook () {
+
+  const [inSearchMode, setInSearchMode] = useState(false)
 
   const dispatch = useDispatch();
 
   const searchResults = useSelector(state => state.searchReducer);
 
   const handleOpenLibrarySearch = async (e) => {
-    e.preventDefault()
-    dispatch(deleteSearchItems())
+    e.preventDefault();
+    setInSearchMode(true)
+    dispatch(deleteSearchItems());
     try {
       const title = covertSearchString(e.target.search_title.value);
       const author = covertSearchString(e.target.search_author.value);
       const results = await returnSearchResults(title, author);
-      dispatch(loadSearchItems(await results))
+      dispatch(loadSearchItems(await results));
     } catch (error) {
-      return
+      return;
     }
+    setInSearchMode(false)
+  }
+
+  const handleClearSearch = () => {
+    dispatch(deleteSearchItems());
   }
 
   return (
@@ -47,10 +55,17 @@ function AddBook () {
             <input className="input" name="search_title" id="search_title" placeholder="Enter book title" required/>
             <label for="search_author">Author Name</label>
             <input className="input" name="search_author" id="search_author" placeholder="Enter book author" required/>
+            {inSearchMode?
+            <input type="submit" className="btn submit-btn add-book-submit-btn btn-inSearchMode" value="---SEARCHING---" disabled/>
+            :
             <input type="submit" className="btn submit-btn add-book-submit-btn" value="Search"/>
+            }
+            
+            
           </form>
           <div className="searchResultsBox">
-            <h4>Search Results:</h4>
+            <h4 className="search-title">Search Results:</h4>
+            <div className="btn submit-btn add-book-submit-btn clear-btn" onClick={()=>handleClearSearch()}>Clear Search</div>
             <div className="searchResultsInnerBox">
               {searchResults.length > 1? 
                 searchResults.map(item => <BookSearchResult item={item.volumeInfo}/> )
