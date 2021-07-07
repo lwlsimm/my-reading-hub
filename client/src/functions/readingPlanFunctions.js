@@ -14,7 +14,7 @@ export function readingPlanValidateInputs (e, measure) {
     const problemAreas = []
     if(!startDate || !startAt || !endAt) {
         problemAreas.push('startAt','endAt');
-        errorMessage.push('It looks like the data you provided was incomplete...  Please try again. ')
+        errorMessage.push('It looks like the data you provided was incomplete... Please try again. ')
     }
     if(per_day && end_date) {
         errorMessage.push(`You can only enter either '${measureCapitalized} Per Day' or 'End Date' - not both.`)
@@ -48,7 +48,7 @@ export function readingPlanValidateInputs (e, measure) {
     if(problemAreas.length > 0) {
       return {validated: false, errorMessage: errorMessage, problemAreas: problemAreas}
     } else {
-      return {validated: false, errorMessage: null, problemAreas: []}
+      return {validated: true, errorMessage: null, problemAreas: []}
     }
   } catch(err) {
         return {validated: false, errorMessage: 'Hmmm... For some reason, it looks like there was an error.  Please make sure all details are enetered correctly and contact us via the About button at the top of the page if the problem persists.'}
