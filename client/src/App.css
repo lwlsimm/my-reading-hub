@@ -9,6 +9,7 @@
   --olive-light: #dfecb3;
   --olive: #BADA55;
   --olive-selected: #a6c443;
+  --yellow-light: #f5e0a7;
   --yellow: #FFCA3A;
   --yellow-selected: #dfae27;
   --ruby: #A65089;
@@ -48,6 +49,11 @@ body{
 
 .btn:hover{
   background-color: var(--ruby-selected);
+}
+
+.btn:active {
+  box-shadow: 3px 3px var(--ruby-selected);
+  transform: translateY(2px);
 }
 
 .form {
@@ -98,6 +104,16 @@ body{
   max-width: 40vw;
 }
 
+.btn-inSearchMode {
+  background-color: gray;
+}
+.btn-inSearchMode:hover {
+  background-color: gray;
+}
+
+.red-text {
+  color: var(--danger);
+}
 
 @media only screen and (max-width: 650px) {
   .Page {

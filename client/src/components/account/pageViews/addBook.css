@@ -43,11 +43,21 @@
   width: 100%;
   margin: 2px;
   padding: 10px 0;
-  border: black 1px solid;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+.search-title {
+  margin: 5px 0;
+}
+
+.clear-btn {
+  background-color: var(--yellow-selected);
+  margin:0;
+}
+.clear-btn:hover {
+  background-color: var(--danger);
 }
 
 /* Book Search Results */

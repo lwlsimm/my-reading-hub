@@ -22,6 +22,8 @@
   font-family: 'Yanone Kaffeesatz', sans-serif;
   font-size: 3em;
   text-align: center;
+  padding: 2px 10px;
+  border-radius: 5px;
 }
 
 .navTitle span {
@@ -30,6 +32,7 @@
 
 .navTitle:hover{
   color: var(--ruby-selected);
+  background-color: var(--yellow);
 }
 
 .navButtonContainer {
