@@ -37,3 +37,17 @@ export const deleteSearchItems = () => {
   }
 }
 
+export const addReadingPlan = plan => {
+  return {
+    type: 'plan/addReadingPlan',
+    payload: plan
+  }
+}
+
+export const removeReadingPlan = planId => {
+  return {
+    type: 'plan/removeReadingPlan',
+    payload: planId
+  }
+}
+

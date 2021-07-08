@@ -15,6 +15,7 @@ function authenticateToken(req, res, next) {
         if(err) {
           throw new Error;
         }
+        req.body.user = user;
         req.body.authenticated = true;
         next()
       }

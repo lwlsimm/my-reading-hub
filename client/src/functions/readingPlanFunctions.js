@@ -1,8 +1,40 @@
-export function constructReadingPlan (e, measure) {
+import { ReadingPlan } from '../classes/ReadingPlan';
+import axios from 'axios';
+import { keys } from '../assets/keys/keys';
+
+export function constructReadingPlan (e, measure, bookObj) {
   //extracting variables
-  const {startDate,startAt,endAt,per_day, end_date, perDayType} = extractReadingPlanVariables(e);
-  //work ou the number of days
-  
+  const { startDate,startAt,endAt,per_day, end_date, perDayType } = extractReadingPlanVariables(e);
+  const id = createBookId(bookObj);
+  //create new Reading Plan object
+  const readingPlanObj = new ReadingPlan(id, startDate, startAt, endAt, per_day, end_date, perDayType, measure, bookObj);
+  return readingPlanObj;
+}
+
+export async function sendNewPlanToServer (plan, token) {
+  const data = await axios({
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${token}`
+    },
+    url: keys.ADD_NEW_PLAN_TO_DB_PATH,
+    data: {
+      plan: {
+        plan_details: plan,
+        plan_scheme: plan.create_new_plan
+      }
+    }
+  });
+  return data.data
+}
+
+function createBookId (bookObj) {
+  const timeNow = new Date();
+  const timeInMss = timeNow.getTime();
+  const title = bookObj.title.replaceAll(/[.,\/#'!$%\^&\*;:{}=\-_`~()]/g,"").replaceAll(" ","");
+  const randomNumber = Math.floor(Math.random() * 2000000);
+  const id = String(`${timeInMss}${title}${randomNumber}`);
+  return id;
 }
 
 export function readingPlanValidateInputs (e, measure) {
@@ -22,7 +54,7 @@ export function readingPlanValidateInputs (e, measure) {
     }
     if(!Number.isInteger(Number(per_day))){
       problemAreas.push('per_day')
-      errorMessage.push(`The value for '${measure} Per Day' must be a whole number.`)
+      errorMessage.push(`The value for '${measureCapitalized} Per Day' must be a whole number.`)
     }
     if(end_date && (end_date < startDate || end_date < dateToday)) {
         if(end_date < dateToday ) {
