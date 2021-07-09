@@ -7,7 +7,9 @@ const PORT = process.env.PORT || 5500;
   //Cors allows cross-origin resoucres
 app.use(cors());
   //Json parses the body
-app.use(express.json());
+app.use(express.json({limit: '50mb'}));
+
+
 
 const apiRouter = require('./server/api')
 app.use('/api', apiRouter)

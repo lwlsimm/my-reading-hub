@@ -17,6 +17,25 @@ const planReducer = (state = initialState, action) => {
           ]
         }
       }
+      case 'plan/readingCompleted': {
+        const { planId, day } = action.payload;
+        return {
+          plans: [
+            ...state.plans.map(item => {
+              if(item.id !== planId) {
+                return item
+              } else {
+                return {...item, ...item.plan_scheme[day].completed = true}
+              }
+            })
+          ]
+        }
+      }
+      case 'plan/clearPlans': {
+        return {
+          plans: []
+        }
+      }
       default: {
         return state;
       }

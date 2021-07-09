@@ -54,10 +54,11 @@ function Book() {
   const handleReadingPlanError = (msg) => {
     setReadingPlanError(msg);
     setInSubmitMode(false);
-  }
+  } 
 
   const handlePlanConstruction = async (e) => {
     try {
+      setFormSubmitError({wasErrorReturned: false, errorMessage:''})
       setReadingPlanError('')
       setFormProblemAreas([])
       e.preventDefault();
@@ -70,7 +71,7 @@ function Book() {
       }
       const bookData = {
         title: book.title,
-        author: book.author,
+        author: book.authors,
         thumbnail: selectedArtwork,
         isbn10: isbn10,
         isbn13: isbn13
@@ -78,8 +79,12 @@ function Book() {
       const newPlan = constructReadingPlan(e, measure, bookData);
       //dispatch(addReadingPlan(newPlan));
       const newPlanToServer = await sendNewPlanToServer(newPlan, token);
-      console.log('NewPlan:', await newPlanToServer)
+      if(newPlanToServer) {
+        dispatch(addReadingPlan(newPlan))
+        history.push('/account');
+      }
       setInSubmitMode(false);
+      throw Error
     } catch (err) {
       setInSubmitMode(false);
       setFormSubmitError({wasErrorReturned: true, errorMessage:err.message})

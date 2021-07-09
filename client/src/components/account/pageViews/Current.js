@@ -1,9 +1,31 @@
 import './pageViews.css';
+import { useSelector, useDispatch } from 'react-redux';
+import PageViewBook from '../../book/PageViewBook';
+
 
 function Current () {
+
+  const books = useSelector(state => state.planReducer.plans);
+
+  function getNextItemInScheme (book) {
+    for(let i = 1; i <= Object.keys(book.plan_scheme).length; i++) {
+      if(book.plan_scheme[i].completed === false) {
+        return 'unfinished'
+      }
+    }
+    return 'finished'
+  }
+ 
   return (
-    <div>
-      <h1>Current Page View</h1>
+    <div className="currentView">
+      <h1>Currently Reading</h1>
+      {books.map(book =>{ 
+        if(getNextItemInScheme(book)==='unfinished'){
+          return(<PageViewBook book={book}/>)
+        } 
+        return null;
+      }
+      )}
     </div>
   )
 }

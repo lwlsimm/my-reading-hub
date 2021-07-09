@@ -11,14 +11,11 @@
   min-width: 30vw;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .manualAddView {
   border-right: black 1px solid;
-}
-
-.openLibraryAddView {
-  
 }
 
 .addBookForm {
@@ -26,10 +23,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 90%;
 }
 
 .addBookForm input {
   margin: 2px 0;
+  
 }
 .addBookForm label {
   margin: 8px 0;
@@ -39,8 +38,12 @@
   margin: 20px 0 !important;
 }
 
+.ab-search-input {
+  width: 80%;
+}
+
 .searchResultsBox {
-  width: 100%;
+  width: 90%;
   margin: 2px;
   padding: 10px 0;
   display: flex;
@@ -62,12 +65,17 @@
 
 /* Book Search Results */
 
+.searchResultsInnerBox {
+  width: 100%;
+}
+
 .BookSearchResult {
   width: 100%;
-  border-bottom: black 1px solid;
   display: flex;
   justify-content: right;
   align-items: center;
+  margin: 5px 0;
+  background-color: var(--yellow-light);
 }
 
 .BookSearchResult:hover {

@@ -51,3 +51,16 @@ export const removeReadingPlan = planId => {
   }
 }
 
+export const readingCompleted = (planId, day) => {
+  return {
+    type: 'plan/readingCompleted',
+    payload: {planId: planId, day: day}
+  }
+}
+
+export const clearPlans = () => {
+  return {
+    type: 'plan/clearPlans'
+  }
+}
+

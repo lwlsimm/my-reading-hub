@@ -6,12 +6,16 @@ import { covertSearchString } from '../../../functions/commonFunctions';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadSearchItems, deleteSearchItems } from '../../../state/actions';
 import { useState } from 'react';
+import { addSelectedBook } from '../../../state/actions';
+import { useHistory } from 'react-router-dom';
 
 function AddBook () {
 
   const [inSearchMode, setInSearchMode] = useState(false)
 
+  const history = useHistory();
   const dispatch = useDispatch();
+  const selectedBookPath = '/selectedBook'
 
   const searchResults = useSelector(state => state.searchReducer);
 
@@ -34,17 +38,29 @@ function AddBook () {
     dispatch(deleteSearchItems());
   }
 
+  const handleAddManualBook = (e) => {
+    e.preventDefault()
+    const title = e.target.manual_title.value;
+    const author = e.target.manual_author.value;
+    const bookObject = {
+      title: title,
+      authors: [author],
+    }
+    dispatch(addSelectedBook({title: title, authors: author, industryIdentifiers: {0: null, 1: null}}));
+    history.push(selectedBookPath)
+  }
+
   return (
     <div>
       <h2 className="pv-pageTitle">Add a book</h2>
       <div className="addBookPage">
         <div className="manualAddView addBookSection">
           <h3>Manual Add</h3>
-          <form className="addBookForm">
+          <form className="addBookForm" onSubmit={e => handleAddManualBook(e)}>
             <label for="manual_title">Book Title</label>
-            <input className="input" name="manual_title" id="manual_title" placeholder="Enter book title" required/>
+            <input className="input ab-search-input" name="manual_title" id="manual_title" placeholder="Enter book title" required/>
             <label for="manual_author">Author Name</label>
-            <input className="input" name="manual_author" id="manual_author" placeholder="Enter book author" required/>
+            <input className="input ab-search-input" name="manual_author" id="manual_author" placeholder="Enter book author" required/>
             <input type="submit" className="btn submit-btn add-book-submit-btn"/>
           </form>
         </div>
@@ -52,9 +68,9 @@ function AddBook () {
         <h3>From Google Books</h3>
           <form className="addBookForm" onSubmit={e=>handleOpenLibrarySearch(e)}>
             <label for="search_title">Book Title</label>
-            <input className="input" name="search_title" id="search_title" placeholder="Enter book title" required/>
+            <input className="input ab-search-input" name="search_title" id="search_title" placeholder="Enter book title" required/>
             <label for="search_author">Author Name</label>
-            <input className="input" name="search_author" id="search_author" placeholder="Enter book author" required/>
+            <input className="input ab-search-input" name="search_author" id="search_author" placeholder="Enter book author" required/>
             {inSearchMode?
             <input type="submit" className="btn submit-btn add-book-submit-btn btn-inSearchMode" value="---SEARCHING---" disabled/>
             :
@@ -64,8 +80,8 @@ function AddBook () {
             
           </form>
           <div className="searchResultsBox">
+            <div className="btn submit-btn add-book-submit-btn clear-btn" onClick={()=>handleClearSearch()}>Clear Search Results</div>
             <h4 className="search-title">Search Results:</h4>
-            <div className="btn submit-btn add-book-submit-btn clear-btn" onClick={()=>handleClearSearch()}>Clear Search</div>
             <div className="searchResultsInnerBox">
               {searchResults.length > 1? 
                 searchResults.map(item => <BookSearchResult item={item.volumeInfo}/> )

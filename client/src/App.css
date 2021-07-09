@@ -1,7 +1,7 @@
 :root {
   --danger: #db5461;
   --danger-selected: #d83747;
-  --blue-light: #dbeefa;
+  --blue-light: #dfe7ec;
   --blue: #aac7db;
   --blue-selected: #89b0ce;
   --green: #45c03e;
@@ -14,6 +14,12 @@
   --yellow-selected: #dfae27;
   --ruby: #A65089;
   --ruby-selected:#8F3C73;
+  
+}
+
+* {
+  margin: 0;
+  padding: 0;
 }
 
 body{
@@ -49,6 +55,14 @@ body{
 
 .btn:hover{
   background-color: var(--ruby-selected);
+}
+
+.btn-red {
+  background-color: var(--danger);
+}
+
+.btn-red:hover {
+  background-color: var(--danger-selected);
 }
 
 .btn:active {
@@ -102,6 +116,9 @@ body{
   min-height: 120px;
   max-height: 250px;
   max-width: 40vw;
+}
+.bold {
+  font-weight: bold;
 }
 
 .btn-inSearchMode {

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { addSelectedBook } from '../../state/actions';
 import bookImg from '../../assets/images/defaultSmallBook.png'
 import './book.css'
+import '../account/pageViews/addBook.css'
 import { extractItemFromObject } from '../../functions/commonFunctions';
 
 function BookSearchResult (props) {

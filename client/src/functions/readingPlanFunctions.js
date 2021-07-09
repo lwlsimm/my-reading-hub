@@ -1,4 +1,5 @@
 import { ReadingPlan } from '../classes/ReadingPlan';
+import { ReadingPlanFromServer } from '../classes/ReadingPlanFromServer';
 import axios from 'axios';
 import { keys } from '../assets/keys/keys';
 
@@ -8,24 +9,57 @@ export function constructReadingPlan (e, measure, bookObj) {
   const id = createBookId(bookObj);
   //create new Reading Plan object
   const readingPlanObj = new ReadingPlan(id, startDate, startAt, endAt, per_day, end_date, perDayType, measure, bookObj);
+  const scheme = readingPlanObj.create_new_plan;
+  readingPlanObj.plan_scheme = scheme;
   return readingPlanObj;
 }
 
 export async function sendNewPlanToServer (plan, token) {
-  const data = await axios({
-    method: 'POST',
-    headers: {
-      authorization: `Bearer ${token}`
-    },
-    url: keys.ADD_NEW_PLAN_TO_DB_PATH,
-    data: {
-      plan: {
-        plan_details: plan,
-        plan_scheme: plan.create_new_plan
+  try {
+    const data = await axios({
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      url: keys.ADD_NEW_PLAN_TO_DB_PATH,
+      data: {
+        plan: {
+          plan_id: plan.id,
+          plan_details: JSON.stringify(plan.obtain_basic_details),
+          plan_scheme: JSON.stringify(plan.create_new_plan)
+        }
       }
-    }
-  });
-  return data.data
+    });
+    if(await data.data){
+      return true
+    } 
+    return false;
+  } catch (error) {
+    return false;
+  }
+}
+
+export async function updateExistingPlan (plan_id, scheme, token) {
+  const json_scheme = JSON.stringify(scheme)
+  try {
+    const data = await axios({
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      url: keys.UPATE_PLAN_ON_DB_PATH,
+      data: {
+        plan_id: plan_id,
+        scheme: json_scheme
+      }
+    });
+    if(await data.data){
+      return true
+    } 
+    return false;
+  } catch (error) {
+    return false;
+  }
 }
 
 function createBookId (bookObj) {

@@ -7,5 +7,6 @@ export const keys = {
   OL_COVER_PATH: "http://covers.openlibrary.org/b/isbn/",
   SEARCH_PATH: 'http://localhost:5500/api/search',
   OL_ISBN_PATH: 'https://openlibrary.org/isbn/',
-  ADD_NEW_PLAN_TO_DB_PATH: 'http://localhost:5500/api/user/addPlan'
+  ADD_NEW_PLAN_TO_DB_PATH: 'http://localhost:5500/api/user/addPlan',
+  UPATE_PLAN_ON_DB_PATH: 'http://localhost:5500/api/user/updatePlan'
 }

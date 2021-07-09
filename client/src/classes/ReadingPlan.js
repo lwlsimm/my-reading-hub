@@ -19,6 +19,11 @@ export class ReadingPlan {
           this.plan_end_date = new Date();
     }
   }
+  get obtain_basic_details() {
+    return {
+      id: this.id, measure: this.measure, plan_start_date: this.plan_start_date, start_at: this.start_at, end_at: this.end_at, per_day_type: this.per_day_type, per_day: this.per_day, book_data: this.book_data, plan_end_date: this.plan_end_date
+    }
+  }
   //This calculates the variables required for creating a brand new reading plan
   get plan_variables() {
     const total_measure = this.end_at - this.start_at + 1;
@@ -64,7 +69,7 @@ export class ReadingPlan {
         }
       }
       const toPage = (running_total + amount_to_read - 1) > this.end_at ? this.end_at : (running_total + amount_to_read - 1);
-      planObject[day] = { day: day, date: date_for_plan_day, total_to_read: toPage - running_total + 1, from: running_total, to: toPage};
+      planObject[day] = { day: day, date: date_for_plan_day, total_to_read: toPage - running_total + 1, from: running_total, to: toPage, completed: false};
       running_total += amount_to_read
     }
     return planObject;

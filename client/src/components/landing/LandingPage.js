@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { axios } from 'axios';
 import { authenticateSession } from '../../functions/loginFunctions';
 import { logout } from '../../state/actions';
+import { clearPlans } from '../../state/actions'
 
 function LandingPage () {
 
@@ -37,6 +38,7 @@ function LandingPage () {
             <img className="bookPileImg" alt="pile of books" src={books}/>
             <h2>Let's get started!</h2>
           </div>
+          <div onClick={()=> dispatch(clearPlans())} className="btn">Clear Plans</div>
         </div>
         <div className="landing-pic-conatiner landing-box">
           <img className="landing-image" src={landingbg} alt="books on a windowsil"/>

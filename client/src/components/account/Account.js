@@ -5,7 +5,7 @@ import closedBooks from '../../assets/images/closed-books.png';
 import addBook from '../../assets/images/add-book.png';
 import logout_icon from '../../assets/images/logout.png';
 import { useDispatch } from 'react-redux';
-import { logout } from '../../state/actions';
+import { logout, clearPlans } from '../../state/actions';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Current from './pageViews/Current';
@@ -16,7 +16,7 @@ import Settings from './pageViews/Settings';
 
 function Account() {
 
-  const [pageView,setPageView] = useState('AddBook')
+  const [pageView,setPageView] = useState('Current')
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -24,6 +24,7 @@ function Account() {
 
   const handleLogOut = () => {
     dispatch(logout());
+    dispatch(clearPlans())
     history.push(landingPath)
   }
 
@@ -49,10 +50,10 @@ function Account() {
   return(
     <div className="Page account-page-grid">
       <div className="account-sidebar">
-        <div className="btn account-page-btn" onClick={()=>setPageView('Current')}><img src={openBook} alt="open book icon" className="sidebar-icon" /><span className="account-btn-wording">Currently Reading</span></div>
-        <div className="btn account-page-btn" onClick={()=>setPageView('Finished')}><img src={closedBooks} alt="closed books icon" className="sidebar-icon" /><span className="account-btn-wording">Finished Reading</span></div>
-        <div className="btn account-page-btn" onClick={()=>setPageView('AddBook')}><img src={addBook} alt="add book icon" className="sidebar-icon"/><span className="account-btn-wording">Add a Book</span></div>
-        <div className="btn account-page-btn" onClick={()=>setPageView('Settings')}><img src={gear} alt="gear icon" className="sidebar-icon"/> <span className="account-btn-wording">Settings </span></div>
+        <div className="btn account-page-btn" onClick={()=>setPageView('Current')}><img src={openBook} alt="open book icon" className="sidebar-icon" /><span className="account-btn-wording">Current</span></div>
+        <div className="btn account-page-btn" onClick={()=>setPageView('Finished')}><img src={closedBooks} alt="closed books icon" className="sidebar-icon" /><span className="account-btn-wording">Finished</span></div>
+        <div className="btn account-page-btn" onClick={()=>setPageView('AddBook')}><img src={addBook} alt="add book icon" className="sidebar-icon"/><span className="account-btn-wording">Add</span></div>
+        <div className="btn account-page-btn" onClick={()=>setPageView('Settings')}><img src={gear} alt="gear icon" className="sidebar-icon"/> <span className="account-btn-wording">Settings</span></div>
         <div className="btn account-page-btn" onClick={()=>handleLogOut()}><img src={logout_icon} alt="door icon" className="sidebar-icon"/>  <span className="account-btn-wording">Logout</span></div>
       </div>
 
