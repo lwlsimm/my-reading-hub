@@ -137,20 +137,20 @@ function Book() {
             <p className="radio-title or">Measure your progress using:</p>
           </div>
           <div className="radio-row">
-            <input type="radio" id="Pages" name="meausurement" value="Pages" onClick={()=>setMeasure('page')} checked/>
+            <input type="radio" id="Pages" name="meausurement" value="Pages" onChange={()=>setMeasure('page')} checked/>
             <label for="Pages">Pages</label>
           </div>
           <div className="radio-row">
-            <input type="radio" id="Chapters" name="meausurement" value="Chapters"  onClick={()=>setMeasure('chapter')}/>
+            <input type="radio" id="Chapters" name="meausurement" value="Chapters"  onChange={()=>setMeasure('chapter')}/>
             <label for="Chapters">Chapters</label>
           </div>
           
           <div className="radio-row">
-            <input type="radio" id="Location" name="meausurement" value="Location" onClick={()=>setMeasure('location')}/>
+            <input type="radio" id="Location" name="meausurement" value="Location" onChange={()=>setMeasure('location')}/>
             <label for="Location">Location</label>
           </div>
           <div className="radio-row">
-            <input type="radio" id="Percentage" name="meausurement" value="Percentage" onClick={()=>setMeasure('percentage')}/>
+            <input type="radio" id="Percentage" name="meausurement" value="Percentage" onChange={()=>setMeasure('percentage')}/>
             <label for="Percentage">Percentage</label>
           </div>
           <div className="breakLine"></div>

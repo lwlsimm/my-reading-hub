@@ -5,7 +5,7 @@ import closedBooks from '../../assets/images/closed-books.png';
 import addBook from '../../assets/images/add-book.png';
 import logout_icon from '../../assets/images/logout.png';
 import { useDispatch } from 'react-redux';
-import { logout, clearPlans } from '../../state/actions';
+import { logout, clearPlans, deleteSearchItems, deleteSelectedBook } from '../../state/actions';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Current from './pageViews/Current';
@@ -24,7 +24,9 @@ function Account() {
 
   const handleLogOut = () => {
     dispatch(logout());
-    dispatch(clearPlans())
+    dispatch(clearPlans());
+    dispatch(deleteSearchItems());
+    dispatch(deleteSelectedBook());
     history.push(landingPath)
   }
 

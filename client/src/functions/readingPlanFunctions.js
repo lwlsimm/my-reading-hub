@@ -1,5 +1,4 @@
 import { ReadingPlan } from '../classes/ReadingPlan';
-import { ReadingPlanFromServer } from '../classes/ReadingPlanFromServer';
 import axios from 'axios';
 import { keys } from '../assets/keys/keys';
 
@@ -12,6 +11,27 @@ export function constructReadingPlan (e, measure, bookObj) {
   const scheme = readingPlanObj.create_new_plan;
   readingPlanObj.plan_scheme = scheme;
   return readingPlanObj;
+}
+
+export async function deletePlanFromServer (planId, token) {
+  try {
+      const data = await axios({
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      url: keys.DELETE_PLAN_ON_DB_PATH,
+      data: {
+        plan_id: planId,
+      }
+    });
+    if(await data.data) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    return false;
+  }
 }
 
 export async function sendNewPlanToServer (plan, token) {

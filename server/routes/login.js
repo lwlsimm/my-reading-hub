@@ -1,12 +1,12 @@
 const loginRouter = require('express').Router();
 module.exports = loginRouter;
-const { checkPassword, generateAccessToken } = require('../functions/loginFunctions');
+const { checkPassword, generateAccessToken, getBookDetails } = require('../functions/loginFunctions');
 
 
 
-loginRouter.post('/' , checkPassword, async(req, res) => {
+loginRouter.post('/' , checkPassword, getBookDetails, async(req, res) => {
   try {
-    const { email, id, verified } = req.body;
+    const { email, id, verified, plan_package } = req.body;
     if(!id) {
       res.status(401).send();
     }
@@ -14,9 +14,9 @@ loginRouter.post('/' , checkPassword, async(req, res) => {
       res.status(200).send({is_verified: false, email: email});
     }
     const tokenData = await generateAccessToken(id);
-    const {token, expiry} = await tokenData;
-    res.status(200).send({is_verified: true, id: id, token: token}) 
-  } 
-    catch (error) {
+    const { token } = await tokenData;
+    res.status(200).send({is_verified: true, id: id, token: token, plan_package: plan_package}) 
+  } catch (error) {
+    res.status(401).send();
   }
 });

@@ -18,6 +18,20 @@ async function addNewPlan (customer_id, planObj, plan_id) {
   }
 }
 
+async function deletePlan (plan_id) {
+  try {
+    const serverQuery = await pool.query("DELETE FROM reading_plans WHERE id = $1 RETURNING customer_id", [plan_id])
+    const data = await serverQuery.rows[0]['customer_id'];
+    if(data) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log(error.message)
+    return false;
+  }
+}
+
 async function updatePlan (plan_id, scheme) {
   try {
     const serverQuery = await pool.query("UPDATE reading_plans SET plan_scheme = $1 WHERE id = $2 RETURNING id", [scheme, plan_id]);
@@ -34,4 +48,4 @@ async function updatePlan (plan_id, scheme) {
 
 
 
-module.exports = { addNewPlan, updatePlan }
+module.exports = { addNewPlan, updatePlan, deletePlan }

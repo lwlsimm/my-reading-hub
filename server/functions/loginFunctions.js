@@ -22,7 +22,22 @@ async function checkPassword (req, res, next) {
     });
   } catch (error) {
     req.body.id = null;
-    next();
+    next()
+  }
+}
+
+async function getBookDetails (req, res, next) {
+  try {
+    const {id, verified} = req.body;
+    if(!id || !verified) {
+      next()
+    }
+    const serverQuery = await pool.query("SELECT * FROM reading_plans WHERE customer_id = $1", [id]);
+    const data = await serverQuery.rows;
+    req.body.plan_package = data;
+    next()
+  } catch(error) {
+    next()
   }
 }
 
@@ -32,4 +47,4 @@ const generateAccessToken = async(id) => {
 }
 
 
-module.exports = { checkPassword, generateAccessToken }
+module.exports = { checkPassword, generateAccessToken, getBookDetails }

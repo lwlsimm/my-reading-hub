@@ -2,7 +2,7 @@ const userRouter = require('express').Router();
 require('dotenv').config();
 const { sendMail } = require('../email/email');
 const { authenticateToken } = require('../functions/authenticateFunctions');
-const { addNewPlan,updatePlan } = require('../functions/planFunctions')
+const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions')
 
 module.exports = userRouter;
 
@@ -14,7 +14,19 @@ userRouter.post('/session_validation', authenticateToken, async (req, res) => {
       throw new Error
     }
   } catch (err) {
-    res.sendStatus(403);
+    res.status(403).send();
+  }
+})
+
+userRouter.post('/deletePlan', authenticateToken, async(req, res) => {
+  try {
+    const isPlanDeletedFromServer = deletePlan(req.body.plan_id);
+    if(await isPlanDeletedFromServer) {
+      res.send(true);
+    }
+    throw Error;
+  } catch(error) {
+    res.status(403).send();
   }
 })
 

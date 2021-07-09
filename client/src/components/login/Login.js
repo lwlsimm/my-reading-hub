@@ -2,7 +2,8 @@ import './login.css';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login } from '../../state/actions';
+import { login, deleteSearchItems, deleteSelectedBook, clearPlans, addReadingPlan } from '../../state/actions';
+import {ReadingPlanFromServer} from '../../classes/ReadingPlanFromServer'
 
 
 const { registerUser } = require('../../functions/registrationFunctions');
@@ -19,10 +20,17 @@ function Login () {
   const emailNotVerifiedPath = "/notverified/?email=";
   const accountPath = "/account";
 
+  function performClearState () {
+    dispatch(clearPlans());
+    dispatch(deleteSearchItems());
+    dispatch(deleteSelectedBook());
+}
+
   const handleRegistration = async (e) => {
     setRegisterErrorMessage('');
     e.preventDefault();
     try {
+      performClearState()
       const registration = await registerUser(e);
       if(registration.data['outcome'] === 'success') {
         history.push(registerSucessPath);
@@ -42,6 +50,13 @@ function Login () {
       if(!response.data['is_verified']){
         history.push(emailNotVerifiedPath + response.data['email']);
       }
+      const plan_package = await response.data.plan_package;
+      plan_package.map(plan => {
+        const plan_details = JSON.parse(plan.plan_details);
+        const plan_scheme = JSON.parse(plan.plan_scheme);
+        const newPlan = new ReadingPlanFromServer(plan_details, plan_scheme);
+        dispatch(addReadingPlan(newPlan));
+      })
       dispatch(login(response.data));
       history.push(accountPath);
     } catch (err) {

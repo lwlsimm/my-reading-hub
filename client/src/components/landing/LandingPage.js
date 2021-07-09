@@ -6,8 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { axios } from 'axios';
 import { authenticateSession } from '../../functions/loginFunctions';
-import { logout } from '../../state/actions';
-import { clearPlans } from '../../state/actions'
+import { logout, clearPlans, deleteSearchItems, deleteSelectedBook } from '../../state/actions';
 
 function LandingPage () {
 
@@ -18,10 +17,23 @@ function LandingPage () {
   const history = useHistory();
   const loginOrMyAccountPath = loggedIn? "/account" : "/login";
 
-  useEffect(async ()=> {
-    const isSessionVald = await authenticateSession(token);
-    if(await isSessionVald === false) {
+  function performLogout () {
       dispatch(logout());
+      dispatch(clearPlans());
+      dispatch(deleteSearchItems());
+      dispatch(deleteSelectedBook());
+  }
+
+  useEffect(async ()=> {
+    try {
+      const isSessionVald = await authenticateSession(token);
+      if(await isSessionVald === false) {
+      performLogout();
+      return;
+      }
+      return;
+    } catch (error) {
+      performLogout()
     }
   },[])
 
