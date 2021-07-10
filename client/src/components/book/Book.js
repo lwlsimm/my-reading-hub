@@ -26,7 +26,7 @@ function Book() {
   const history = useHistory();
   const dispatch = useDispatch();
   const book = useSelector(state => state.selectedBookReducer);
-  const backPath = '/account';
+  const backPath = '/account/?search';
   const token = useSelector(state => state.loginReducer.token);
 
   const thumbnail = extractItemFromObject(['thumbnail'],book.imageLinks, bookImg);
@@ -93,7 +93,7 @@ function Book() {
 
   return (
     <div>
-      <div className="btn backToResults" onClick={()=>history.push('/account')}><img src={backArrow} className="backArrow" alt="back arrow"/>Back to Results</div>
+      <div className="btn backToResults" onClick={()=>history.push(backPath)}><img src={backArrow} className="backArrow" alt="back arrow"/>Back to Results</div>
     <div className="flexBoxByCols ">
       <div className="flexBoxByRows bookPage-row1 book-details-col">
         <div>

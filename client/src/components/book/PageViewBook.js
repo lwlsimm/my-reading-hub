@@ -70,6 +70,7 @@ function PageViewBook (props) {
   const {day, date, from, to} = getNextItemInScheme();
   const displayDate = new Date(date).toDateString();
   const modalClassNames = deleteBookMode ? "deleteModal" : "deleteModal hideModal";
+  const modal_bg_ClassNames = deleteBookMode ? "modalbackground" : "modalbackground hideModal";
 
   const handleDeleteBook = async () => {
     try {
@@ -90,9 +91,11 @@ function PageViewBook (props) {
       <div className="cb-column cb-img-col"><img className="cb-thumbnail" src={bookInfo.thumbnail} alt="book cover"/></div>
       <div className="cb-column cb-details-col">
         <img className="cb-mini-thumbnail" src={bookInfo.thumbnail} alt="book cover"/>
-        <h4>{bookInfo.title}</h4>
-        <h5>{bookInfo.author}</h5>
-        <p className="cb-para">Completed: {percetage.toFixed(1)}%</p>
+        <div className="cb--details-container">
+          <h4>{bookInfo.title}</h4>
+          <h5>{bookInfo.author}</h5>
+          <p className="cb-para">Completed: {percetage.toFixed(1)}%</p>
+        </div>
       </div>
       {to === 'finished'? 
           <div className="cb-column cb-comp-col">
@@ -112,11 +115,13 @@ function PageViewBook (props) {
           </div>
       }
       <div className="cb-column cb-btn-col">
-        <div className="btn btn-red cb-btn" onClick={()=>setDeleteBookMode(true)}>Delete Book</div>
         <div className="btn cb-btn submit-btn" >View/Edit</div>
+        <div className="btn btn-red cb-btn" onClick={()=>setDeleteBookMode(true)}>Delete Book</div>
       </div>
       
       {/* Delete Modal */}
+      <div className={modal_bg_ClassNames}onClick={()=>setDeleteBookMode(false)}></div>
+
       <div className={modalClassNames}>
         <h2 className="red-text">Delete '{bookInfo.title}'?</h2>
         <div className="deleteModal-row2">

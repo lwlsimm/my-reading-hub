@@ -4,9 +4,9 @@ import openBook from '../../assets/images/open-book.png';
 import closedBooks from '../../assets/images/closed-books.png';
 import addBook from '../../assets/images/add-book.png';
 import logout_icon from '../../assets/images/logout.png';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout, clearPlans, deleteSearchItems, deleteSelectedBook } from '../../state/actions';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Current from './pageViews/Current';
 import Finished from './pageViews/Finished';
@@ -16,11 +16,13 @@ import Settings from './pageViews/Settings';
 
 function Account() {
 
-  const [pageView,setPageView] = useState('Current')
+  const [pageView,setPageView] = useState('Current');
+  const loggedIn = useSelector(state => state.loginReducer.loggedIn);
 
   const dispatch = useDispatch();
   const history = useHistory();
   const landingPath = "/"
+  const logginPath = "/login"
 
   const handleLogOut = () => {
     dispatch(logout());
@@ -48,6 +50,16 @@ function Account() {
     default:
       pageDisplay = <Current />;
   }
+
+  useEffect(()=> {
+    if(!loggedIn) {
+      history.push(logginPath)
+    }
+    const queryParams = window.location.search;
+    if(queryParams === '?search') {
+      setPageView('AddBook')
+    }
+  },[])
 
   return(
     <div className="Page account-page-grid">

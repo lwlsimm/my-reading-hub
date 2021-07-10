@@ -1,0 +1,44 @@
+.about-page {
+  padding: 5px 20px;
+  text-align: justify;
+}
+
+.about-title {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.about-para {
+  margin-bottom: 5px;
+}
+
+.about-form {
+  margin-top: 15px;
+  max-width: 500px;
+  background-color: var(--blue-light);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+  box-shadow: 2px 2px var(--ruby);
+}
+
+.about-label {
+  width: 100%;
+  text-align: left;
+
+}
+.about-input {
+  width: 100%;
+  height: 30px;
+}
+.about-message {
+  height: 80px;
+  text-align: left;
+  padding: 5px 2px;
+}
+.about-submit {
+  width: 100%;
+}

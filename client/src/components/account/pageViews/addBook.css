@@ -2,16 +2,16 @@
 .addBookPage {
   display: flex;
   padding: 10px;
+  justify-content: space-evenly;
 }
 
 .addBookSection {
   padding: 5px;
   text-align: center;
-  min-height: 500px;
-  min-width: 30vw;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 50%;
 }
 
 .manualAddView {

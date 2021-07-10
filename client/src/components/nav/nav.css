@@ -5,6 +5,7 @@
   justify-content: space-evenly;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .bookImg {
@@ -52,22 +53,30 @@
     margin-right: 10px;
   }
   .NavBar {
-    justify-content: space-evenly;
+    justify-content: space-between;
   }
   .nav-btn {
     width: 100px;
     font-size: 0.75em;
+  }
+  .navButtonContainer {
+    width: 100%;
+    justify-content: space-evenly;
   }
 }
 
 @media only screen and (max-width: 600px) {
   .NavBar {
     display: grid;
-    grid-template: 1fr 1fr / 1fr 2fr;
+    grid-template: 1.3fr 1fr / 1fr 2fr;
     align-items: center;
     justify-items: center;
+    margin-bottom: 5px;
   }
   .navButtonContainer {
     grid-column: 1 / span 2;
+  }
+  .nav-btn {
+    height: 40px;
   }
 }

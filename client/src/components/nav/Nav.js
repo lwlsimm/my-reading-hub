@@ -7,6 +7,7 @@ function Nav() {
 
   const history = useHistory();
   const landingPath = "/";
+  const aboutPath = "/about";
 
   const loggedIn = useSelector(state => state.loginReducer.loggedIn);
 
@@ -21,7 +22,7 @@ function Nav() {
         <div className="btn nav-btn" onClick={()=> history.push(loginOrMyAccountPath)}>
           {accountButtonWording}
         </div>
-        <div className="btn nav-btn">
+        <div className="btn nav-btn" onClick={()=> history.push(aboutPath)}>
           ABOUT
         </div>
       </div>

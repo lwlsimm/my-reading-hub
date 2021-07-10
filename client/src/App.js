@@ -10,7 +10,7 @@ import NotVerified from './components/verification/NotVerified'
 import FourOhFour from './components/404/FourOhFour';
 import RegisterSuccess from './components/login/registerPages/RegisterSuccess';
 import Book from './components/book/Book'
-
+import About from './components/About/About'
 
 function App() {
 
@@ -20,14 +20,16 @@ function App() {
       <Nav/>
       <Switch>
         <Route path="/" exact component={LandingPage}/>
+        <Route path="/about" exact component={About}/>
         <Route path="/login" exact component={Login}/>
-        <Route path="/account" exact component={Account}/>
+        <Route path="/account" component={Account}/>
         <Route path="/verificationsuccess" exact component={VerificationSuccess}/>
         <Route path="/verificationfail" exact component={VerificationFail}/>
         <Route path="/404" exact component={FourOhFour}/>
         <Route path="/notverified" component={NotVerified}/>
         <Route path="/registersuccess" exact component={RegisterSuccess}/>
         <Route path="/selectedBook" exact component={Book}/>
+        <Route path="/" component={FourOhFour}/>
       </Switch>
     </div>
     </Router>

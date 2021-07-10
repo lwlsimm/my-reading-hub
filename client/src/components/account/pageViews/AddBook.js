@@ -42,10 +42,6 @@ function AddBook () {
     e.preventDefault()
     const title = e.target.manual_title.value;
     const author = e.target.manual_author.value;
-    const bookObject = {
-      title: title,
-      authors: [author],
-    }
     dispatch(addSelectedBook({title: title, authors: author, industryIdentifiers: {0: null, 1: null}}));
     history.push(selectedBookPath)
   }

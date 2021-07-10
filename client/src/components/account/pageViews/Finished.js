@@ -1,5 +1,5 @@
 import './pageViews.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PageViewBook from '../../book/PageViewBook';
 
 

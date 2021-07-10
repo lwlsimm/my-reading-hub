@@ -1,5 +1,5 @@
 import './pageViews.css';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PageViewBook from '../../book/PageViewBook';
 
 
@@ -21,7 +21,7 @@ function Current () {
       <h1>Currently Reading</h1>
       {books.map(book =>{ 
         if(getNextItemInScheme(book)==='unfinished'){
-          return(<PageViewBook book={book}/>)
+          return(<PageViewBook key={book.id} book={book}/>)
         } 
         return null;
       }
