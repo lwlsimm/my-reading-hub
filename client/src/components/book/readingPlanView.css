@@ -19,7 +19,7 @@
 }
 .RP-form {
   display: grid;
-  grid-template-columns: 40px 90px 50px 50px 70px 25px 25px;
+  grid-template-columns: 25px 50px 50px 50px 70px 25px 25px 25px;
   grid-auto-rows: 40px;
   margin: 10px auto;
 }
@@ -32,13 +32,13 @@
 }
 .RP-col3{
   grid-column: 3 / span 1;
-  margin: 2px;
-  width: 60px;
 }
 .RP-col4{
   grid-column: 4 / span 1;
+}
+.RP-col3, .RP-col4 {
   margin: 2px;
-  width: 60px;
+  width: 45px;
 }
 .RP-col5{
   grid-column: 5 / span 1;
@@ -50,14 +50,25 @@
 .RP-col7{
   grid-column: 7 / span 1;
 }
-.RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7 {
+.RP-col8{
+  grid-column: 8 / span 1;
+}
+.RP-edit-doneBtn {
+  grid-column: 6 / span 3;
   height: 20px;
+  margin: 0;
+  width: 75px;
+}
+.RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7, .RP-col8 {
+  height: 25px;
   text-align: center;
   font-size: 0.8em;
   display: flex;
   justify-content: center;
   align-items: center;
   justify-self: center;
+  padding: 0;
+  margin: 0
 }
 .RP-icon {
   width: 20px;
@@ -71,7 +82,7 @@
 
 @media only screen and (min-width: 800px) {
   .RP-form {
-    grid-template-columns: 80px 200px 100px 100px 100px 60px 60px;
+    grid-template-columns: 80px 200px 100px 100px 100px 60px 60px 60px;
     grid-auto-rows: 40px;
     margin: 10px auto;
   }
@@ -85,5 +96,8 @@
   }
   .RP-flex {
     justify-content: space-evenly;
+  }
+  .RP-edit-doneBtn {
+    width: 200px;
   }
 }

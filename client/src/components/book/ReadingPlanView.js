@@ -4,6 +4,7 @@ import './readingPlanView.css';
 import furthestReadIcon from '../../assets/images/furthestRead.png'
 import updateIcon from '../../assets/images/update.png'
 import noReading from '../../assets/images/no-reading.png'
+import editing from '../../assets/images/editing.png'
 const { updatePlanReadToAndFrom } = require('../../functions/readingPlanFunctions');
 
 
@@ -16,6 +17,7 @@ function ReadingPlanView () {
   const [furthestReadTo, setFurthestReadTo] = useState(0);
   const [numberOfDays, setNumberOfDays] = useState(0);
   const [currentChanges, setCurrentChanges] = useState({});
+  const [editDay,setEditDay] = useState(0)
 
   function getDataFromState () {
     const queryParams = window.location.search.substring(1);
@@ -46,6 +48,8 @@ function ReadingPlanView () {
   useEffect(()=> {
     getDataFromState();
   },[]);
+
+  console.log(scheme)
 
   function updateSchemeUsingCurrentChanges() {
     const newScheme = [...scheme];
@@ -112,6 +116,11 @@ function ReadingPlanView () {
     updateSchemeUsingCurrentChanges();
   }
 
+  const handleFinishEditingDay = () => {
+    updateSchemeUsingCurrentChanges();
+    setEditDay(0)
+  }
+
   const displayStartDate = new Date(plan.plan_start_date).toDateString();
   const displayEndDate = new Date(plan.plan_end_date).toDateString();
   
@@ -137,8 +146,9 @@ function ReadingPlanView () {
           <div className="btn" onClick={()=>handleReset()}>Reset</div>
           <div>
             <p className="bold">Key:</p>
-            <p>Mark as furthest dead {plan.measure} <img className="RP-icon" src={furthestReadIcon}/></p>
+            <p>Mark as furthest read {plan.measure} <img className="RP-icon" src={furthestReadIcon}/></p>
             <p>No reading for today <img className="RP-icon" src={noReading} /></p>
+            <p>Edit Day <img className="RP-icon" src={editing} /></p>
           </div>
         </div>
         
@@ -155,8 +165,10 @@ function ReadingPlanView () {
         <div className="RP-col5 bold RP-top-row">Status</div>
         <div className="RP-col6 bold RP-top-row"></div>
         <div className="RP-col7 bold RP-top-row"></div>
+        <div className="RP-col8 bold RP-top-row"></div>
         {
             scheme.map((item, index) => {
+            const editingToday = item.day === editDay ? true : false;
             const options = { weekday: 'short',day: 'numeric' , month: 'short'};
             const displayDate = new Date(item.date).toLocaleDateString('en-UK', options);
             const completed = item.day <= furthestReadTo ? 'Read':'Unread';
@@ -164,11 +176,30 @@ function ReadingPlanView () {
                   <Fragment>
                     <div className="RP-col1">{item.day}</div>
                     <div className="RP-col2">{displayDate}</div>
-                    <input className="RP-col3" id={`RP-row-${item.day}-from`} defaultValue={item.from} onChange={(e)=>handleInputChange(e.target.value,item.day,'from')}/>
-                    <input className="RP-col4" id={`RP-row-${item.day}-to`}defaultValue={item.to} onChange={(e)=>handleInputChange(e.target.value,item.day,'to')}/>
+                    
+                    {editingToday?
+                    <Fragment>
+                      <input className="RP-col3" id={`RP-row-${item.day}-from`} defaultValue={item.from} onChange={(e)=>handleInputChange(e.target.value,item.day,'from')}/>
+                      <input className="RP-col4" id={`RP-row-${item.day}-to`}defaultValue={item.to} onChange={(e)=>handleInputChange(e.target.value,item.day,'to')}/>
+                    </Fragment>
+                    :
+                    <Fragment>
+                      <div className="RP-col3" id={`RP-row-${item.day}-from`} defaultValue={item.from}>{item.from}</div>
+                      <div className="RP-col4" id={`RP-row-${item.day}-to`}>{item.to}</div>
+                    </Fragment>
+                    }
                     <div className="RP-col5">{completed}</div>
-                    <img className="RP-col6 RP-icon" src={furthestReadIcon} onClick={()=>handleFurthestRead(item.day)}/>
-                    <img className="RP-col7 RP-icon" src={noReading} onClick={()=>handleNoReadingToday(item.day)}/>
+                    {editingToday?
+                    <Fragment>
+                      <div className="RP-edit-doneBtn btn" onClick={()=>handleFinishEditingDay()}>Done</div>
+                    </Fragment>:
+                     <Fragment>
+                      <img className="RP-col6 RP-icon" src={furthestReadIcon} onClick={()=>handleFurthestRead(item.day)}/>
+                      <img className="RP-col7 RP-icon" src={noReading} onClick={()=>handleNoReadingToday(item.day)}/>
+                      <img className="RP-col8 RP-icon" src={editing} onClick={()=>setEditDay(item.day)}/>
+                    </Fragment>
+                    }
+                    
                   </Fragment>
                 )
             })
