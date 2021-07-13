@@ -10,4 +10,5 @@ export const keys = {
   ADD_NEW_PLAN_TO_DB_PATH: 'http://localhost:5500/api/user/addPlan',
   UPATE_PLAN_ON_DB_PATH: 'http://localhost:5500/api/user/updatePlan',
   DELETE_PLAN_ON_DB_PATH: 'http://localhost:5500/api/user/deletePlan',
+  ABOUT_CONTACT_PATH: 'http://localhost:5500/api/user/contact'
 }

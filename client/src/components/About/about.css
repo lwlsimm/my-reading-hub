@@ -1,6 +1,10 @@
 .about-page {
   padding: 5px 20px;
   text-align: justify;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .about-title {
@@ -22,7 +26,8 @@
   flex-direction: column;
   padding: 10px;
   align-items: center;
-  box-shadow: 2px 2px var(--ruby);
+  box-shadow: 1px 1px black;
+  width: 80%;
 }
 
 .about-label {
@@ -41,4 +46,11 @@
 }
 .about-submit {
   width: 100%;
+}
+
+.successMessage {
+  color: var(--green-selected);
+}
+.failMessage {
+  color: var(--danger);
 }

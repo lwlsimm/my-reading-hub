@@ -149,10 +149,10 @@
 }
 
 
-@media only screen and (max-width: 800px) {
-  .form-section {
 
-  }
+
+
+@media only screen and (max-width: 800px) {
   .radio-column {
     margin-bottom: 15px;
     text-align: center;
@@ -161,4 +161,5 @@
   .mediaOnly {
     display: block;
   }
+
 }

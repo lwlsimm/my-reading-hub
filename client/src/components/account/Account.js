@@ -13,7 +13,6 @@ import Finished from './pageViews/Finished';
 import AddBook from './pageViews/AddBook';
 import Settings from './pageViews/Settings';
 
-
 function Account() {
 
   const [pageView,setPageView] = useState('Current');
@@ -45,7 +44,7 @@ function Account() {
       pageDisplay = <AddBook />;  
       break;
     case 'Settings':
-      pageDisplay = <Settings />;  
+      pageDisplay = <Settings />;
       break;
     default:
       pageDisplay = <Current />;
@@ -53,12 +52,12 @@ function Account() {
 
   useEffect(()=> {
     if(!loggedIn) {
-      history.push(logginPath)
-    }
+      history.push(logginPath);
+    };
     const queryParams = window.location.search;
     if(queryParams === '?search') {
-      setPageView('AddBook')
-    }
+      setPageView('AddBook');
+    };
   },[])
 
   return(

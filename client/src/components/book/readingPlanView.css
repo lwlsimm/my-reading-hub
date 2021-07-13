@@ -1,0 +1,89 @@
+/* Reading Plan View */
+.RP-page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
+}
+.RP-top-row {
+  display: flex;
+  margin: 5px auto;
+  width: 90%;
+  justify-content: space-evenly;
+  text-align: center;
+}
+.RP-paragrpah-container {
+  max-width: 80vw;
+  text-align: justify;
+  margin: 15px auto;
+}
+.RP-form {
+  display: grid;
+  grid-template-columns: 40px 90px 50px 50px 70px 25px 25px;
+  grid-auto-rows: 40px;
+  margin: 10px auto;
+}
+
+.RP-col1{
+  grid-column: 1 / span 1;
+}
+.RP-col2{
+  grid-column: 2 / span 1;
+}
+.RP-col3{
+  grid-column: 3 / span 1;
+  margin: 2px;
+  width: 60px;
+}
+.RP-col4{
+  grid-column: 4 / span 1;
+  margin: 2px;
+  width: 60px;
+}
+.RP-col5{
+  grid-column: 5 / span 1;
+}
+.RP-col6{
+  grid-column: 6 / span 1;
+  
+}
+.RP-col7{
+  grid-column: 7 / span 1;
+}
+.RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7 {
+  height: 20px;
+  text-align: center;
+  font-size: 0.8em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+}
+.RP-icon {
+  width: 20px;
+}
+.RP-flex {
+  justify-content: space-evenly;
+}
+.RP-top-row {
+  margin-bottom: 20px;
+}
+
+@media only screen and (min-width: 800px) {
+  .RP-form {
+    grid-template-columns: 80px 200px 100px 100px 100px 60px 60px;
+    grid-auto-rows: 40px;
+    margin: 10px auto;
+  }
+  .RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7 {
+    height: 20px;
+    text-align: center;
+    font-size: 1em;
+  }
+  .RP-icon {
+    
+  }
+  .RP-flex {
+    justify-content: space-evenly;
+  }
+}

@@ -3,9 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeReadingPlan, readingCompleted } from '../../state/actions';
 import { updateExistingPlan, deletePlanFromServer } from '../../functions/readingPlanFunctions';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
 
 function PageViewBook (props) {
 
+  const history = useHistory();
   const token = useSelector(state => state.loginReducer.token);
   const dispatch = useDispatch();
   const [updatingInProgress, setUpdatingInProgress] = useState(false)
@@ -16,7 +19,7 @@ function PageViewBook (props) {
   const {book} = props;
   const bookInfo = book.book_data;
   const scheme = book.plan_scheme;
-
+  const viewBookPath = `/plan/?${book.id}`;
 
   function calculatePercentageComplete () {
     let totalComplete = 0;
@@ -64,6 +67,10 @@ function PageViewBook (props) {
       window.alert(`It looks like there was an error that occured when trying to update your plan.  Please logout and try again.  If the problem persists, please contact us via the 'About' button at the top of the page.`);
       console.log(error.message)
     }
+  }
+
+  const handleView = () => {
+    history.push(viewBookPath);
   }
 
   const percetage = calculatePercentageComplete();
@@ -115,7 +122,7 @@ function PageViewBook (props) {
           </div>
       }
       <div className="cb-column cb-btn-col">
-        <div className="btn cb-btn submit-btn" >View/Edit</div>
+        <div className="btn cb-btn submit-btn" onClick={()=>handleView()}>View/Edit</div>
         <div className="btn btn-red cb-btn" onClick={()=>setDeleteBookMode(true)}>Delete Book</div>
       </div>
       

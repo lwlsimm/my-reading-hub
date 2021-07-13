@@ -1,8 +1,9 @@
 const userRouter = require('express').Router();
 require('dotenv').config();
 const { sendMail } = require('../email/email');
-const { authenticateToken } = require('../functions/authenticateFunctions');
-const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions')
+const { authenticateToken, authenticateEmail } = require('../functions/authenticateFunctions');
+const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions');
+const { contactFormToAdminPlanText,contactFormToAdminHTML, contactFormConfirmationPlanText, contactFormConfirmationHTML } = require('../email/emailText')
 
 module.exports = userRouter;
 
@@ -60,5 +61,27 @@ userRouter.post('/updatePlan', authenticateToken, async(req, res) => {
     }
   } catch (err) {
     res.status(403).send()
+  }
+})
+
+userRouter.post('/contact', authenticateToken, authenticateEmail, async(req, res) => {
+  try {
+    const {email, message} = req.body;
+    const plainTextToAdmin = contactFormToAdminPlanText(email, message);
+    const htmlToAdmin = contactFormToAdminHTML(email, message);
+    const emailToAdmin = await sendMail(process.env.ADMIN_EMAIL, plainTextToAdmin, htmlToAdmin);
+    if(await emailToAdmin.accepted) {
+      if(req.body.email_authenticated) {
+        const confirmationEmailPlainText = contactFormConfirmationPlanText(message);
+        const confirmationEmailHTML = contactFormConfirmationHTML(message);
+        sendMail(email, confirmationEmailPlainText, confirmationEmailHTML);
+      }
+      res.status(200).send(true); 
+    } else {
+      res.status(403).send(false);
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(403).send(false);
   }
 })

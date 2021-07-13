@@ -137,3 +137,7 @@ body{
     margin-top: 10px;
   }
 }
+
+.makeFirstLetterUpper {
+  text-transform: capitalize;
+}

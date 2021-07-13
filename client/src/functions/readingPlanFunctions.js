@@ -163,3 +163,7 @@ export function extractReadingPlanVariables(e) {
     }
     return returnObject
 }
+
+export function updatePlanReadToAndFrom (updatedPageNum, ToOrFrom, day, scheme) {
+
+}

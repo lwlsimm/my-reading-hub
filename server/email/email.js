@@ -28,7 +28,7 @@ async function sendMail(emailTo, text, html) {
     const mailOptions = {
       from: GMAIL_ADDRESS,
       to: emailTo,
-      subject: 'Hello from Lee Simmons',
+      subject: 'A Message from My Reading Hub',
       text: text,
       html: html
     }

@@ -2,7 +2,6 @@ import './pageViews.css';
 import { useSelector } from 'react-redux';
 import PageViewBook from '../../book/PageViewBook';
 
-
 function Current () {
 
   const books = useSelector(state => state.planReducer.plans);

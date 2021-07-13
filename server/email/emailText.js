@@ -5,4 +5,25 @@ const registrationEmailPlainText = (link)=> {
   return `Please enable HTML for the link to verify your 'My Book Hub' account.  Alternatively, paste the following link into your browser: ${link}`;
 }
 
-module.exports = { registrationEmailPlainText, registrationHTML }
+const contactFormToAdminPlanText = (email, message) => {
+  return (
+    `Email from: ${email}.  Message: ${message}`
+  )
+}
+const contactFormToAdminHTML = (email, message) => {
+  return (
+    `<p>Email from: ${email}.</p>  <p>Message: ${message}</p>`
+  )
+}
+const contactFormConfirmationPlanText = (message) => {
+  return (
+    `Thank you for contacting us.  We will respond as soon as we can.  You message was as follows: ${message}`
+  )
+}
+const contactFormConfirmationHTML = (message) => {
+  return (
+    `<p>Thank you for contacting us.  We will respond as soon as we can. </p>  <p>You message was as follows:  ${message}</p>`
+  )
+}
+
+module.exports = { registrationEmailPlainText, registrationHTML, contactFormToAdminHTML,contactFormToAdminPlanText, contactFormConfirmationPlanText, contactFormConfirmationHTML  }
