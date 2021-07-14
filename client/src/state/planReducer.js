@@ -31,6 +31,22 @@ const planReducer = (state = initialState, action) => {
           ]
         }
       }
+      case 'plan/updateScheme': {
+        const { planId, newScheme } = action.payload;
+        return {
+          plans: [
+            ...state.plans.map(item => {
+              if(item.id !== planId) {
+                return item
+              } else {
+                let newItem = item;
+                newItem.plan_scheme = newScheme 
+                return newItem;
+              }
+            })
+          ]
+        }
+      }
       case 'plan/clearPlans': {
         return {
           plans: []

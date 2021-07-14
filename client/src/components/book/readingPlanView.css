@@ -59,6 +59,12 @@
   margin: 0;
   width: 75px;
 }
+.RP-submit {
+  grid-column: 1 / span 8;
+  width: 100%;
+  margin: 10px auto;
+}
+
 .RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7, .RP-col8 {
   height: 25px;
   text-align: center;
@@ -94,6 +100,7 @@
   text-align: center;
 }
 
+
 @media only screen and (min-width: 800px) {
   .RP-form {
     grid-template-columns: 80px 200px 100px 100px 100px 60px 60px 60px;
@@ -114,5 +121,26 @@
   .RP-edit-doneBtn {
     width: 200px;
   }
+  
 }
 
+@media only screen and (max-width: 700px) {
+  .editSchemeModal {
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+  }
+  .modal-para {
+    font-size: 0.8em;
+  }
+  .RPM-label {
+    font-size: 0.8em;
+    width: 40%;
+  }
+  .RPM-input {
+    width: 52%;
+  }
+  .editSchemeModal .btn {
+    margin: 10px;
+  }
+}

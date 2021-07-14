@@ -57,6 +57,13 @@ export const readingCompleted = (planId, day) => {
     payload: {planId: planId, day: day}
   }
 }
+export const updateScheme = (planId, newScheme) => {
+  
+  return {
+    type: 'plan/updateScheme',
+    payload: {planId: planId, newScheme: newScheme}
+  }
+}
 
 export const clearPlans = () => {
   return {
