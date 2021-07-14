@@ -127,6 +127,12 @@ body{
 .btn-inSearchMode:hover {
   background-color: gray;
 }
+.btn-yellow {
+  background-color: var(--yellow);
+}
+.btn-yellow:hover {
+  background-color: var(--yellow-selected);
+}
 
 .red-text {
   color: var(--danger);

@@ -18,6 +18,7 @@ function ReadingPlanView () {
   const [numberOfDays, setNumberOfDays] = useState(0);
   const [currentChanges, setCurrentChanges] = useState({});
   const [editDay,setEditDay] = useState(0)
+  const [modalVisible, setModalVisible] = useState(true)
 
   function getDataFromState () {
     const queryParams = window.location.search.substring(1);
@@ -68,6 +69,7 @@ function ReadingPlanView () {
           throw Error
         }
       } catch {};
+      newScheme[i-1]['day'] > furthestReadTo ? newScheme[i-1]['completed'] = false : newScheme[i-1]['completed'] = true;
       newScheme[i-1]['total_to_read'] = Number.isInteger(newScheme[i-1]['to'] - newScheme[i-1]['from']) ? Number.isInteger(newScheme[i-1]['to'] - newScheme[i-1]['from']): 0;
       newScheme[i-1]['completed'] = newScheme[i-1]['day'] <= furthestReadTo ? true : false;
     }
@@ -123,6 +125,8 @@ function ReadingPlanView () {
 
   const displayStartDate = new Date(plan.plan_start_date).toDateString();
   const displayEndDate = new Date(plan.plan_end_date).toDateString();
+  const modalClassNames = modalVisible ? "deleteModal" : "deleteModal hideModal";
+  const modal_bg_ClassNames = modalVisible ? "modalbackground" : "modalbackground hideModal";
   
   const instructions = `To change your plan enter the ${plan.measure} you have read from and to each day - click on the date to confirm you have read that day's readings.  Once you have done that, you can save your plan or you can recalculate a new end date/number of ${plan.measure}s per day based on your actual progress.`
 
@@ -206,6 +210,28 @@ function ReadingPlanView () {
         }
       </form>
 
+
+      {/* Modal */}
+      <div className={modal_bg_ClassNames}onClick={()=>setModalVisible(false)}></div>
+
+        <div className={modalClassNames}>
+          <form>
+          <h3>Revise Plan for '{bookDetails.title}'</h3>
+          <div className="deleteModal-row2">
+            <img className="" src={bookDetails.thumbnail} alt="book cover"/>
+            <div className="deleteModal-row2-col2">
+              <div className="flexBoxByRows">
+                <label>Last day completed :</label><input defaultValue={furthestReadTo}></input>
+              </div>
+              <div className="flexBoxByRows">
+                <label className="makeFirstLetterUpper">{plan.measure} read to:</label><input defaultValue={furthestReadTo}></input>
+              </div>
+            </div>
+          </div>
+          <input type="submit" className="btn submit-btn modal-btn" />
+          <div className="btn modal-btn" onClick={()=>setModalVisible(false)}>Take me back!</div>
+          </form>
+        </div>
 
     </div>
   )
