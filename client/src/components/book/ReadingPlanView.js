@@ -18,7 +18,8 @@ function ReadingPlanView () {
   const [numberOfDays, setNumberOfDays] = useState(0);
   const [currentChanges, setCurrentChanges] = useState({});
   const [editDay,setEditDay] = useState(0)
-  const [modalVisible, setModalVisible] = useState(true)
+  const [modalVisible, setModalVisible] = useState(true);
+  const [modalEndDate, setModalEndDate] = useState('')
 
   function getDataFromState () {
     const queryParams = window.location.search.substring(1);
@@ -39,6 +40,7 @@ function ReadingPlanView () {
             furthest = item.plan_scheme[i].day;
           }
         }
+        setModalEndDate(formatDateForModalDefault(plan.plan_end_date))
         setFurthestReadTo(furthest);
         setScheme(schemeArray);
         setNumberOfDays(Object.keys(item.plan_scheme).length);
@@ -50,7 +52,6 @@ function ReadingPlanView () {
     getDataFromState();
   },[]);
 
-  console.log(scheme)
 
   function updateSchemeUsingCurrentChanges() {
     const newScheme = [...scheme];
@@ -125,9 +126,25 @@ function ReadingPlanView () {
 
   const displayStartDate = new Date(plan.plan_start_date).toDateString();
   const displayEndDate = new Date(plan.plan_end_date).toDateString();
-  const modalClassNames = modalVisible ? "deleteModal" : "deleteModal hideModal";
+  const modalClassNames = modalVisible ? "Modal" : "Modal hideModal";
   const modal_bg_ClassNames = modalVisible ? "modalbackground" : "modalbackground hideModal";
+  const modalDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+  let readToDateForModal;
+  let currentPage;
+  let endDateForModal;
+  try {
+    endDateForModal = formatDateForModalDefault(displayEndDate)
+    readToDateForModal = new Date(scheme[furthestReadTo-1].date).toLocaleDateString('en-UK', modalDateOptions);
+    currentPage = scheme[furthestReadTo-1]['to']
+  } catch {}
   
+function formatDateForModalDefault(date) {
+  const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+  const reformedDate = new Date(date).toLocaleDateString('en-UK', options).toString();
+  return String(`${reformedDate.slice(6,10)}-${reformedDate.slice(3,5)}-${reformedDate.slice(0,2)}`)
+}
+
+  console.log(endDateForModal)
   const instructions = `To change your plan enter the ${plan.measure} you have read from and to each day - click on the date to confirm you have read that day's readings.  Once you have done that, you can save your plan or you can recalculate a new end date/number of ${plan.measure}s per day based on your actual progress.`
 
   return (
@@ -214,24 +231,35 @@ function ReadingPlanView () {
       {/* Modal */}
       <div className={modal_bg_ClassNames}onClick={()=>setModalVisible(false)}></div>
 
-        <div className={modalClassNames}>
-          <form>
-          <h3>Revise Plan for '{bookDetails.title}'</h3>
-          <div className="deleteModal-row2">
-            <img className="" src={bookDetails.thumbnail} alt="book cover"/>
-            <div className="deleteModal-row2-col2">
-              <div className="flexBoxByRows">
-                <label>Last day completed :</label><input defaultValue={furthestReadTo}></input>
+        <form className={modalClassNames}>
+          
+            
+              <h3>{bookDetails.title}</h3>
+              <h4>Edit Your Reading Plan</h4>
+              <p className="modal-para">{furthestReadTo === 0?
+              `You have yet to start this plan.  If this is not correct, please record the details of it in the 'Your Plan Scheme' section, otherwise your new plan will not reflect any progress that you have made.`
+              :
+              `According to 'Your Plan Scheme, you have read to ${plan.measure} ${currentPage} as at ${readToDateForModal}.  If this is not correct then you can update your progressin the 'Your Plan Scheme' section.`
+              }</p>
+              <div className="flexBoxByRows RPM-row">
+                <label className="RPM-label" for="lastReadTo">The last {plan.measure} that I read was:</label><input type="text" className="RPM-input" id="lastReadTo" defaultValue={currentPage}/>
               </div>
-              <div className="flexBoxByRows">
-                <label className="makeFirstLetterUpper">{plan.measure} read to:</label><input defaultValue={furthestReadTo}></input>
+              <div className="flexBoxByRows RPM-row">
+                <label className="RPM-label" for="lastReadTo">I want my revised plan to start from:</label><input type="date" className="RPM-input" id="lastReadTo" />
               </div>
+              <div className="or">Enter either:</div>
+            <div className="flexBoxByRows RPM-row">
+              <label  className="makeFirstLetterUpper RPM-label" for="per_day">{`${plan.measure}s per day`}</label>
+              <input className="RPM-input" type="text" id="per_day" name="per_day" />
             </div>
-          </div>
-          <input type="submit" className="btn submit-btn modal-btn" />
-          <div className="btn modal-btn" onClick={()=>setModalVisible(false)}>Take me back!</div>
-          </form>
-        </div>
+            <div className="or">OR</div>
+            <div className="flexBoxByRows RPM-row">
+              <label className="RPM-label" for="end_date RPM-label">End Date</label>
+              <input className="RPM-input" type="date" id="end_date" name="end_date" placeholder="Enter the end date" value={modalEndDate} onChange={(e)=>setModalEndDate(e.target.value)}/>
+            </div>
+            <input className="btn submit-btn" type="submit"/>
+          
+        </form>
 
     </div>
   )

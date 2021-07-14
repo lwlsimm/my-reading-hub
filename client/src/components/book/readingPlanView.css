@@ -79,6 +79,20 @@
 .RP-top-row {
   margin-bottom: 20px;
 }
+.RPM-row {
+  width: 90%;
+  justify-content: space-evenly;
+  margin: 5px 0;
+}
+.RPM-label {
+  width: 60%;
+  font-size: 0.95em;
+}
+.RPM-input {
+  width: 30%;
+  padding: 5px 0;
+  text-align: center;
+}
 
 @media only screen and (min-width: 800px) {
   .RP-form {
@@ -101,3 +115,4 @@
     width: 200px;
   }
 }
+

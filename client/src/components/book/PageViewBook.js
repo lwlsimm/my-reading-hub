@@ -76,7 +76,7 @@ function PageViewBook (props) {
   const percetage = calculatePercentageComplete();
   const {day, date, from, to} = getNextItemInScheme();
   const displayDate = new Date(date).toDateString();
-  const modalClassNames = deleteBookMode ? "deleteModal" : "deleteModal hideModal";
+  const modalClassNames = deleteBookMode ? "Modal" : "Modal hideModal";
   const modal_bg_ClassNames = deleteBookMode ? "modalbackground" : "modalbackground hideModal";
 
   const handleDeleteBook = async () => {

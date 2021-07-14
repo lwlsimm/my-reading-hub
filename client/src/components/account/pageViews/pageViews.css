@@ -92,22 +92,7 @@
   }
 }
 
-.deleteModal {
-  position: fixed;
-  border-radius: 10px;
-  z-index: 100;
-  top: 80px;
-  margin: 0 auto;
-  min-width: 40vw;
-  min-height: 40vh;
-  background-color: var(--yellow-light);
-  border: black 1px solid;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+
 .deleteModal-row2 {
   display: flex;
   justify-content: space-between;
@@ -121,25 +106,9 @@
   justify-content: center;
   align-items: center;
 }
-.modal-btn {
-  width: 80%;
-  height: 50px;
-}
+
 .deleteModal-para {
   max-width: 200px;
   font-size: 0.8em;
 }
-.hideModal {
-  display: none;
-}
 
-.modalbackground {
-  position: fixed;
-  z-index: 50;
-  top: 0px;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-  opacity: 50%;
-}
