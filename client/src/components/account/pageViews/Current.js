@@ -6,15 +6,13 @@ function Current () {
 
   const books = useSelector(state => state.planReducer.plans);
 
-  console.log(books)
-
   function getNextItemInScheme (book) {
     for(let i = 1; i <= Object.keys(book.plan_scheme).length; i++) {
       if(book.plan_scheme[i].completed === false) {
-        return 'unfinished'
+        return 'unfinished';
       }
     }
-    return 'finished'
+    return 'finished';
   }
  
   return (
@@ -31,4 +29,4 @@ function Current () {
   )
 }
 
-export default Current
+export default Current;

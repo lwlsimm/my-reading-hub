@@ -1,16 +1,17 @@
 
 export class ReadingPlan {
 
-  constructor(id, startDate, startAt, endAt, per_day = 0, end_date, perDayType, measure, bookData) {
+  constructor(id, plan_start_date, start_at, end_at, per_day = 0, end_date, per_day_type, measure, book_data, plan_scheme = {}) {
     this.id = id;
     this.measure = measure;
-    this.plan_start_date = new Date(startDate);
-    this.start_at = Number(startAt);
-    this.end_at = Number(endAt);
-    this.per_day_type = perDayType;
+    this.plan_start_date = new Date(plan_start_date);
+    this.start_at = Number(start_at);
+    this.end_at = Number(end_at);
+    this.per_day_type = per_day_type;
     this.per_day = Number(per_day);
     this.msPerDay = 24*60*60*1000;
-    this.book_data = bookData;
+    this.book_data = book_data;
+    this.plan_scheme = plan_scheme;
     if(end_date) {
           this.plan_end_date = new Date(end_date);
    } else {
@@ -74,4 +75,5 @@ export class ReadingPlan {
     }
     return planObject;
   }
+  
 }

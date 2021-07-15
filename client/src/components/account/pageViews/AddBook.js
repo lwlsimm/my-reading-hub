@@ -41,7 +41,7 @@ function AddBook () {
   const handleAddManualBook = (e) => {
     e.preventDefault()
     const title = e.target.manual_title.value;
-    const author = e.target.manual_author.value;
+    const author = [e.target.manual_author.value];
     dispatch(addSelectedBook({title: title, authors: author, industryIdentifiers: {0: null, 1: null}}));
     history.push(selectedBookPath)
   }

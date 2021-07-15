@@ -26,5 +26,11 @@ const validateEmail = (email) => {
    }
  }
 
+ function formatDate(date) {
+  const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
+  const reformedDate = new Date(date).toLocaleDateString('en-UK', options).toString();
+  return String(`${reformedDate.slice(6,10)}-${reformedDate.slice(3,5)}-${reformedDate.slice(0,2)}`)
+  }
 
- export { validateEmail, extractItemFromObject, covertSearchString  }
+
+ export { validateEmail, extractItemFromObject, covertSearchString, formatDate  }

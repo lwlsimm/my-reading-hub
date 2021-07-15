@@ -5,7 +5,6 @@ import { keys } from '../assets/keys/keys';
 export function constructReadingPlan (e, measure, bookObj) {
   //extracting variables
   const { startDate,startAt,endAt,per_day, end_date, perDayType } = extractReadingPlanVariables(e);
-  console.log(perDayType)
   const id = createBookId(bookObj);
   //create new Reading Plan object
   const readingPlanObj = new ReadingPlan(id, startDate, startAt, endAt, per_day, end_date, perDayType, measure, bookObj);
@@ -163,8 +162,4 @@ export function extractReadingPlanVariables(e) {
       perDayType: perDayType
     }
     return returnObject
-}
-
-export function updatePlanReadToAndFrom (updatedPageNum, ToOrFrom, day, scheme) {
-
 }

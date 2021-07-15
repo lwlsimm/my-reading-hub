@@ -5,6 +5,9 @@ import furthestReadIcon from '../../assets/images/furthestRead.png'
 import noReading from '../../assets/images/no-reading.png'
 import editing from '../../assets/images/editing.png';
 import { updateScheme } from '../../state/actions';
+import { formatDate } from '../../functions/commonFunctions';
+import { updateExistingPlan } from '../../functions/readingPlanFunctions';
+import { recalculate_plan } from '../../functions/recalculatePlanFunction'
 
 function ReadingPlanView () {
 
@@ -12,6 +15,7 @@ function ReadingPlanView () {
     getDataFromState();
   },[]);
 
+  // State
   const plansInState = useSelector(state => state.planReducer.plans);
   const [plan, setPlan] = useState({});
   const [bookDetails, setBookDetails] = useState({});
@@ -23,10 +27,42 @@ function ReadingPlanView () {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalEndDate, setModalEndDate] = useState('');
   const [modalPerDay, setModalPerDay] = useState('');
-  const [modalStartDate, setModalStartDate] = useState();
+  const [modalEndPage, setModalEndPage] = useState();
+  const [modalStartDate, setModalStartDate] = useState(null);
+  const [inSubmitMode,setInSubmitMode] = useState(false);
+  const [formSubmitError, setFormSubmitError] = useState({
+    wasErrorReturned: false,
+    errorMessage: ''
+  })
+  const [inputError, setInputError] = useState({
+    wasErrorReturned: false,
+    errorMessage: ''
+  })
+  const [modalError, setModalError] = useState({
+    wasErrorReturned: false,
+    errorMessage: ''
+  })
   const queryParams = window.location.search.substring(1);
   const dispatch = useDispatch();
 
+  //Variables
+  const token = useSelector(state => state.loginReducer.token);
+  const displayStartDate = new Date(plan.plan_start_date).toDateString();
+  const displayEndDate = new Date(plan.plan_end_date).toDateString();
+  const modalClassNames = modalVisible ? "Modal editSchemeModal" : "Modal hideModal";
+  const modal_bg_ClassNames = modalVisible ? "modalbackground" : "modalbackground hideModal";
+  const modalDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+  let readToDateForModal;
+  let currentPage;
+  let endDateForModal;
+  try {
+    endDateForModal = formatDate(displayEndDate)
+    readToDateForModal = new Date(scheme[furthestReadTo-1].date).toLocaleDateString('en-UK', modalDateOptions);
+    currentPage = scheme[furthestReadTo-1]['to'];
+  } catch {}
+  
+  
+  //This function gets the relevant plan from redux state and populates the local react state.
   function getDataFromState () {
     plansInState.map(item => {
       if(item.id === queryParams) {
@@ -50,7 +86,7 @@ function ReadingPlanView () {
         } else {
           setModalPerDay(plan.per_day)
         }
-        setModalStartDate(formatDate(new Date()))
+        setModalEndPage(plan.end_at)
         setFurthestReadTo(furthest);
         setScheme(schemeArray);
         setNumberOfDays(Object.keys(item.plan_scheme).length);
@@ -64,30 +100,41 @@ function ReadingPlanView () {
       const changeArray = ['to','from','date']
       for(let a = 0; a < changeArray.length; a++) {
         try {
-          if(currentChanges[i][changeArray[a]]) {
+          if(currentChanges[i][changeArray[a]] || currentChanges[i][changeArray[a]] === 0) {
             newScheme[i-1][changeArray[a]] = currentChanges[i][changeArray[a]]
-          } else {throw Error}} catch {};
-      }
+          } else {throw Error}} catch {}}
       if(i > 1) {
        if(formatDate(newScheme[i-1]['date']) <= formatDate(newScheme[i-2]['date'])) {
          const newDate = new Date(newScheme[i-2]['date']);
          newDate.setDate(newDate.getDate() + 1);
-         newScheme[i-1]['date'] = newDate;
-       }
+         newScheme[i-1]['date'] = newDate}
       }
       newScheme[i-1]['day'] > furthestReadTo ? newScheme[i-1]['completed'] = false : newScheme[i-1]['completed'] = true;
       let total_to_read = 0
       if(newScheme[i-1]['to']-newScheme[i-1]['from'] > 0) {
-        total_to_read = newScheme[i-1]['to']-newScheme[i-1]['from']
-      } 
+        total_to_read = newScheme[i-1]['to']-newScheme[i-1]['from']} 
       newScheme[i-1]['total_to_read'] = total_to_read;
       newScheme[i-1]['completed'] = newScheme[i-1]['day'] <= furthestReadTo ? true : false;
     }
     setScheme(newScheme);
     return newScheme;
   }
+  
 
-  console.log(scheme)
+  const handleInputChange = (num, day, type) => {
+    let valueFromInput
+    if(type !== 'date') {
+    valueFromInput = num !== 'None'? Number(num) : num;
+    } else {valueFromInput = num}
+
+    if(type === 'to' && num > modalEndPage) {
+      setModalEndPage(num)
+    }
+    const changes = currentChanges;
+    if(!changes[day]) {changes[day] = {}}
+    changes[day][type] = valueFromInput;
+    setCurrentChanges(changes);
+  }
 
   const handleAddNewDay = () => {
     const dayNumber = numberOfDays + 1;
@@ -107,17 +154,6 @@ function ReadingPlanView () {
     setNumberOfDays(dayNumber);
   }
 
-  const handleInputChange = (num, day, type) => {
-    let valueFromInput
-    if(type !== 'date') {
-    valueFromInput = num !== 'None'? Number(num) : num;
-    } else {valueFromInput = num}
-    const changes = currentChanges;
-    if(!changes[day]) {changes[day] = {}}
-    changes[day][type] = valueFromInput;
-    setCurrentChanges(changes);
-  }
-
   const handleFurthestRead = (day) => {
     setFurthestReadTo(day);
   };
@@ -132,29 +168,72 @@ function ReadingPlanView () {
     updateSchemeUsingCurrentChanges();
   }
 
-  const handleFinishEditingDay = () => {
-    updateSchemeUsingCurrentChanges();
+
+  const removeTodaysChangesFromCurrentChanges = (day) => {
+    const updatedChanges = currentChanges;
+    delete currentChanges[day];
+    setCurrentChanges(updatedChanges);
+  }  
+
+  const findPageOfThePreviousDay = (day) => {
+    if(day > 1) {
+      for(let i = day -2; i >= 0; i--) {
+        if(scheme[i]['to'] !== 'None') {
+          return scheme[i]['to'];
+        }
+      }
+    }
+    return plan.start_at;
+  }
+
+  const handleFinishEditingDay = () => { 
+    //validation
+    let to = scheme[editDay-1]['to'];
+    let from = scheme[editDay-1]['from'];
+    let date = scheme[editDay-1]['date'];
+    if(currentChanges[editDay] !== undefined) {
+      if(currentChanges[editDay]['to'] !== undefined) {
+        to = currentChanges[editDay]['to'];
+      }
+      if(currentChanges[editDay]['from'] !== undefined) {
+        from = currentChanges[editDay]['from'];
+      }
+      if(currentChanges[editDay]['date'] !== undefined) {
+        date = currentChanges[editDay]['date'];
+      }
+    }
+    
+    let errorMsg = '';
+    if(from > to) {
+      errorMsg = `The 'to' value cannot be less than the 'from' value! `
+    }
+    if(editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
+      errorMsg = errorMsg + `The 'from' value of the day you are editing cannot be less than the 'to' value of the previous reading day.  Change the previous reading day first.`
+    }
+    if((to === 'None' || from === 'None') && (to !== 'None' || from !== 'None')) {
+      //Overrides previous error messages
+      errorMsg = `Either both 'to' and 'from' must be 'None' or neither! `
+    }
+    if(editDay > 1) {
+      const today = new Date(formatDate(date));
+      const yesterday = new Date(formatDate(scheme[editDay-2]['date']));
+      if(today <= yesterday) {
+        errorMsg = errorMsg + `The date of the day that you are editing must be later than the date of the previous day!`
+      }
+    }
+    if(errorMsg) {
+      removeTodaysChangesFromCurrentChanges(editDay);
+      setInputError({wasErrorReturned: true, errorMessage: errorMsg})
+    } else {
+      updateSchemeUsingCurrentChanges();
+    }
+    
     setEditDay(0)
   }
 
-  const displayStartDate = new Date(plan.plan_start_date).toDateString();
-  const displayEndDate = new Date(plan.plan_end_date).toDateString();
-  const modalClassNames = modalVisible ? "Modal editSchemeModal" : "Modal hideModal";
-  const modal_bg_ClassNames = modalVisible ? "modalbackground" : "modalbackground hideModal";
-  const modalDateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
-  let readToDateForModal;
-  let currentPage;
-  let endDateForModal;
-  try {
-    endDateForModal = formatDate(displayEndDate)
-    readToDateForModal = new Date(scheme[furthestReadTo-1].date).toLocaleDateString('en-UK', modalDateOptions);
-    currentPage = scheme[furthestReadTo-1]['to']
-  } catch {}
-  
-  function formatDate(date) {
-  const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
-  const reformedDate = new Date(date).toLocaleDateString('en-UK', options).toString();
-  return String(`${reformedDate.slice(6,10)}-${reformedDate.slice(3,5)}-${reformedDate.slice(0,2)}`)
+  const handleSetEditDay = (day) => {
+    setInputError({wasErrorReturned: false, errorMessage: ''});
+    setEditDay(day)
   }
 
   function handleModalEndData (value,type) {
@@ -167,14 +246,78 @@ function ReadingPlanView () {
     }
   }
 
-  function handleUpdateSubmit () {
-    const updatedScheme = updateSchemeUsingCurrentChanges();
-    const data_for_state = {};
-    for(let i = 0; i < updatedScheme.length; i++) {
-      data_for_state[i+1] = updatedScheme[i]
+  async function handleUpdateSubmit () {
+    setInSubmitMode(true)
+    try {
+      const updatedScheme = updateSchemeUsingCurrentChanges();
+      const data_for_state = {};
+      for(let i = 0; i < updatedScheme.length; i++) {
+        data_for_state[i+1] = updatedScheme[i]
+      }
+      dispatch(updateScheme(plan.id, data_for_state));
+      const sendNewPlanToServer = await updateExistingPlan(plan.id,data_for_state,token);
+      if(!sendNewPlanToServer) {throw Error}
+      setInSubmitMode(false)
+      return
+    } catch (error) {
+      setFormSubmitError({wasErrorReturned: true, errorMessage: `There was an error in saving your progress to the server.  We apologise for the inconvenience.  Please logout and login again.  If the problem persists, please contact us via the 'About' section.`})
+      setInSubmitMode(false)
     }
-    console.log(data_for_state)
-    dispatch(updateScheme(plan.id, data_for_state));
+  }
+
+  const handleChangeModalStartDate = (date) => {
+    setModalError({wasErrorReturned: false, errorMessage: ''})
+    const newDate = formatDate(date);
+    const furthestReadToDate = formatDate(scheme[furthestReadTo-1]['date']);
+    if(newDate <= furthestReadToDate) {
+      setModalError({wasErrorReturned: true, errorMessage:`The start date of the revised plan is before the last date that you marked as being 'Read' - either set the start after ${readToDateForModal} or update 'Your Plan Scheme'`})
+      setModalStartDate(formatDate(scheme[furthestReadTo]['date']))
+    }
+    setModalStartDate(newDate)
+  }
+
+  const handleMakeModalVisible = () => {
+    handleUpdateSubmit();
+    setModalVisible(true);
+  }
+
+  const handleRecalculatePlan = (e) => {
+    e.preventDefault();
+    setModalError({wasErrorReturned: false, errorMessage: ``})
+    const lastReadTo = Number(e.target.lastReadTo.value);
+    const startDate = new Date(e.target.startDate.value);
+    const endAt = Number(e.target.readTo.value);
+    const per_day = Number(e.target.modal_per_day.value);
+    let end_date = e.target.modal_end_date.value;
+    const per_day_type = per_day? 'per_day':'end_date';
+    if(end_date && per_day) {
+      setModalError({wasErrorReturned: true, errorMessage: `You cannot input a value for both an 'end date' and a '${plan.measure}s per day'.  Please delete one`})
+      return;
+    }
+    if(end_date && end_date < startDate) {
+      setModalError({wasErrorReturned: true, errorMessage: `The end date cannot be before the start date.`})
+      return;
+    }
+    end_date = new Date(e.target.modal_end_date.value);
+    if(endAt < lastReadTo) {
+      setModalError({wasErrorReturned: true, errorMessage: `The ${plan.measure} that you are reading upto cannot be less than the last page that you read up to.`})
+      return;
+    }
+    const data_for_new_plan = {
+      current_plan_scheme: scheme,
+      measure_last_read_to: lastReadTo,
+      end_at: endAt,
+      new_plan_start_date: startDate,
+      per_day_type: per_day_type,
+      end_date: end_date,
+      per_day: per_day,
+    }
+    const plan_total_days = ((end_date - startDate) / plan.msPerDay)+1;
+    console.log(plan_total_days)
+    const newPlan = recalculate_plan(data_for_new_plan); 
+    dispatch(updateScheme(plan.id, newPlan));
+    getDataFromState();
+    setModalVisible(false);
   }
 
   const instructions = `To change your plan enter the ${plan.measure} you have read from and to each day - click on the date to confirm you have read that day's readings.  Once you have done that, you can save your plan or you can recalculate a new end date/number of ${plan.measure}s per day based on your actual progress.`
@@ -196,13 +339,15 @@ function ReadingPlanView () {
         <p className="RP-para">Your plan has a current end date of: <span className="bold">{displayEndDate}</span></p>
         <div className="flexBoxByRows RP-flex">
           <div className="btn" onClick={()=>handleAddNewDay()}>Add New Day</div>
-          <div className="btn" onClick={()=>setModalVisible(true)}>Recalculate Plan</div>
+          
           <div className="btn btn-red" onClick={()=>handleReset()}>Reset</div>
-          <div>
+          <div className="key-box">
             <p className="bold">Key:</p>
             <p>Mark as furthest read {plan.measure} <img className="RP-icon" src={furthestReadIcon}/></p>
             <p>No reading for today <img className="RP-icon" src={noReading} /></p>
             <p>Edit Day <img className="RP-icon" src={editing} /></p>
+            <p>Duplicate reading with previous day&nbsp;<span className="bg-red">&nbsp;5&nbsp;</span></p>
+            <p>Gap in plan from previous day&nbsp;<span className="bg-yellow">&nbsp;5&nbsp;</span></p>
           </div>
         </div>
         
@@ -210,7 +355,8 @@ function ReadingPlanView () {
       {/* Table */}
       
       <h2>Your Plan Scheme</h2>
-      
+      {inputError.wasErrorReturned? <h3 className="red-text">{inputError.errorMessage}</h3>:null}
+      {formSubmitError.wasErrorReturned? <h3 className="red-text">{formSubmitError.errorMessage}</h3>: null}
       <form className="RP-form">
         <div className="RP-col1 bold RP-top-row">Day</div>
         <div className="RP-col2 bold RP-top-row">Date</div>
@@ -227,6 +373,17 @@ function ReadingPlanView () {
             const displayDate = new Date(item.date).toLocaleDateString('en-UK', options);
             const inputDate = formatDate(new Date(item.date))
             const completed = item.day <= furthestReadTo ? 'Read':'Unread';
+            const yesterdayToValue = findPageOfThePreviousDay(item.day);
+            let fromClassNames = 'RP-col3 ';
+            if(item.day > 1 && item.from < yesterdayToValue ) {
+              fromClassNames = fromClassNames +'bg-red';
+            }
+            if(item.day > 1 && item.from - yesterdayToValue >= 2) {
+              fromClassNames = fromClassNames +' bg-yellow';
+            }
+            if(item.from !== 'None' && yesterdayToValue === plan.start_at && item.from !== plan.start_at) {
+              fromClassNames = fromClassNames +' bg-yellow';
+            }
                 return (
                   <Fragment>
                     <div className="RP-col1">{item.day}</div>
@@ -240,7 +397,7 @@ function ReadingPlanView () {
                     :
                     <Fragment>
                       <div className="RP-col2">{displayDate}</div>
-                      <div className="RP-col3" id={`RP-row-${item.day}-from`} defaultValue={item.from}>{item.from}</div>
+                      <div className={fromClassNames} id={`RP-row-${item.day}-from`} defaultValue={item.from}>{item.from}</div>
                       <div className="RP-col4" id={`RP-row-${item.day}-to`}>{item.to}</div>
                     </Fragment>
                     }
@@ -253,7 +410,7 @@ function ReadingPlanView () {
                      <Fragment>
                       <img className="RP-col6 RP-icon" src={furthestReadIcon} onClick={()=>handleFurthestRead(item.day)}/>
                       <img className="RP-col7 RP-icon" src={noReading} onClick={()=>handleNoReadingToday(item.day)}/>
-                      <img className="RP-col8 RP-icon" src={editing} onClick={()=>setEditDay(item.day)}/>
+                      <img className="RP-col8 RP-icon" src={editing} onClick={()=>handleSetEditDay(item.day)}/>
                     </Fragment>
                     }
                     
@@ -261,7 +418,11 @@ function ReadingPlanView () {
                 )
             })
         }
-        <div className="btn submit-btn RP-submit" onClick={()=>handleUpdateSubmit()}>Submit Changes</div>
+        <div className={inSubmitMode? "btn submit-btn RP-submit btn-inSearchMode":"btn submit-btn RP-submit"} onClick={()=>handleUpdateSubmit()}>{inSubmitMode?'... SUBMITTING ...':'Submit Changes'}</div>
+        
+        
+        <div></div>
+        <div className="btn submit-btn RP-submit" onClick={()=>handleMakeModalVisible()}>Submit Changes & Recalculate Plan</div>
         {/* Div below ensures the submit button does not sit at the bottowm of the page */}
         <div></div>
       </form>
@@ -270,7 +431,7 @@ function ReadingPlanView () {
       {/* Modal */}
       <div className={modal_bg_ClassNames} onClick={()=>setModalVisible(false)}></div>
 
-        <form className={modalClassNames}>
+        <form className={modalClassNames} onSubmit={(e)=>handleRecalculatePlan(e)}>
           
             
               <h3>{bookDetails.title}</h3>
@@ -280,21 +441,25 @@ function ReadingPlanView () {
               :
               `According to 'Your Plan Scheme, you have read to ${plan.measure} ${currentPage} as at ${readToDateForModal}.  If this is not correct then you can update your progressin the 'Your Plan Scheme' section.`
               }</p>
+              {modalError.wasErrorReturned? <h4 className="red-text">{modalError.errorMessage}</h4>:null}
               <div className="flexBoxByRows RPM-row">
-                <label className="RPM-label" for="lastReadTo">The last {plan.measure} that I read was:</label><input type="text" className="RPM-input" id="lastReadTo" defaultValue={currentPage}/>
+                <label className="RPM-label" for="lastReadTo">The last {plan.measure} that I read was:</label><input type="text" className="RPM-input" id="lastReadTo" defaultValue={currentPage} required/>
               </div>
               <div className="flexBoxByRows RPM-row">
-                <label className="RPM-label" for="lastReadTo">I want my new plan to start from:</label><input type="date" className="RPM-input" id="startDate" onChange={(e)=>setModalStartDate(e.target.value)}value={modalStartDate}/>
+                <label className="RPM-label" for="lastReadTo">I want my new plan to start from:</label><input type="date" className="RPM-input" id="startDate" value={modalStartDate} onChange={(e)=>handleChangeModalStartDate(e.target.value)} required/>
+              </div>
+              <div className="flexBoxByRows RPM-row">
+                <label className="RPM-label" for="lastReadTo">You will be reading to {plan.measure}:</label><input type="text" className="RPM-input" id="readTo" onChange={(e)=>setModalEndPage(e.target.value)}value={modalEndPage}/>
               </div>
               <div className="or">Enter either:</div>
             <div className="flexBoxByRows RPM-row">
-              <label  className="makeFirstLetterUpper RPM-label" for="per_day">{`${plan.measure}s per day`}</label>
-              <input className="RPM-input" type="text" id="per_day" name="per_day" value={modalPerDay} onChange={(e)=>handleModalEndData(e.target.value, 'per_day')}/>
+              <label  className="makeFirstLetterUpper RPM-label" for="modal_per_day">{`${plan.measure}s per day`}</label>
+              <input className="RPM-input" type="text" id="modal_per_day" name="per_day" value={modalPerDay} onChange={(e)=>handleModalEndData(e.target.value, 'per_day')}/>
             </div>
             <div className="or">OR</div>
             <div className="flexBoxByRows RPM-row">
-              <label className="RPM-label" for="end_date RPM-label">End Date</label>
-              <input className="RPM-input" type="date" id="end_date" name="end_date" placeholder="Enter the end date" value={modalEndDate} onChange={(e)=>handleModalEndData(e.target.value, 'end_date')}/>
+              <label className="RPM-label" for="modal_end_date">End Date</label>
+              <input className="RPM-input" type="date" id="modal_end_date" name="modal_end_date" placeholder="Enter the end date" value={modalEndDate} onChange={(e)=>handleModalEndData(e.target.value, 'end_date')}/>
             </div>
             <input className="btn submit-btn modal-submit" type="submit"/>
             <div className="btn submit-btn btn-yellow modal-exit" onClick={()=>setModalVisible(false)}>Exit</div>

@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login, deleteSearchItems, deleteSelectedBook, clearPlans, addReadingPlan } from '../../state/actions';
-import {ReadingPlanFromServer} from '../../classes/ReadingPlanFromServer'
+//import {ReadingPlanFromServer} from '../../classes/ReadingPlanFromServer'
+import { ReadingPlan } from '../../classes/ReadingPlan';
 
 
 const { registerUser } = require('../../functions/registrationFunctions');
@@ -45,6 +46,7 @@ function Login () {
   const handleLoginAttempt = async (e) => {
     setloginErrorMessage('');
     e.preventDefault();
+
     try {
       const response = await loginUser(e.target.login_email.value, e.target.login_password.value);
       if(!response.data['is_verified']){
@@ -54,7 +56,9 @@ function Login () {
       plan_package.map(plan => {
         const plan_details = JSON.parse(plan.plan_details);
         const plan_scheme = JSON.parse(plan.plan_scheme);
-        const newPlan = new ReadingPlanFromServer(plan_details, plan_scheme);
+        // const newPlan = new ReadingPlanFromServer(plan_details, plan_scheme);
+        const {id, plan_start_date, start_at, end_at, per_day, end_date, per_day_type, measure, book_data } = plan_details;
+        const newPlan = new ReadingPlan(id, plan_start_date, start_at, end_at, per_day, end_date, per_day_type, measure, book_data, plan_scheme)
         dispatch(addReadingPlan(newPlan));
       })
       dispatch(login(response.data));
