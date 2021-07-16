@@ -36,6 +36,6 @@ const authenticateSession = async(token) => {
   } else {
     return false
   }
-}
+} 
 
 export { loginUser, authenticateSession }

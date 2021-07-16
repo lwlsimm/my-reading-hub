@@ -3,7 +3,10 @@ require('dotenv').config();
 const { sendMail } = require('../email/email');
 const { authenticateToken, authenticateEmail } = require('../functions/authenticateFunctions');
 const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions');
-const { contactFormToAdminPlanText,contactFormToAdminHTML, contactFormConfirmationPlanText, contactFormConfirmationHTML } = require('../email/emailText')
+const { contactFormToAdminPlanText,contactFormToAdminHTML, contactFormConfirmationPlanText, contactFormConfirmationHTML } = require('../email/emailText');
+const { changePassword, changeEmail } = require('../functions/settingsFunctions');
+const { checkCurrentPasswordUsingCustomerId   } = require('../functions/loginFunctions');
+const { hashPassword } = require('../functions/registrationFunctions')
 
 module.exports = userRouter;
 
@@ -76,12 +79,48 @@ userRouter.post('/contact', authenticateToken, authenticateEmail, async(req, res
         const confirmationEmailHTML = contactFormConfirmationHTML(message);
         sendMail(email, confirmationEmailPlainText, confirmationEmailHTML);
       }
-      res.status(200).send(true); 
+      res.send(true); 
     } else {
-      res.status(403).send(false);
+      res.send(false);
     }
   } catch (error) {
     console.log(error.message);
-    res.status(403).send(false);
+    res.send(false);
+  }
+});
+
+userRouter.post('/changepw', authenticateToken, checkCurrentPasswordUsingCustomerId , hashPassword, async(req, res) => {
+  try {
+    const id = req.body.user.id;
+    const { hashedPassword } = req.body;
+    if(! req.body.pw_verified || !req.body.authenticated) {
+      throw new Error('auth failed');
+    } 
+    const isPasswordChanged = await changePassword(id, hashedPassword);
+    if(await isPasswordChanged) {
+      res.status(200).send(true);
+    } else {
+      throw new Error('unknown error');
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(200).send(false);
+  }
+})
+
+userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
+  try {
+    if(! req.body.pw_verified || !req.body.authenticated) {
+      throw new Error('auth failed');
+    }
+    const id = req.body.user.id;
+    const wasEmailChanged = await changeEmail(id, req.body.email); 
+    if(await wasEmailChanged) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {
+    res.send(false);
   }
 })

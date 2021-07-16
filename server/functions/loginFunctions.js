@@ -26,6 +26,26 @@ async function checkPassword (req, res, next) {
   }
 }
 
+async function checkCurrentPasswordUsingCustomerId (req, res, next) {
+  try {
+    const { id } = req.body.user;
+    const { current_password } = req.body;
+    const serverQuery = await pool.query("SELECT hashed_pw FROM passwords WHERE customer_id  = $1", [id]);
+    const dbPassword = await serverQuery.rows[0]['hashed_pw'];
+    bcrypt.compare(current_password, await dbPassword, async function(err, result) {
+      if(await result) {
+        req.body.pw_verified = true;
+      } else {
+        req.body.pw_verified = false;
+      }
+      next()
+    });
+  } catch (error) {
+    req.body.pw_verified = false;
+    next();
+  }
+}
+
 async function getBookDetails (req, res, next) {
   try {
     const {id, verified} = req.body;
@@ -47,4 +67,4 @@ const generateAccessToken = async(id) => {
 }
 
 
-module.exports = { checkPassword, generateAccessToken, getBookDetails }
+module.exports = { checkPassword, generateAccessToken, getBookDetails, checkCurrentPasswordUsingCustomerId  }

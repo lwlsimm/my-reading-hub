@@ -1,6 +1,7 @@
 import fail from '../../assets/images/oops.png';
 import './verification.css';
 
+
 const VerificationFail = () => {
   
 

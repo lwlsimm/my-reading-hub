@@ -6,7 +6,7 @@ const { Pool } = require('pg');
 function authenticateToken(req, res, next) {
   try {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]
+    const token = authHeader && authHeader.split(' ')[1];
     if(token === null) {
       throw new Error
     }
@@ -31,7 +31,6 @@ async function authenticateEmail(req, res, next) {
   try {
     const {email} = req.body;
     const id = req.body.user.id;
-    console.log('getting server data')
     const serverQuery = await pool.query("SELECT email FROM users WHERE id = $1",[id]);
     const emailFomServer = await serverQuery.rows[0]['email'];
     if(await emailFomServer === email) {
