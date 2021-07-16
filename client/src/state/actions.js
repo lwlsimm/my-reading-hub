@@ -64,6 +64,13 @@ export const updateScheme = (planId, newScheme) => {
     payload: {planId: planId, newScheme: newScheme}
   }
 }
+export const updateEndDate = (planId, newDate) => {
+  
+  return {
+    type: 'plan/updateEndDate',
+    payload: {planId: planId, newDate: newDate}
+  }
+}
 
 export const clearPlans = () => {
   return {

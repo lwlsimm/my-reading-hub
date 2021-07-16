@@ -81,10 +81,22 @@ function Login () {
             <input className="input" name="login_password" id="password" type="password" placeholder="Enter password" required/>
             <input type="submit" className="btn submit-btn"/>
           </form>
-          
         </div>
+        <div className="sectionDivider flexBoxByCols"></div>
+        <div className=" flexBoxByCols">
+        <h2>Forgotten Password?</h2>
+        <p className="login-para">Enter your email below.  If the email exists in our system, you will be sent a link to reset your password.</p>
+        <form className='form' >
+            <input className="input" name="email" id="login_email" placeholder="Enter email address" required/>
+            <input type="submit" className="btn submit-btn"/>
+          </form>
+          </div>
+        
+        
+        {
+        /* 
         <div className="sectionDivider"></div>
-        {/* <div>
+        <div>
           <h3>or login with Google+</h3>
           <img class="googleIcon" alt="google" src={google}/>
         </div> */}
@@ -105,8 +117,10 @@ function Login () {
             <input type="submit" className="btn submit-btn"/>
           </form>
         </div>
+        
+        {/* 
         <div className="sectionDivider"></div>
-        {/* <div>
+        <div>
           <h3>or register using Google+</h3>
           <img alt="google" class="googleIcon regIcon" src={google}/>
         </div> */}

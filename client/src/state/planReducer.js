@@ -47,6 +47,22 @@ const planReducer = (state = initialState, action) => {
           ]
         }
       }
+      case 'plan/updateEndDate': {
+        const { planId, newDate  } = action.payload;
+        return {
+          plans: [
+            ...state.plans.map(item => {
+              if(item.id !== planId) {
+                return item
+              } else {
+                let newItem = item;
+                newItem.plan_end_date = newDate
+                return newItem;
+              }
+            })
+          ]
+        }
+      }
       case 'plan/clearPlans': {
         return {
           plans: []

@@ -17,6 +17,7 @@
   width: 90%;
   border-top: 1.5px black solid;
   align-self: center;
+  margin: 10px 0;
 }
 
 .googleIcon {
@@ -54,6 +55,11 @@
 .errorParagraph {
   text-align: center;
   color: red;
+}
+
+.login-para {
+  width: 80%;
+  text-align: center;
 }
 
 

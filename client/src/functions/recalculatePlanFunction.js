@@ -22,7 +22,7 @@ function recalculate_plan (inputs) {
     }
   })
   const days_already_completed = Object.keys(new_plan_obj).length;
-  let running_total = measure_last_read_to + 1;
+  let running_total = measure_last_read_to;
   for(let day = 1; day <= plan_total_days; day++) {
     const date_for_plan_day = new Date();
     date_for_plan_day.setDate(new_plan_start_date.getDate()+ day - 1);

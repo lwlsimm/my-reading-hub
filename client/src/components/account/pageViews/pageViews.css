@@ -64,6 +64,53 @@
   display: none;
 }
 
+.deleteModal-row2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.deleteModal-row2-col2 {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.deleteModal-para {
+  max-width: 200px;
+  font-size: 0.8em;
+}
+
+.setting-container {
+  justify-content: center;
+  align-items: flex-start;
+}
+.setting-container2 {
+  justify-content: space-around;
+  width: 100%;
+}
+
+.setting-btn {
+  margin: 20px;
+  width: 50%;
+  min-width: 300px;
+}
+
+.setting-input {
+  padding: 2px;
+  margin: 8px;
+  width: 275px;
+}
+
+.setting-delete-btn {
+  width: 250px;
+}
+.setting-para {
+  max-width: 500px;
+}
+
 @media only screen and (max-width: 700px) {
   .cb-mini-thumbnail{
     display: block;
@@ -92,23 +139,4 @@
   }
 }
 
-
-.deleteModal-row2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-.deleteModal-row2-col2 {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.deleteModal-para {
-  max-width: 200px;
-  font-size: 0.8em;
-}
 

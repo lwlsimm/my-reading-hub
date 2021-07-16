@@ -115,9 +115,9 @@ function PageViewBook (props) {
             <p className="cb-para">{displayDate}</p>
             <p className="cb-para">Read from {book.measure}: <span className="bold">{from}</span> <br/>to the end of: <span className="bold">{to}</span></p>
             {updatingInProgress ?
-              <div className="btn cb-btn submit-btn cb-complete-btn btn-inSearchMode" disabled>MARK COMPLETE</div>
+              <div className="btn cb-btn submit-btn cb-complete-btn btn-inSearchMode" disabled>MARK DAY COMPLETE</div>
               :
-              <div className="btn cb-btn submit-btn cb-complete-btn" onClick={()=>completeReading(book.id, day, book)}>MARK COMPLETE</div>
+              <div className="btn cb-btn submit-btn cb-complete-btn" onClick={()=>completeReading(book.id, day, book)}>MARK DAY COMPLETE</div>
             }
           </div>
       }

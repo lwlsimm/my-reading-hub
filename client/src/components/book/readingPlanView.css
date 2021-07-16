@@ -96,6 +96,10 @@
   width: 60%;
   font-size: 0.95em;
 }
+.RPM-para {
+  font-size: 0.85em;
+}
+
 .RPM-input {
   width: 30%;
   padding: 5px 0;
@@ -148,6 +152,9 @@
   .RPM-label {
     font-size: 0.8em;
     width: 40%;
+  }
+  .RPM-para {
+    font-size: 0.8em;
   }
   .RPM-input {
     width: 52%;
