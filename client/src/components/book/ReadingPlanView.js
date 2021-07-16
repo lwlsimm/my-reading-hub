@@ -268,10 +268,12 @@ function ReadingPlanView () {
   const handleChangeModalStartDate = (date) => {
     setModalError({wasErrorReturned: false, errorMessage: ''})
     const newDate = formatDate(date);
-    const furthestReadToDate = formatDate(scheme[furthestReadTo-1]['date']);
-    if(newDate <= furthestReadToDate) {
-      setModalError({wasErrorReturned: true, errorMessage:`The start date of the revised plan is before the last date that you marked as being 'Read' - either set the start after ${readToDateForModal} or update 'Your Plan Scheme'`})
-      setModalStartDate(formatDate(scheme[furthestReadTo]['date']))
+    if(furthestReadTo !== 0) {
+      const furthestReadToDate = formatDate(scheme[furthestReadTo-1]['date']);
+      if(newDate <= furthestReadToDate) {
+        setModalError({wasErrorReturned: true, errorMessage:`The start date of the revised plan is before the last date that you marked as being 'Read' - either set the start after ${readToDateForModal} or update 'Your Plan Scheme'`})
+        setModalStartDate(formatDate(scheme[furthestReadTo]['date']))
+      }
     }
     setModalStartDate(newDate)
   }
@@ -446,7 +448,7 @@ function ReadingPlanView () {
                 <label className="RPM-label" for="lastReadTo">The last {plan.measure} that I read was:</label><input type="text" className="RPM-input" id="lastReadTo" defaultValue={currentPage} required/>
               </div>
               <div className="flexBoxByRows RPM-row">
-                <label className="RPM-label" for="lastReadTo">I want my new plan to start from:</label><input type="date" className="RPM-input" id="startDate" value={modalStartDate} onChange={(e)=>handleChangeModalStartDate(e.target.value)} required/>
+                <label className="RPM-label" for="lastReadTo">I want my new plan to start from:</label><input type="date" className="RPM-input" id="startDate" onChange={(e)=>handleChangeModalStartDate(e.target.value)} required/>
               </div>
               <div className="flexBoxByRows RPM-row">
                 <label className="RPM-label" for="lastReadTo">You will be reading to {plan.measure}:</label><input type="text" className="RPM-input" id="readTo" onChange={(e)=>setModalEndPage(e.target.value)}value={modalEndPage}/>
@@ -459,7 +461,7 @@ function ReadingPlanView () {
             <div className="or">OR</div>
             <div className="flexBoxByRows RPM-row">
               <label className="RPM-label" for="modal_end_date">End Date</label>
-              <input className="RPM-input" type="date" id="modal_end_date" name="modal_end_date" placeholder="Enter the end date" value={modalEndDate} onChange={(e)=>handleModalEndData(e.target.value, 'end_date')}/>
+              <input className="RPM-input" type="date" id="modal_end_date" name="modal_end_date" placeholder="Enter the end date" onChange={(e)=>handleModalEndData(e.target.value, 'end_date')}/>
             </div>
             <input className="btn submit-btn modal-submit" type="submit"/>
             <div className="btn submit-btn btn-yellow modal-exit" onClick={()=>setModalVisible(false)}>Exit</div>
