@@ -106,6 +106,7 @@
 
 .setting-delete-btn {
   width: 250px;
+  border: none;
 }
 .setting-para {
   max-width: 500px;

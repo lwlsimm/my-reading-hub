@@ -2,6 +2,7 @@ export const keys = {
   REGISTER_PATH: 'http://localhost:5500/api/register',
   REVERIFY_PATH: 'http://localhost:5500/api/verify/resend/',
   LOGIN_PATH: 'http://localhost:5500/api/login',
+  RESET_PW_PATH: 'http://localhost:5500/api/login/reset_pw',
   AUTHENTICATE_PATH: 'http://localhost:5500/api/user/session_validation',
   OL_SEARCH_PATH: 'http://openlibrary.org/search.json?title=',
   OL_COVER_PATH: "http://covers.openlibrary.org/b/isbn/",
@@ -12,5 +13,8 @@ export const keys = {
   DELETE_PLAN_ON_DB_PATH: 'http://localhost:5500/api/user/deletePlan',
   ABOUT_CONTACT_PATH: 'http://localhost:5500/api/user/contact',
   CHANGE_PW_PATH: 'http://localhost:5500/api/user/changepw',
-  CHANGE_EMAIL_PATH: 'http://localhost:5500/api/user/change_email'
+  CHANGE_EMAIL_PATH: 'http://localhost:5500/api/user/change_email',
+  DELETE_PLANS_PATH: 'http://localhost:5500/api/user/delete_plans',
+  DELETE_ACCOUNT_PATH: 'http://localhost:5500/api/user/delete_account',
+  UPDATE_PW_AFTER_RESET: 'http://localhost:5500/api/login/update_reset_pw'
 }

@@ -8,6 +8,12 @@
   flex-direction: column;
   text-align: center;
 }
+.fullPage {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
 
 .loginContainer {
   border-right: 1px black solid;

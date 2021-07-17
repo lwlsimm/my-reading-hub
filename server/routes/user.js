@@ -4,9 +4,9 @@ const { sendMail } = require('../email/email');
 const { authenticateToken, authenticateEmail } = require('../functions/authenticateFunctions');
 const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions');
 const { contactFormToAdminPlanText,contactFormToAdminHTML, contactFormConfirmationPlanText, contactFormConfirmationHTML } = require('../email/emailText');
-const { changePassword, changeEmail } = require('../functions/settingsFunctions');
+const { changePassword, changeEmail, deletePlansForId, deleteAccount, } = require('../functions/settingsFunctions');
 const { checkCurrentPasswordUsingCustomerId   } = require('../functions/loginFunctions');
-const { hashPassword } = require('../functions/registrationFunctions')
+const { hashPassword } = require('../functions/registrationFunctions');
 
 module.exports = userRouter;
 
@@ -123,4 +123,38 @@ userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCus
   } catch (error) {
     res.send(false);
   }
+});
+
+userRouter.post('/delete_plans', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
+  try {
+    if(! req.body.pw_verified || !req.body.authenticated) {
+      throw new Error('auth failed');
+    }
+    const id = req.body.user.id;
+    const werePlansDeleted = await deletePlansForId(id);
+    if(await werePlansDeleted) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {
+    res.send(false);
+  }
 })
+
+userRouter.post('/delete_account', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
+  try {
+    if(! req.body.pw_verified || !req.body.authenticated) {
+      throw new Error('auth failed');
+    }
+    const id = req.body.user.id;
+    const wasAccountDeleted = await deleteAccount(id);
+    if(await wasAccountDeleted) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
+  } catch (error) {
+    res.send(false);
+  }
+});

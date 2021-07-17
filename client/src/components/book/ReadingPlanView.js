@@ -240,8 +240,6 @@ function ReadingPlanView () {
     setEditDay(day)
   }
 
-  
-
   async function handleUpdateSubmit () {
     setInSubmitMode(true)
     try {
@@ -443,7 +441,9 @@ function ReadingPlanView () {
               <div className="flexBoxByRows RPM-row">
                 <label className="RPM-label" for="lastReadTo">I want my new plan to start from:</label><input type="date" className="RPM-input" id="startDate" placeholder="dd/mm/yyyy" required/>
               </div>
+              {readToDateForModal? 
               <p className="RPM-para">The above date must be <span className="bold">after</span> {readToDateForModal}.</p>
+              : null}
               <div className="flexBoxByRows RPM-row">
                 <label className="RPM-label" for="lastReadTo">You will be reading to {plan.measure}:</label><input type="text" className="RPM-input" id="readTo" defaultValue={plan.end_at}/>
               </div>

@@ -27,6 +27,7 @@ async function hashPassword (req, res, next) {
         });
     });
   } catch (error) {
+    console.log('hashPassword error:', error.message)
     res.status(401).send(error.message);
   }
 }

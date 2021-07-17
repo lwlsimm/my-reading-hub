@@ -8,18 +8,20 @@ import { ReadingPlan } from '../../classes/ReadingPlan';
 
 
 const { registerUser } = require('../../functions/registrationFunctions');
-const { loginUser } = require('../../functions/loginFunctions');
+const { loginUser, passwordResetRequest } = require('../../functions/loginFunctions');
 
 function Login () {
 
   const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [loginErrorMessage, setloginErrorMessage] = useState("");
+  const [resetEmailRequestSent, setResetEmailRequestSent] = useState(false)
 
   const dispatch = useDispatch()
   const history = useHistory();
   const registerSucessPath = '/registersuccess';
   const emailNotVerifiedPath = "/notverified/?email=";
   const accountPath = "/account";
+  const resetPath = '/passwordreset/?code='
 
   function performClearState () {
     dispatch(clearPlans());
@@ -43,12 +45,23 @@ function Login () {
     }
   }
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setResetEmailRequestSent(true);
+    const email = e.target.email.value;
+    passwordResetRequest(email)
+  }
+
   const handleLoginAttempt = async (e) => {
     setloginErrorMessage('');
     e.preventDefault();
-
     try {
       const response = await loginUser(e.target.login_email.value, e.target.login_password.value);
+      console.log(response.data['verified'])
+      if(response.data['is_verified'] === 'reset') {
+        history.push(resetPath + response.data['code']);
+        return;
+      }
       if(!response.data['is_verified']){
         history.push(emailNotVerifiedPath + response.data['email']);
       }
@@ -85,8 +98,9 @@ function Login () {
         <div className="sectionDivider flexBoxByCols"></div>
         <div className=" flexBoxByCols">
         <h2>Forgotten Password?</h2>
-        <p className="login-para">Enter your email below.  If the email exists in our system, you will be sent a link to reset your password.</p>
-        <form className='form' >
+        <p className="login-para">Enter your email below.  If the email exists in our system, you will be sent a temporary password.</p>
+        <form className='form' onSubmit={e=>handleResetPassword(e)}>
+            {resetEmailRequestSent? <h4>Check your email for the reset link</h4>:null}
             <input className="input" name="email" id="login_email" placeholder="Enter email address" required/>
             <input type="submit" className="btn submit-btn"/>
           </form>

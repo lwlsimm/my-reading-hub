@@ -137,6 +137,9 @@ body{
 .red-text {
   color: var(--danger);
 }
+.green-text {
+  color: var(--green-selected)
+}
 
 
 

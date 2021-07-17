@@ -5,6 +5,13 @@ const registrationEmailPlainText = (link)=> {
   return `Please enable HTML for the link to verify your 'My Book Hub' account.  Alternatively, paste the following link into your browser: ${link}`;
 }
 
+const passwordResetEmailPlainText = (code) => {
+  return `You have requested a password reset.  Please enter the following temporary password to allow you to reset: ${code}`
+}
+const passwordResetEmailHTML = (code) => {
+  return `<h2>Thank you for joining My Reading Hub</h2><p>You have requested a password reset.  Please enter the following temporary password to allow you to reset: ${code}</p>`
+}
+
 const contactFormToAdminPlanText = (email, message) => {
   return (
     `Email from: ${email}.  Message: ${message}`
@@ -26,4 +33,4 @@ const contactFormConfirmationHTML = (message) => {
   )
 }
 
-module.exports = { registrationEmailPlainText, registrationHTML, contactFormToAdminHTML,contactFormToAdminPlanText, contactFormConfirmationPlanText, contactFormConfirmationHTML  }
+module.exports = { registrationEmailPlainText, registrationHTML, contactFormToAdminHTML,contactFormToAdminPlanText, contactFormConfirmationPlanText, contactFormConfirmationHTML, passwordResetEmailPlainText, passwordResetEmailHTML  }

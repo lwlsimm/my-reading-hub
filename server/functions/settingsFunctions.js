@@ -9,7 +9,6 @@ async function changePassword (customer_id, new_password) {
     const serverQuery = await pool.query('UPDATE passwords SET hashed_pw = $1 WHERE customer_id = $2 RETURNING id', [new_password, customer_id]);
     const result = await serverQuery.rows[0]['id']; 
     if(await result) {
-      
       return true;
     }
     return false;
@@ -50,4 +49,44 @@ async function changeEmail (customer_id, new_email) {
   }
 }
 
-module.exports = { changePassword, changeEmail }
+async function deletePlansForId (id) {
+  try {
+    const areThereAnyPlans = await pool.query("SELECT * FROM reading_plans WHERE customer_id = $1", [id])
+    if(await areThereAnyPlans.rows[0]) {
+      const deletionOfPlans = await pool.query("DELETE FROM reading_plans WHERE customer_id = $1 RETURNING customer_id", [id]);
+      if(await deletionOfPlans.rows[0]) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true
+    }
+  } catch (error) {
+    return false;
+  }
+}
+
+async function deleteAccount (id) {
+  try {
+    console.log('start')
+    const emailData = await pool.query("SELECT email FROM users WHERE id = $1", [id]);
+    const email = emailData.rows[0]['email'];
+    console.log(id)
+    const planDelete = await pool.query("DELETE FROM reading_plans WHERE customer_id = $1", [id]);
+    const passwordDelete = await pool.query("DELETE FROM passwords WHERE customer_id = $1", [id]);
+    const verificationDelete = await pool.query("DELETE FROM email_verification WHERE user_email = $1", [email]);
+    const userDelete = await pool.query("DELETE FROM users WHERE id = $1 RETURNING id", [id]);
+    if(userDelete) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    console.log(error.message)
+    return false;
+  }
+}
+
+
+module.exports = { changePassword, changeEmail, deletePlansForId, deleteAccount,  }

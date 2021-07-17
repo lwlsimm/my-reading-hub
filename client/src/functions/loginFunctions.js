@@ -38,4 +38,31 @@ const authenticateSession = async(token) => {
   }
 } 
 
-export { loginUser, authenticateSession }
+const passwordResetRequest = async(email) => {
+  const data = await axios({
+    method: 'POST',
+    url: keys.RESET_PW_PATH,
+    data: {
+      email: email,
+    }
+  })
+}
+
+async function updatePasswordAfterReset (email, password, code) {
+  try {
+    const data = await axios({
+      method: 'POST',
+      url: keys.UPDATE_PW_AFTER_RESET,
+      data: {
+        email: email,
+        password: password,
+        code: code
+      }
+    })
+    return await data.data;
+  } catch (error) {
+    return null
+  }
+}
+
+export { loginUser, authenticateSession, passwordResetRequest, updatePasswordAfterReset}

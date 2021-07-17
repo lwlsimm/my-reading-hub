@@ -11,7 +11,8 @@ import FourOhFour from './components/404/FourOhFour';
 import RegisterSuccess from './components/login/registerPages/RegisterSuccess';
 import Book from './components/book/Book';
 import About from './components/About/About';
-import ReadingPlanView from './components/book/ReadingPlanView'
+import ReadingPlanView from './components/book/ReadingPlanView';
+import PasswordReset from './components/login/PasswordReset'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" exact component={LandingPage}/>
         <Route path="/about" exact component={About}/>
         <Route path="/login" exact component={Login}/>
+        <Route path="/passwordreset" component={PasswordReset}/>
         <Route path="/account" component={Account}/>
         <Route path="/verificationsuccess" exact component={VerificationSuccess}/>
         <Route path="/verificationfail" exact component={VerificationFail}/>
