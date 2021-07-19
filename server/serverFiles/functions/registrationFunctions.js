@@ -12,6 +12,7 @@ async function checkUserExists (req, res, next) {
     req.body.userId = userId['id'];
     next();
   } catch (error) {
+    console.log('checkUserExists', error.message)
     res.status(401).send(error.message);
   }
 }

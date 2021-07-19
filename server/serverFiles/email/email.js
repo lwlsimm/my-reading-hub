@@ -32,6 +32,7 @@ async function sendMail(emailTo, text, html) {
       html: html};
     return await transport.sendMail(mailOptions);
   } catch (error) {
+    console.log('sendMail', error.message)
     return error
   }
 }
