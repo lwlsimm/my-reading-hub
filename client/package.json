@@ -42,5 +42,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5500"
+  "proxy": "https://my-reading-hub.herokuapp.com"
 }
