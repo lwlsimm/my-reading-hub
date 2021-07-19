@@ -1,6 +1,7 @@
 const pool = require('../database/db');
 const { sendMail } = require('../email/email');
-const { registrationEmailPlainText, registrationHTML } = require('../email/emailText')
+const { registrationEmailPlainText, registrationHTML } = require('../email/emailText');
+const { keys } = require('../keys/keys');
 
 const isValidationStillValid = async (email, code) => {
   try {
@@ -29,7 +30,7 @@ async function resendVerificationEmail (email) {
     const addEmailVerificationToDb = await pool.query("UPDATE email_verification SET expiry = $1, verification_code = $2 WHERE user_email = $3 RETURNING id", [expiry, code, email]);
     const verificationId = await addEmailVerificationToDb.rows[0]  
     if(!verificationId) throw new Error;
-    const verificationLink = `http://localhost:5500/api/verify/${email}/${code}`;
+    const verificationLink = `${keys.VERIFICATION_PATH}${email}/${code}`;
     sendMail(email, registrationEmailPlainText(verificationLink), registrationHTML(verificationLink));
     return
   } catch (error) {
