@@ -17,4 +17,4 @@ apiRouter.use('/login',loginRouter);
 const searchRouter = require('./routes/search');
 apiRouter.use('/search',searchRouter);
 
-module.exports = apiRouter;
+module.exports = apiRouter; 

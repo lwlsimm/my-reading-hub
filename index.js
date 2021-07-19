@@ -11,12 +11,12 @@ app.use(cors());
   //Json parses the body
 app.use(express.json({limit: '50mb'}));
 
-if(process.env.NODE_ENV === 'production') {
+if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production-test' ) {
   app.use(express.static(path.join(__dirname, "client/build")));
 };
 
 const apiRouter = require('./serverFiles/api')
-app.use('/api', apiRouter)
+app.use('/api', apiRouter);
 
 //Listener
 app.listen(PORT, () => {
