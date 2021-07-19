@@ -82,6 +82,7 @@ function ReadingPlanView () {
         setNumberOfDays(Object.keys(item.plan_scheme).length);
         setCurrentPage(lastReadPage());
       }
+    return;
     })
   }
 
@@ -91,7 +92,8 @@ function ReadingPlanView () {
     scheme.map(item => {
       if(item.completed && item.to !== 'None') {
         lastRead = item.to;
-      }
+      };
+      return
     })
     return lastRead;
   }
@@ -251,7 +253,8 @@ function ReadingPlanView () {
       dispatch(updateScheme(plan.id, data_for_state));
       const sendNewPlanToServer = await updateExistingPlan(plan.id,data_for_state,token);
       if(!sendNewPlanToServer) {throw Error}
-      setInSubmitMode(false)
+      setInSubmitMode(false);
+      setCurrentChanges({})
       return
     } catch (error) {
       setFormSubmitError({wasErrorReturned: true, errorMessage: `There was an error in saving your progress to the server.  We apologise for the inconvenience.  Please logout and login again.  If the problem persists, please contact us via the 'About' section.`})
@@ -322,7 +325,7 @@ function ReadingPlanView () {
           <br/>
           <h2>{bookDetails.author}</h2>
         </div>
-        <img src={bookDetails.thumbnail}/>
+        <img src={bookDetails.thumbnail} alt="book cover"/>
       </div>
       {/* Instructions */}
       <div className="RP-paragrpah-container">
@@ -335,9 +338,9 @@ function ReadingPlanView () {
           <div className="btn btn-red" onClick={()=>handleReset()}>Reset</div>
           <div className="key-box">
             <p className="bold">Key:</p>
-            <p>Mark as furthest read {plan.measure} <img className="RP-icon" src={furthestReadIcon}/></p>
-            <p>No reading for today <img className="RP-icon" src={noReading} /></p>
-            <p>Edit Day <img className="RP-icon" src={editing} /></p>
+            <p>Mark as furthest read {plan.measure} <img className="RP-icon" src={furthestReadIcon} alt="furthest read to"/></p>
+            <p>No reading for today <img className="RP-icon" src={noReading} alt="no reading today"/></p>
+            <p>Edit Day <img className="RP-icon" src={editing} alt="edit book"/></p>
             <p>Duplicate reading with previous day&nbsp;<span className="bg-red">&nbsp;5&nbsp;</span></p>
             <p>Gap in plan from previous day&nbsp;<span className="bg-yellow">&nbsp;5&nbsp;</span></p>
           </div>
@@ -373,7 +376,7 @@ function ReadingPlanView () {
             if(item.day > 1 && item.from - yesterdayToValue >= 2) {
               fromClassNames = fromClassNames +' bg-yellow';
             }
-            if(item.from !== 'None' && yesterdayToValue === plan.start_at && item.from !== plan.start_at) {
+            if(item.day > 1 && yesterdayToValue === plan.start_at && item.to !== 'None' && scheme[index-1]['to'] === 'None' && item.to !== plan.start_at) {
               fromClassNames = fromClassNames +' bg-yellow';
             }
                 return (
@@ -400,9 +403,9 @@ function ReadingPlanView () {
                     </Fragment>
                     :
                      <Fragment>
-                      <img className="RP-col6 RP-icon" src={furthestReadIcon} onClick={()=>handleFurthestRead(item.day)}/>
-                      <img className="RP-col7 RP-icon" src={noReading} onClick={()=>handleNoReadingToday(item.day)}/>
-                      <img className="RP-col8 RP-icon" src={editing} onClick={()=>handleSetEditDay(item.day)}/>
+                      <img className="RP-col6 RP-icon" src={furthestReadIcon} onClick={()=>handleFurthestRead(item.day)} alt="furthest read to"/>
+                      <img className="RP-col7 RP-icon" src={noReading} onClick={()=>handleNoReadingToday(item.day)} alt="no reading today"/>
+                      <img className="RP-col8 RP-icon" src={editing} onClick={()=>handleSetEditDay(item.day)} alt="edit book"/>
                     </Fragment>
                     }
                     

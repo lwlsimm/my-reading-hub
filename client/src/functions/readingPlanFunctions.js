@@ -25,9 +25,7 @@ export async function deletePlanFromServer (planId, token) {
         plan_id: planId,
       }
     });
-    if(await data.data) {
-      return true;
-    }
+    if(await data.data) return true;
     return false;
   } catch (error) {
     return false;
@@ -50,9 +48,7 @@ export async function sendNewPlanToServer (plan, token) {
         }
       }
     });
-    if(await data.data){
-      return true
-    } 
+    if(await data.data) return true
     return false;
   } catch (error) {
     return false;
@@ -73,9 +69,7 @@ export async function updateExistingPlan (plan_id, scheme, token) {
         scheme: json_scheme
       }
     });
-    if(await data.data){
-      return true
-    } 
+    if(await data.data) return true
     return false;
   } catch (error) {
     return false;
@@ -94,50 +88,50 @@ function createBookId (bookObj) {
 export function readingPlanValidateInputs (e, measure) {
   try {
     const {startDate,startAt,endAt,per_day, end_date} = extractReadingPlanVariables(e);
-    const measureCapitalized = measure.charAt(0).toUpperCase() + measure.slice(1)
+    const measureCapitalized = measure.charAt(0).toUpperCase() + measure.slice(1);
     const dateToday = Date.now();
     const errorMessage = [];
-    const problemAreas = []
+    const problemAreas = [];
     if(!startDate || !startAt || !endAt) {
         problemAreas.push('startAt','endAt');
         errorMessage.push('It looks like the data you provided was incomplete... Please try again. ')
     }
     if(per_day && end_date) {
-        errorMessage.push(`You can only enter either '${measureCapitalized} Per Day' or 'End Date' - not both.`)
-        problemAreas.push('per_day', 'end_date')
+        errorMessage.push(`You can only enter either '${measureCapitalized} Per Day' or 'End Date' - not both.`);
+        problemAreas.push('per_day', 'end_date');
     }
     if(!Number.isInteger(Number(per_day))){
-      problemAreas.push('per_day')
-      errorMessage.push(`The value for '${measureCapitalized} Per Day' must be a whole number.`)
+      problemAreas.push('per_day');
+      errorMessage.push(`The value for '${measureCapitalized} Per Day' must be a whole number.`);
     }
     if(end_date && (end_date < startDate || end_date < dateToday)) {
         if(end_date < dateToday ) {
-          problemAreas.push('end_date')
+          problemAreas.push('end_date');
         } else {
-          problemAreas.push('end_date','startDate')
+          problemAreas.push('end_date','startDate');
         }
         errorMessage.push("The 'End Date' cannot be before the Start Date or in the past. ");
     }
     if(!Number.isInteger(Number(startAt))||!Number.isInteger(Number(endAt))) {
         if(!Number.isInteger(Number(startAt))) {
-          problemAreas.push('startAt')
+          problemAreas.push('startAt');
         }
         if(!Number.isInteger(Number(endAt))) {
-          problemAreas.push('endAt')
+          problemAreas.push('endAt');
         }
-        errorMessage.push(`Both the 'Starting ${measure}' and 'End ${measure}' must be whole numbers.`) 
+        errorMessage.push(`Both the 'Starting ${measure}' and 'End ${measure}' must be whole numbers.`) ;
     }
     if(Number(startAt) >= Number(endAt)) {
-        errorMessage.push(`The number of the 'Starting ${measure}' must be before the number of the 'End ${measure}'`) 
-        problemAreas.push('startAt','endAt')
+        errorMessage.push(`The number of the 'Starting ${measure}' must be before the number of the 'End ${measure}'`) ;
+        problemAreas.push('startAt','endAt');
     }
     if(problemAreas.length > 0) {
-      return {validated: false, errorMessage: errorMessage, problemAreas: problemAreas}
+      return {validated: false, errorMessage: errorMessage, problemAreas: problemAreas};
     } else {
-      return {validated: true, errorMessage: null, problemAreas: []}
+      return {validated: true, errorMessage: null, problemAreas: []};
     }
   } catch(err) {
-        return {validated: false, errorMessage: 'Hmmm... For some reason, it looks like there was an error.  Please make sure all details are enetered correctly and contact us via the About button at the top of the page if the problem persists.'}
+        return {validated: false, errorMessage: 'Hmmm... For some reason, it looks like there was an error.  Please make sure all details are enetered correctly and contact us via the About button at the top of the page if the problem persists.'};
   }
 }
 
@@ -147,12 +141,7 @@ export function extractReadingPlanVariables(e) {
     const endAt = e.target.endAt.value;
     const end_date = e.target.end_date.value;
     const per_day = e.target.per_day.value;
-    let perDayType
-    if(per_day) {
-      perDayType = 'per_day'
-    } else {
-      perDayType = 'end_date'
-    }
+    const perDayType = per_day ? 'per_day' : 'end_date';
     const returnObject = {
       startAt: startAt,
       startDate: startDate,
@@ -160,6 +149,6 @@ export function extractReadingPlanVariables(e) {
       end_date: end_date,
       per_day: per_day,
       perDayType: perDayType
-    }
-    return returnObject
+    };
+    return returnObject;
 }

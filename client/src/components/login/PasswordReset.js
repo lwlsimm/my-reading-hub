@@ -1,9 +1,5 @@
 import './login.css';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-
-
 
 const { updatePasswordAfterReset } = require('../../functions/loginFunctions');
 
@@ -23,12 +19,12 @@ function PasswordReset () {
       const email = e.target.email.value;
       if(password !== reenteredpassword) {
         setErrorMessage("Passwords must match!");
-        return
+        return;
       }
       const passwordUpdated = await updatePasswordAfterReset (email, password, code);
       if(passwordUpdated) {
         setSuccessMessage('Your password was updated.  You can now login as normal');
-        return
+        return;
       } else {
         throw Error;
       }

@@ -32,7 +32,7 @@ function LandingPage () {
       }
       return;
     } catch (error) {
-      performLogout()
+      performLogout();
     }
   },[])
 

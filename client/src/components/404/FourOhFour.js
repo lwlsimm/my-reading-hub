@@ -1,5 +1,5 @@
 import fail from '../../assets/images/no-entry.png';
-import '../verification/verification.css'
+import '../verification/verification.css';
 
 const FourOhFour = () => {
 

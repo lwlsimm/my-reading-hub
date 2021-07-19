@@ -12,16 +12,16 @@ const returnSearchResults = async(title, author) => {
         author: author
       }
     })
-    return data.data
+    return data.data;
   } catch (error) {
-    return null
+    return null;
   }
 }
 
 const OLAdditionalCoverArtFinder = async (title) => {
   try {
-    const isbnArray = []
-    const verifiedLinks = []
+    const isbnArray = [];
+    const verifiedLinks = [];
     const path = keys.OL_SEARCH_PATH + title;
     const results = await axios.get(path);
     const resultsArray = await results.data.docs;
@@ -29,9 +29,7 @@ const OLAdditionalCoverArtFinder = async (title) => {
       if(element.isbn) {
        const elementIsbnArray = element.isbn;
         elementIsbnArray.forEach(isbn => {
-          if(!isbnArray.includes(isbn)) {
-            isbnArray.push(isbn)
-          }
+          if(!isbnArray.includes(isbn)) isbnArray.push(isbn);
         }) 
       }
     });
@@ -40,13 +38,9 @@ const OLAdditionalCoverArtFinder = async (title) => {
       const path = keys.OL_COVER_PATH + isbn + '-M.jpg';
       img.src = path;
       const width = getWidthData(img);
-      if(width > 5) {
-        verifiedLinks.push(path)
-      }
-    })
-    if(verifiedLinks.length < 1) {
-      return []
-    }
+      if(width > 5) verifiedLinks.push(path);
+    });
+    if(verifiedLinks.length < 1) return [];
     return verifiedLinks;
   } catch (error) {
    return [] 

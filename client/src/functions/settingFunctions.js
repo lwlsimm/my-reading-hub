@@ -23,7 +23,7 @@ async function changePassword (token, new_password, password) {
       current_password: password,
     };
   const data = await settingsServerCall(token, keys.CHANGE_PW_PATH, dataObj)
-  return data
+  return data;
 }
 
 

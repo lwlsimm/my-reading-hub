@@ -45,9 +45,7 @@ async function updateDatabase (req, res, next) {
     const code = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     const addEmailVerificationToDb = await pool.query("INSERT INTO email_verification (user_email, verification_code, expiry) VALUES($1, $2, $3) RETURNING id", [email, code , expiry]);
     const verificationId = await addEmailVerificationToDb.rows[0]
-    if(!verificationId) {
-      throw new Error;
-    }
+    if(!verificationId) throw new Error;
     req.body.code = code;
     next();
   } catch (error) {

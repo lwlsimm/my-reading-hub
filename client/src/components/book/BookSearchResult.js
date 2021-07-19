@@ -23,7 +23,7 @@ function BookSearchResult (props) {
   return (
     <div key={props.item.key} className="BookSearchResult" onClick={()=>{selectBook()}}>
       {/* <div className="btn bookSearchBtn" onClick={()=>selectBook()}>Select Book</div> */}
-      <img className="smallBookImg" src={thumbnail}/>
+      <img className="smallBookImg" src={thumbnail} alt="book cover"/>
       <div className="searchResultText">
         <p>{props.item.title}</p>
         <p>{props.item.authors}</p>

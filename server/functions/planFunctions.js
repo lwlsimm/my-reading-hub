@@ -22,9 +22,7 @@ async function deletePlan (plan_id) {
   try {
     const serverQuery = await pool.query("DELETE FROM reading_plans WHERE id = $1 RETURNING customer_id", [plan_id])
     const data = await serverQuery.rows[0]['customer_id'];
-    if(data) {
-      return true;
-    }
+    if(data) return true;
     return false;
   } catch (error) {
     console.log(error.message)
@@ -36,9 +34,7 @@ async function updatePlan (plan_id, scheme) {
   try {
     const serverQuery = await pool.query("UPDATE reading_plans SET plan_scheme = $1 WHERE id = $2 RETURNING id", [scheme, plan_id]);
     const data = await serverQuery.rows[0]['id'];
-    if(data) {
-      return true
-    }
+    if(data) return true
     throw Error;
   } catch (error) {
     console.log(error.message)

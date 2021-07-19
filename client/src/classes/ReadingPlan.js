@@ -69,7 +69,8 @@ export class ReadingPlan {
           amount_to_read--;
         }
       }
-      const toPage = (running_total + amount_to_read - 1) > this.end_at ? this.end_at : (running_total + amount_to_read - 1);
+      let toPage = (running_total + amount_to_read - 1) > this.end_at ? this.end_at : (running_total + amount_to_read - 1);
+      if(toPage < running_total ) toPage = running_total;
       planObject[day] = { day: day, date: date_for_plan_day, total_to_read: toPage - running_total + 1, from: running_total, to: toPage, completed: false};
       running_total += amount_to_read
     }

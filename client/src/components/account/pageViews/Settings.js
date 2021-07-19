@@ -59,6 +59,7 @@ function Settings () {
       const confirm_password = e.target.confirm_password.value;
       if(confirm_password !== password) {
         setErrorMsg('Passwords do not match!');
+        setInSubmitMode(false);
         return;
       }
       const passwordChanged = await changePassword(token, password, current_password);
@@ -93,7 +94,7 @@ function Settings () {
         history.push(registerSucessPath);
       } else {
         setErrorMsg('There was a problem changing your email.  Please logout and back in again and then try again!');
-        setInSubmitMode(false) 
+        setInSubmitMode(false);
       }
     } catch (error) {
       setErrorMsg('There was a problem changing your email.  Please logout and back in again and then try again!');
@@ -125,7 +126,7 @@ function Settings () {
   const handleDeleteAccount = async (e) => {
     try {
       e.preventDefault();
-      setInSubmitMode(true)
+      setInSubmitMode(true);
       setErrorMsg(null);
       setServerMessage(null);
       const current_password = e.target.current_password.value;

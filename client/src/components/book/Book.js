@@ -21,7 +21,7 @@ function Book() {
   const [formSubmitError, setFormSubmitError] = useState({
     wasErrorReturned: false,
     errorMessage: ''
-  })
+  });
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -32,9 +32,9 @@ function Book() {
   const thumbnail = extractItemFromObject(['thumbnail'],book.imageLinks, bookImg);
   const isbn10 = extractItemFromObject(['identifier'],book.industryIdentifiers[0], 'Not supplied');
   const isbn13 = extractItemFromObject(['identifier'],book.industryIdentifiers[1], 'Not supplied');
-  const canonicalVolumeLink = extractItemFromObject(['canonicalVolumeLink'], book, null)
+  const canonicalVolumeLink = extractItemFromObject(['canonicalVolumeLink'], book, null);
 
-  const [selectedArtwork, setSelectedArtwork] = useState(thumbnail)
+  const [selectedArtwork, setSelectedArtwork] = useState(thumbnail);
   
   const getAdditionalCoverArtwork = async () => {
     setInSearchMode(true)
@@ -44,9 +44,7 @@ function Book() {
       const additionalArtLinks = await OLAdditionalCoverArtFinder(titleForOL);
       setAdditionalCovers(additionalArtLinks);
       i++;
-      if(additionalArtLinks.length > 25) {
-        break;
-      }
+      if(additionalArtLinks.length > 25) break;
     }
     setInSearchMode(false);
   } 
@@ -58,15 +56,15 @@ function Book() {
 
   const handlePlanConstruction = async (e) => {
     try {
-      setFormSubmitError({wasErrorReturned: false, errorMessage:''})
-      setReadingPlanError('')
-      setFormProblemAreas([])
+      setFormSubmitError({wasErrorReturned: false, errorMessage:''});
+      setReadingPlanError('');
+      setFormProblemAreas([]);
       e.preventDefault();
       setInSubmitMode(true);
       const {validated, errorMessage, problemAreas} = readingPlanValidateInputs(e, measure);
       if(!validated) {
         handleReadingPlanError(errorMessage);
-        setFormProblemAreas(problemAreas)
+        setFormProblemAreas(problemAreas);
         return;
       }
       const bookData = {
@@ -80,14 +78,14 @@ function Book() {
       //dispatch(addReadingPlan(newPlan));
       const newPlanToServer = await sendNewPlanToServer(newPlan, token);
       if(newPlanToServer) {
-        dispatch(addReadingPlan(newPlan))
+        dispatch(addReadingPlan(newPlan));
         history.push('/account');
       }
       setInSubmitMode(false);
-      throw Error
+      throw Error;
     } catch (err) {
       setInSubmitMode(false);
-      setFormSubmitError({wasErrorReturned: true, errorMessage:err.message})
+      setFormSubmitError({wasErrorReturned: true, errorMessage:err.message});
     }
   }
 
@@ -105,7 +103,7 @@ function Book() {
           <h3 className="book-main-details-text">by {book.authors}</h3>
           <h4 className="book-main-details-text">ISBN (10 digit) {isbn10}</h4>
           <h4 className="book-main-details-text">ISBN (13 digit) {isbn13}</h4>
-          {canonicalVolumeLink ? <a href={canonicalVolumeLink} target="_blank" className="btn btn-smaller-text">More Info at Google Books</a>: null}
+          {canonicalVolumeLink ? <a href={canonicalVolumeLink} target="_blank" rel="noreferrer" className="btn btn-smaller-text">More Info at Google Books</a>: null}
         </div>
       </div>
 
@@ -195,7 +193,7 @@ function Book() {
       <div className="flexBoxByCols additionalArtContainer">
         <h2 className="additionalCoverText">Additional Cover Artwork</h2>
         <h4 className="additionalCoverText">from Open Library</h4>
-        <p>Click the button below to find other covers form  <a href="https://openlibrary.org/" target="_blank">Open Libary</a>.  Simply click on the cover to make it the cover for your book.<br/>It can sometimes take upto 45 seconds to retrieve all the artwork so please be patient!</p>
+        <p>Click the button below to find other covers form  <a href="https://openlibrary.org/" target="_blank" rel="noreferrer">Open Libary</a>.  Simply click on the cover to make it the cover for your book.<br/>It can sometimes take upto 45 seconds to retrieve all the artwork so please be patient!</p>
         {inSearchMode? 
          <div className="btn submit-btn btn-inSearchMode" disbaled>---SEARCHING---</div>
         : 

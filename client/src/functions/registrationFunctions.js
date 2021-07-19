@@ -9,15 +9,9 @@ async function registerUser (e) {
   const reenteredPassword = e.target.reenteredpassword.value;
   const isEmailValid = validateEmail(email);
   let errorMessage = ''
-  if(!isEmailValid) {
-    errorMessage = 'The email address enetered does not appear to be valid! '
-  } 
-  if(password !== reenteredPassword) {
-    errorMessage = errorMessage + "Your passwords do not match!"
-  }
-  if(errorMessage.length > 1) {
-    throw Error(errorMessage)
-  }
+  if(!isEmailValid) errorMessage = 'The email address enetered does not appear to be valid!';
+  if(password !== reenteredPassword) errorMessage = errorMessage + "Your passwords do not match!";
+  if(errorMessage.length > 1) throw Error(errorMessage);
   try {
     const data = await axios({
       method: 'POST',
@@ -26,12 +20,11 @@ async function registerUser (e) {
         email: email,
         password: password
       }
-    })
-    const response = await data;
-    return response;
+    });
+    return data;
   } catch (err) {
-    errorMessage = "There was problem registering.  Perhaps you already have an account? If not, please contact us via the About button above."
-    throw Error(errorMessage)
+    errorMessage = "There was problem registering.  Perhaps you already have an account? If not, please contact us via the About button above.";
+    throw Error(errorMessage);
   }
 }
 

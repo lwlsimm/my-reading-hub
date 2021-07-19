@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 
 function AddBook () {
 
-  const [inSearchMode, setInSearchMode] = useState(false)
+  const [inSearchMode, setInSearchMode] = useState(false);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ function AddBook () {
 
   const searchResults = useSelector(state => state.searchReducer);
 
-  const handleOpenLibrarySearch = async (e) => {
+  const handleSearchForBooks = async (e) => {
     e.preventDefault();
     setInSearchMode(true)
     dispatch(deleteSearchItems());
@@ -62,7 +62,7 @@ function AddBook () {
         </div>
         <div className="openLibraryAddView addBookSection">
         <h3>From Google Books</h3>
-          <form className="addBookForm" onSubmit={e=>handleOpenLibrarySearch(e)}>
+          <form className="addBookForm" onSubmit={e=>handleSearchForBooks(e)}>
             <label for="search_title">Book Title</label>
             <input className="input ab-search-input" name="search_title" id="search_title" placeholder="Enter book title" required/>
             <label for="search_author">Author Name</label>

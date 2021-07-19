@@ -58,7 +58,7 @@ function Account() {
     if(queryParams === '?search') {
       setPageView('AddBook');
     };
-  },[])
+  },[]);
 
   return(
     <div className="Page account-page-grid">

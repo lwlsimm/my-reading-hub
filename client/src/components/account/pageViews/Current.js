@@ -8,10 +8,8 @@ function Current () {
 
   function getNextItemInScheme (book) {
     for(let i = 1; i <= Object.keys(book.plan_scheme).length; i++) {
-      if(book.plan_scheme[i].completed === false) {
-        return 'unfinished';
+      if(book.plan_scheme[i].completed === false) return 'unfinished'
       }
-    }
     return 'finished';
   }
  
@@ -23,8 +21,7 @@ function Current () {
           return(<PageViewBook key={book.id} book={book}/>)
         } 
         return null;
-      }
-      )}
+      })}
     </div>
   )
 }

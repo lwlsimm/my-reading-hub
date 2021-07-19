@@ -8,11 +8,10 @@ const { isValidationStillValid } = require('../functions/verificationFunctions')
 
 verifyRouter.post('/resend/:email', async(req, res)=> {
   try {
-    console.log(req.body.email)
-    resendVerificationEmail(req.body.email)
-    res.sendStatus(200)
+    resendVerificationEmail(req.body.email);
+    res.sendStatus(200);
   } catch (error) {
-    res.sendStatus(401)
+    res.sendStatus(401);
   } 
 });
 
@@ -20,15 +19,15 @@ verifyRouter.get('/:email/:code', async(req, res)=> {
   try {
     const { email, code } = req.params;
     const isVerificationValid = await isValidationStillValid(email,code);
-    if(await isVerificationValid) {
-      res.redirect(keys.SUCCESS_ROUTE).send()
+    if(isVerificationValid) {
+      res.redirect(keys.SUCCESS_ROUTE);
     } else {
-      resendVerificationEmail(email)
-      res.redirect(keys.FAIL_ROUTE)
+      resendVerificationEmail(req.params.email);
+      res.redirect(keys.FAIL_ROUTE);
     }
+    throw Error;
   } catch (error) {
-    resendVerificationEmail(email)
-    res.redirect(keys.FAIL_ROUTE)
+    res.redirect(keys.FAIL_ROUTE);
   }
 });
 

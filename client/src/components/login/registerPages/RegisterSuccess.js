@@ -1,11 +1,9 @@
 import success from '../../../assets/images/success.png';
 import  '../../verification/verification.css'
-import { useHistory } from 'react-router-dom';
+
 
 const RegisterSuccess = () => {
   
-  const history = useHistory();
-  const loginPath = "/login";
 
   return (
     <div className="verifyPage">

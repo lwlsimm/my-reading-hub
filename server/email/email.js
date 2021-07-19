@@ -23,17 +23,14 @@ async function sendMail(emailTo, text, html) {
         clientSecret: CLIENT_SECRET,
         refreshToken: REFRESH_TOKEN,
         accessToken: accessToken
-      }
-    })
+      }});
     const mailOptions = {
       from: GMAIL_ADDRESS,
       to: emailTo,
       subject: 'A Message from My Reading Hub',
       text: text,
-      html: html
-    }
-    const result = await transport.sendMail(mailOptions)
-    return result;
+      html: html};
+    return await transport.sendMail(mailOptions);
   } catch (error) {
     return error
   }

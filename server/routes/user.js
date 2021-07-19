@@ -15,7 +15,7 @@ userRouter.post('/session_validation', authenticateToken, async (req, res) => {
     if(req.body.authenticated) {
       res.send('Success');
     } else {
-      throw new Error
+      throw new Error;
     }
   } catch (err) {
     res.status(403).send();
@@ -25,9 +25,7 @@ userRouter.post('/session_validation', authenticateToken, async (req, res) => {
 userRouter.post('/deletePlan', authenticateToken, async(req, res) => {
   try {
     const isPlanDeletedFromServer = deletePlan(req.body.plan_id);
-    if(await isPlanDeletedFromServer) {
-      res.send(true);
-    }
+    if(await isPlanDeletedFromServer) res.send(true);
     throw Error;
   } catch(error) {
     res.status(403).send();
@@ -39,9 +37,7 @@ userRouter.post('/addPlan', authenticateToken, async(req, res) => {
     if(req.body.authenticated) {
       const id = req.body.user.id;
       const addPlanToDB = await addNewPlan(id, req.body.plan)
-      if(addPlanToDB) {
-        res.send(addPlanToDB);
-      }
+      if(addPlanToDB) res.send(addPlanToDB);
       throw new Error
     } else {
       throw new Error
@@ -93,9 +89,7 @@ userRouter.post('/changepw', authenticateToken, checkCurrentPasswordUsingCustome
   try {
     const id = req.body.user.id;
     const { hashedPassword } = req.body;
-    if(! req.body.pw_verified || !req.body.authenticated) {
-      throw new Error('auth failed');
-    } 
+    if(! req.body.pw_verified || !req.body.authenticated) throw new Error('auth failed');
     const isPasswordChanged = await changePassword(id, hashedPassword);
     if(await isPasswordChanged) {
       res.status(200).send(true);
@@ -111,8 +105,10 @@ userRouter.post('/changepw', authenticateToken, checkCurrentPasswordUsingCustome
 userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
   try {
     if(! req.body.pw_verified || !req.body.authenticated) {
+      console.log('failed ---')
       throw new Error('auth failed');
-    }
+    };
+    console.log('passed---')
     const id = req.body.user.id;
     const wasEmailChanged = await changeEmail(id, req.body.email); 
     if(await wasEmailChanged) {
@@ -127,9 +123,7 @@ userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCus
 
 userRouter.post('/delete_plans', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
   try {
-    if(! req.body.pw_verified || !req.body.authenticated) {
-      throw new Error('auth failed');
-    }
+    if(! req.body.pw_verified || !req.body.authenticated) throw new Error('auth failed');
     const id = req.body.user.id;
     const werePlansDeleted = await deletePlansForId(id);
     if(await werePlansDeleted) {
@@ -144,9 +138,7 @@ userRouter.post('/delete_plans', authenticateToken, checkCurrentPasswordUsingCus
 
 userRouter.post('/delete_account', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
   try {
-    if(! req.body.pw_verified || !req.body.authenticated) {
-      throw new Error('auth failed');
-    }
+    if(! req.body.pw_verified || !req.body.authenticated) throw new Error('auth failed');
     const id = req.body.user.id;
     const wasAccountDeleted = await deleteAccount(id);
     if(await wasAccountDeleted) {

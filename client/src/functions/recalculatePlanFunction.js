@@ -17,9 +17,8 @@ function recalculate_plan (inputs) {
   //creating the new plan
   const new_plan_obj = {};
   current_plan_scheme.map(item => {
-    if(item.completed) {
-      new_plan_obj[item.day] = item
-    }
+    if(item.completed) new_plan_obj[item.day] = item;
+    return
   })
   const days_already_completed = Object.keys(new_plan_obj).length;
   let running_total = measure_last_read_to;
@@ -31,9 +30,10 @@ function recalculate_plan (inputs) {
       amount_to_read++;
       if(num_intervals_to_skip > 0 && day <=(remainder_interval * num_intervals_to_skip)) {
         amount_to_read--;
-      }
+      };
     }
-    const toPage = (running_total + amount_to_read - 1) > end_at ? end_at : (running_total + amount_to_read - 1);
+    let toPage = (running_total + amount_to_read - 1) > end_at ? end_at : (running_total + amount_to_read - 1);
+    if(toPage < running_total ) toPage = running_total;
     new_plan_obj[day + days_already_completed] = {
       day: day + days_already_completed, date: date_for_plan_day, total_to_read: toPage - running_total + 1, from: running_total, to: toPage, completed: false};
     running_total += amount_to_read;

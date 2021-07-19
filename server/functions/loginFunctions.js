@@ -34,11 +34,7 @@ async function checkIfResetPasswordAttempt (email, password) {
     const timeNow = Date.now();
     const pwCodeOnServer = await pool.query("SELECT * FROM password_reset WHERE verification_code = $1", [code]);
     const {expiry, user_email} = pwCodeOnServer.rows[0];
-    if(timeNow < await expiry && user_email === email) {
-      return true;
-    } else {
-      return false;
-    }
+    return timeNow < await expiry && user_email === email
   } catch (error) {
     console.log(error.message)
     return false;    

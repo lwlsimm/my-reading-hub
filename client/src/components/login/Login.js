@@ -14,7 +14,8 @@ function Login () {
 
   const [registerErrorMessage, setRegisterErrorMessage] = useState("");
   const [loginErrorMessage, setloginErrorMessage] = useState("");
-  const [resetEmailRequestSent, setResetEmailRequestSent] = useState(false)
+  const [resetEmailRequestSent, setResetEmailRequestSent] = useState(false);
+  const [inSubmitMode, setInSubmitMode] = useState(false);
 
   const dispatch = useDispatch()
   const history = useHistory();
@@ -30,6 +31,7 @@ function Login () {
 }
 
   const handleRegistration = async (e) => {
+    setInSubmitMode(true);
     setRegisterErrorMessage('');
     e.preventDefault();
     try {
@@ -38,10 +40,12 @@ function Login () {
       if(registration.data['outcome'] === 'success') {
         history.push(registerSucessPath);
       } else {
-        throw new Error(`Something did not quite work with your registration.  Please contact us via the 'About' tab at the top of the page!  Apologies for the inconvenience`)
+        throw new Error(`Something did not quite work with your registration.  Please contact us via the 'About' tab at the top of the page!  Apologies for the inconvenience`);
       }
+      setInSubmitMode(false);
     } catch (err) {
       setRegisterErrorMessage(err.message);
+      setInSubmitMode(false);
     }
   }
 
@@ -49,15 +53,16 @@ function Login () {
     e.preventDefault();
     setResetEmailRequestSent(true);
     const email = e.target.email.value;
-    passwordResetRequest(email)
+    passwordResetRequest(email);
   }
 
   const handleLoginAttempt = async (e) => {
+    setInSubmitMode(true);
     setloginErrorMessage('');
     e.preventDefault();
     try {
       const response = await loginUser(e.target.login_email.value, e.target.login_password.value);
-      console.log(response.data['verified'])
+      console.log(response.data['verified']);
       if(response.data['is_verified'] === 'reset') {
         history.push(resetPath + response.data['code']);
         return;
@@ -73,11 +78,14 @@ function Login () {
         const {id, plan_start_date, start_at, end_at, per_day, end_date, per_day_type, measure, book_data } = plan_details;
         const newPlan = new ReadingPlan(id, plan_start_date, start_at, end_at, per_day, end_date, per_day_type, measure, book_data, plan_scheme)
         dispatch(addReadingPlan(newPlan));
+        return;
       })
       dispatch(login(response.data));
+      setInSubmitMode(false);
       history.push(accountPath);
     } catch (err) {
-      setloginErrorMessage(err.message)
+      setloginErrorMessage(err.message);
+      setInSubmitMode(false);
     }
   }
 
@@ -92,7 +100,12 @@ function Login () {
             <input className="input" name="email" id="login_email" placeholder="Enter email address" required/>
             <label for="password">Password</label>
             <input className="input" name="login_password" id="password" type="password" placeholder="Enter password" required/>
+            {inSubmitMode ?
+            <input type="submit" className="btn submit-btn btn-inSearchMode" disabled/>
+            :
             <input type="submit" className="btn submit-btn"/>
+            }
+            
           </form>
         </div>
         <div className="sectionDivider flexBoxByCols"></div>
@@ -128,7 +141,11 @@ function Login () {
               <input className="input input-registration-pw" name="password" id="password" type="password" placeholder="Enter password" required minlength="8"/>
               <input className="input input-registration-pw" name="reenteredpassword" id="reenteredpassword" type="password" placeholder="Re-enter password" required minlength="8"/>
             </div>
+            {inSubmitMode ?
+            <input type="submit" className="btn submit-btn btn-inSearchMode" disabled/>
+            :
             <input type="submit" className="btn submit-btn"/>
+            }
           </form>
         </div>
         
