@@ -12,9 +12,12 @@ function LandingPage () {
   const loggedIn = useSelector(state => state.loginReducer.loggedIn);
   const token = useSelector(state => state.loginReducer.token);
   const dispatch = useDispatch();
+  const searchparams = new URLSearchParams(window.location.search);
+  const redir = searchparams.get('redir');
 
   const history = useHistory();
   const loginOrMyAccountPath = loggedIn? "/account" : "/login";
+  if(redir) history.push(`/${redir}`);
 
   function performLogout () {
       dispatch(logout());

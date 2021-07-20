@@ -1,5 +1,5 @@
 import './App.css';
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, Switch, useHistory} from 'react-router-dom';
 import Nav from './components/nav/Nav';
 import LandingPage from './components/landing/LandingPage';
 import Login from './components/login/Login';
@@ -15,11 +15,12 @@ import ReadingPlanView from './components/book/ReadingPlanView';
 import PasswordReset from './components/login/PasswordReset'
 
 function App() {
-
+  
   return (
     <Router>
     <div className="AppPage">
       <Nav/>
+      {console.log('hi')}
       <Switch>
         <Route path="/" exact component={LandingPage}/>
         <Route path="/about" exact component={About}/>

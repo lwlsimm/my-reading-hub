@@ -18,6 +18,13 @@ if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production
 const apiRouter = require('./serverFiles/api')
 app.use('/api', apiRouter);
 
+app.use('/verificationsuccess', (req, res) => {
+  res.redirect('/?redir=verificationsuccess')
+})
+app.use('/verificationfail', (req, res) => {
+  res.redirect('/?redir=verificationsuccess')
+})
+
 //Listener
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
