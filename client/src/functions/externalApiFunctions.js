@@ -34,13 +34,13 @@ const OLAdditionalCoverArtFinder = async (title) => {
       }
     });
     isbnArray.forEach(isbn => {
-      // const img = new Image();
+      const img = new Image();
       const path = keys.OL_COVER_PATH + isbn + '-M.jpg';
-      // img.src = path;
-      // const width = getWidthData(img);
-      // if(width > 5) {
+      img.src = path;
+      const width = getWidthData(img);
+      if(width > 5) {
         verifiedLinks.push(path)
-      // };
+      };
     });
     if(verifiedLinks.length < 1) return [];
     return verifiedLinks;
