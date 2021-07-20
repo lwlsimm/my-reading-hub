@@ -190,7 +190,7 @@ function Book() {
       }
       </form> 
 
-      {/* <div className="flexBoxByCols additionalArtContainer">
+      <div className="flexBoxByCols additionalArtContainer">
         <h2 className="additionalCoverText">Additional Cover Artwork</h2>
         <h4 className="additionalCoverText">from Open Library</h4>
         <p>Click the button below to find other covers form  <a href="https://openlibrary.org/" target="_blank" rel="noreferrer">Open Libary</a>.  Simply click on the cover to make it the cover for your book.<br/>It can sometimes take upto 45 seconds to retrieve all the artwork so please be patient!</p>
@@ -202,7 +202,7 @@ function Book() {
         <div>
           {additionalCovers.map(cover=><img key={cover} className="additionalCover" alt="additional cover" src={cover} onClick={()=>setSelectedArtwork(cover)}/>)}
         </div>
-      </div> */}
+      </div>
     
     </div>
     </div>
