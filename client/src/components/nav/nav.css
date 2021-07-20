@@ -44,7 +44,7 @@
   font-size: 12px;
 }
 
-@media only screen and (max-width: 820px) {
+@media only screen and (max-width: 700px) {
   .navTitle {
     font-size: 1.5em;
   }
@@ -52,31 +52,42 @@
     height: 50px;
     margin-right: 10px;
   }
-  .NavBar {
-    justify-content: space-between;
-  }
-  .nav-btn {
-    width: 100px;
-    font-size: 0.75em;
-  }
-  .navButtonContainer {
-    width: 100%;
-    justify-content: space-evenly;
-  }
-}
 
-@media only screen and (max-width: 820px) {
   .NavBar {
     display: grid;
     grid-template: 1.3fr 1fr / 1fr 2fr;
     align-items: center;
     justify-items: center;
     margin-bottom: 5px;
+    justify-content: space-between;
   }
   .navButtonContainer {
     grid-column: 1 / span 2;
+    width: 100%;
+    justify-content: space-evenly;
   }
   .nav-btn {
     height: 40px;
+    width: 100px;
+    font-size: 0.75em;
   }
+}
+
+@media only screen and (max-width: 850px) {
+
+
+  .NavBar {
+    display: grid;
+    grid-template: 1.3fr 1fr / 1fr 2fr;
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 5px;
+    justify-content: space-between;
+  }
+  .navButtonContainer {
+    grid-column: 1 / span 2;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+ 
 }

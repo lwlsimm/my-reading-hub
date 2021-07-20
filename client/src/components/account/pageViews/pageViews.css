@@ -9,7 +9,7 @@
 }
 
 .CurrentBook {
-  min-width: 80%;
+  width: 80%;
   max-width: 800px;
   display: inline-grid;
   grid-template-columns: 1fr 2fr 2fr 1.5fr;
