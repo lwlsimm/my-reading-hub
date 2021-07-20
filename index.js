@@ -22,7 +22,7 @@ app.use('/verificationsuccess', (req, res) => {
   res.redirect('/?redir=verificationsuccess')
 })
 app.use('/verificationfail', (req, res) => {
-  res.redirect('/?redir=verificationsuccess')
+  res.redirect('/?redir=verificationfail')
 })
 
 //Listener
