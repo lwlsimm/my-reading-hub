@@ -1,4 +1,5 @@
 # My Reading Hub
+![](./client/src/assets/images/bookshelf.png)
 
 A web app that allows users to create reading plans for themselves and to keep track of theior reading by updating their plans each day.
 
