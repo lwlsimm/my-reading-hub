@@ -10,6 +10,11 @@ import { updateExistingPlan } from '../../functions/readingPlanFunctions';
 import { recalculate_plan } from '../../functions/recalculatePlanFunction'
 import { useHistory } from 'react-router-dom';
 
+function useForceUpdate(){
+  const [value, setValue] = useState(0); // integer state
+  return () => setValue(value => value + 1); // update the state to force render
+}
+
 function ReadingPlanView () {
 
   useEffect(()=> {
@@ -28,6 +33,7 @@ function ReadingPlanView () {
   const [modalVisible, setModalVisible] = useState(false);
   const [inSubmitMode,setInSubmitMode] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const forceUpdate = useForceUpdate();
   const [formSubmitError, setFormSubmitError] = useState({
     wasErrorReturned: false,
     errorMessage: ''
@@ -88,6 +94,8 @@ function ReadingPlanView () {
     })
   }
 
+
+
   //Find last read page 
   function lastReadPage () {
     let lastRead = plan.start_at;
@@ -101,9 +109,9 @@ function ReadingPlanView () {
   }
 
   function updateSchemeUsingCurrentChanges() {
-    const newScheme = [...scheme];
+    const newScheme = scheme;
     let furthest = 0;
-    for(let i = 1; i <= numberOfDays; i++) {
+    for(let i = 1; i <= numberOfDays +1; i++) {
       const changeArray = ['to','from','date']
       for(let a = 0; a < changeArray.length; a++) {
         try {
@@ -114,7 +122,7 @@ function ReadingPlanView () {
             }
           } else {throw Error}} catch {}}
       if(i > 1) {
-       if(formatDate(newScheme[i-1]['date']) < formatDate(newScheme[i-2]['date'])) {
+       if(formatDate(newScheme[i-1]['date']) <= formatDate(newScheme[i-2]['date'])) {
          const newDate = new Date(newScheme[i-2]['date']);
          newDate.setDate(newDate.getDate() + 1);
          newScheme[i-1]['date'] = newDate}
@@ -128,6 +136,7 @@ function ReadingPlanView () {
     }
     setScheme(newScheme);
     setCurrentPage(lastReadPage());
+    setEditDay(0)
     return newScheme;
   }
   
@@ -173,7 +182,8 @@ function ReadingPlanView () {
   const handleNoReadingToday = (day) => {
     handleInputChange("None",day,'to');
     handleInputChange("None",day,'from');
-    updateSchemeUsingCurrentChanges();
+    handleFinishEditingDay(day);
+    forceUpdate();
   }
 
 
@@ -194,20 +204,20 @@ function ReadingPlanView () {
     return plan.start_at;
   }
 
-  const handleFinishEditingDay = () => { 
+  const handleFinishEditingDay = (dayToEdit = editDay) => { 
     //validation
-    let to = scheme[editDay-1]['to'];
-    let from = scheme[editDay-1]['from'];
-    let date = scheme[editDay-1]['date'];
-    if(currentChanges[editDay] !== undefined) {
-      if(currentChanges[editDay]['to'] !== undefined) {
-        to = currentChanges[editDay]['to'];
+    let to = scheme[dayToEdit-1]['to'];
+    let from = scheme[dayToEdit-1]['from'];
+    let date = scheme[dayToEdit-1]['date'];
+    if(currentChanges[dayToEdit] !== undefined) {
+      if(currentChanges[dayToEdit]['to'] !== undefined) {
+        to = currentChanges[dayToEdit]['to'];
       }
-      if(currentChanges[editDay]['from'] !== undefined) {
-        from = currentChanges[editDay]['from'];
+      if(currentChanges[dayToEdit]['from'] !== undefined) {
+        from = currentChanges[dayToEdit]['from'];
       }
-      if(currentChanges[editDay]['date'] !== undefined) {
-        date = currentChanges[editDay]['date'];
+      if(currentChanges[dayToEdit]['date'] !== undefined) {
+        date = currentChanges[dayToEdit]['date'];
       }
     }
     
@@ -238,8 +248,7 @@ function ReadingPlanView () {
     } else {
       updateSchemeUsingCurrentChanges();
     }
-    
-    setEditDay(0)
+    setEditDay(0);
   }
 
   const handleSetEditDay = (day) => {
@@ -338,9 +347,9 @@ function ReadingPlanView () {
         <p className="RP-para">Your plan has a current start date of: <span className="bold">{displayStartDate}</span></p>
         <p className="RP-para">Your plan has a current end date of: <span className="bold">{displayEndDate}</span></p>
         <div className="flexBoxByRows RP-flex">
-          <div className="btn" onClick={()=>handleAddNewDay()}>Add New Day</div>
+          {/* <div className="btn" onClick={()=>handleAddNewDay()}>Add New Day</div> */}
           
-          <div className="btn btn-red" onClick={()=>handleReset()}>Reset</div>
+          {/* <div className="btn btn-red" onClick={()=>handleReset()}>Reset</div> */}
           <div className="key-box">
             <p className="bold">Key:</p>
             <p>Mark as furthest read {plan.measure} <img className="RP-icon" src={furthestReadIcon} alt="furthest read to"/></p>
@@ -368,6 +377,7 @@ function ReadingPlanView () {
         <div className="RP-col8 bold RP-top-row"></div>
         {
             scheme.map((item, index) => {
+
             const editingToday = item.day === editDay ? true : false;
             const options = { weekday: 'short',day: 'numeric' , month: 'short'};
             const displayDate = new Date(item.date).toLocaleDateString('en-UK', options);
@@ -382,8 +392,6 @@ function ReadingPlanView () {
               fromClassNames = fromClassNames +' bg-yellow';
             }
             if(item.day > 1 && yesterdayToValue === plan.start_at && item.to !== 'None' && scheme[index-1]['to'] === 'None' && item.from !== plan.start_at) {
-              console.log(scheme[index-1]['to'])
-              console.log(item.from)
               fromClassNames = fromClassNames +' bg-yellow';
             }
                 return (
@@ -420,11 +428,11 @@ function ReadingPlanView () {
                 )
             })
         }
-        <div className={inSubmitMode? "btn submit-btn RP-submit btn-inSearchMode":"btn submit-btn RP-submit"} onClick={()=>handleUpdateSubmit()}>{inSubmitMode?'... SUBMITTING ...':'Submit Changes'}</div>
+        {/* <div className={inSubmitMode? "btn submit-btn RP-submit btn-inSearchMode":"btn submit-btn RP-submit"} onClick={()=>handleUpdateSubmit()}>{inSubmitMode?'... SUBMITTING ...':'Submit Changes'}</div> */}
         
         
         <div></div>
-        <div className="btn submit-btn RP-submit" onClick={()=>handleMakeModalVisible()}>Submit Changes & Recalculate Plan</div>
+        <div className="btn submit-btn RP-submit" onClick={()=>handleMakeModalVisible()}>Recalculate Plan</div>
         {/* Div below ensures the submit button does not sit at the bottowm of the page */}
         <div></div>
       </form>
