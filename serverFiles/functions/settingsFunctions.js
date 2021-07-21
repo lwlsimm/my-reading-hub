@@ -39,6 +39,7 @@ async function changeEmail (customer_id, new_email) {
       } else {return false}
     } else {return false}
   } catch (error) {
+    
     console.log(error.message)
     return false
   }
