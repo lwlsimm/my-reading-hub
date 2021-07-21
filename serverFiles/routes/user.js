@@ -105,10 +105,8 @@ userRouter.post('/changepw', authenticateToken, checkCurrentPasswordUsingCustome
 userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCustomerId, async(req, res) => {
   try {
     if(! req.body.pw_verified || !req.body.authenticated) {
-      console.log('failed ---')
       throw new Error('auth failed');
     };
-    console.log('passed---')
     const id = req.body.user.id;
     const wasEmailChanged = await changeEmail(id, req.body.email); 
     if(await wasEmailChanged) {
@@ -117,7 +115,12 @@ userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCus
       res.send(false);
     }
   } catch (error) {
-    res.send(false);
+    console.log(error.message)
+    const errObj = {
+      error1: error.message,
+      deepError: req.body.error
+    }
+    res.send(errObj);
   }
 });
 
