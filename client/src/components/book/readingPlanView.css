@@ -11,6 +11,7 @@
   width: 90%;
   justify-content: space-evenly;
   text-align: center;
+  flex-wrap: wrap;
 }
 .RP-paragrpah-container {
   max-width: 80vw;
