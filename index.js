@@ -39,7 +39,7 @@ app.use('*', (req,res) => {
       res.redirect('/?redir=verificationfail');
     break;
     default:
-      res.redirect(`/?display=${url}`);
+      res.redirect(`/`);
   }
 });
 
