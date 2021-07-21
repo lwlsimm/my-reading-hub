@@ -216,7 +216,7 @@ function ReadingPlanView () {
       errorMsg = `The 'to' value cannot be less than the 'from' value! `
     }
     if(from > plan.start_at) {
-      errorMsg = errorMsg + `The start page for this plan is ${plan.start}.`
+      errorMsg = errorMsg + `The start page for this plan is ${plan.start_at}.`
     }
     if(editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
       errorMsg = errorMsg + `The 'from' value of the day you are editing cannot be less than the 'to' value of the previous reading day.  Change the previous reading day first.`
