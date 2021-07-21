@@ -8,6 +8,7 @@ import { updateScheme, updateEndDate } from '../../state/actions';
 import { formatDate } from '../../functions/commonFunctions';
 import { updateExistingPlan } from '../../functions/readingPlanFunctions';
 import { recalculate_plan } from '../../functions/recalculatePlanFunction'
+import { useHistory } from 'react-router-dom';
 
 function ReadingPlanView () {
 
@@ -41,6 +42,7 @@ function ReadingPlanView () {
   })
   const queryParams = window.location.search.substring(1);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   //Variables
   const token = useSelector(state => state.loginReducer.token);
@@ -165,7 +167,7 @@ function ReadingPlanView () {
   };
 
   const handleReset = () => {
-    window.location.reload();
+    history.push(`/?redir=plan/${plan.id}`)
   }
 
   const handleNoReadingToday = (day) => {
@@ -213,9 +215,10 @@ function ReadingPlanView () {
     if(from > to) {
       errorMsg = `The 'to' value cannot be less than the 'from' value! `
     }
-    if(from < plan.start_at) {
-      errorMsg = errorMsg + `The start page for this plan is ${plan.start_at}. The from value can never be less than this!`
-    } else if (editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
+    if(from > plan.start_at) {
+      errorMsg = errorMsg + `The start page for this plan is ${plan.start}.`
+    }
+    if(editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
       errorMsg = errorMsg + `The 'from' value of the day you are editing cannot be less than the 'to' value of the previous reading day.  Change the previous reading day first.`
     }
     if((to === 'None' || from === 'None') && (to !== 'None' || from !== 'None')) {
@@ -379,6 +382,8 @@ function ReadingPlanView () {
               fromClassNames = fromClassNames +' bg-yellow';
             }
             if(item.day > 1 && yesterdayToValue === plan.start_at && item.to !== 'None' && scheme[index-1]['to'] === 'None' && item.from !== plan.start_at) {
+              console.log(scheme[index-1]['to'])
+              console.log(item.from)
               fromClassNames = fromClassNames +' bg-yellow';
             }
                 return (
