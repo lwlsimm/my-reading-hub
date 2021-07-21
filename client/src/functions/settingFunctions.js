@@ -33,7 +33,6 @@ async function changeEmail(token, email, password) {
       current_password: password,
     }
   const data = await settingsServerCall(token, keys.CHANGE_EMAIL_PATH, dataObj)
-  console.log(data.data)
   return data;
 }
 

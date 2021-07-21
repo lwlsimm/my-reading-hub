@@ -115,12 +115,7 @@ userRouter.post('/change_email', authenticateToken, checkCurrentPasswordUsingCus
       res.send(false);
     }
   } catch (error) {
-    console.log(error.message)
-    const errObj = {
-      error1: error.message,
-      deepError: req.body.error
-    }
-    res.send(errObj);
+    res.send(false);
   }
 });
 

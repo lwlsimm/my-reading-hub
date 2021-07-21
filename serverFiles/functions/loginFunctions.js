@@ -103,7 +103,6 @@ async function checkCurrentPasswordUsingCustomerId (req, res, next) {
   } catch (error) {
     console.log(error.message);
     req.body.pw_verified = false;
-    req.body.error = error.message;
     next();
   }
 }

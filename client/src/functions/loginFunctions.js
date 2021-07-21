@@ -19,7 +19,7 @@ const loginUser = async (email, password) => {
   } catch (error) {
     throw new Error('There was a problem logging in.  Please check the email and password provided.')
   }
-}
+} 
 
 const authenticateSession = async(token) => {
   const data = await axios({
