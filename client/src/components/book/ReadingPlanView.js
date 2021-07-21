@@ -111,7 +111,7 @@ function ReadingPlanView () {
   function updateSchemeUsingCurrentChanges() {
     const newScheme = scheme;
     let furthest = 0;
-    for(let i = 1; i <= numberOfDays +1; i++) {
+    for(let i = 1; i <= numberOfDays; i++) {
       const changeArray = ['to','from','date']
       for(let a = 0; a < changeArray.length; a++) {
         try {
