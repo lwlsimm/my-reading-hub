@@ -5,7 +5,7 @@ import furthestReadIcon from '../../assets/images/furthestRead.png'
 import noReading from '../../assets/images/no-reading.png'
 import editing from '../../assets/images/editing.png';
 import { updateScheme, updateEndDate } from '../../state/actions';
-import { formatDate } from '../../functions/commonFunctions';
+import { extractItemFromObject, formatDate } from '../../functions/commonFunctions';
 import { updateExistingPlan } from '../../functions/readingPlanFunctions';
 import { recalculate_plan } from '../../functions/recalculatePlanFunction'
 import { useHistory } from 'react-router-dom';
@@ -21,7 +21,6 @@ function ReadingPlanView () {
   const [plan, setPlan] = useState({});
   const [book_data,setBook_data] = useState({});
   const [scheme, setScheme] = useState([]);
-  const [editedScheme,setEditedScheme] = useState({});
   const queryParams = window.location.search.substring(1);
   const forceUpdate = useForceUpdate();
   
@@ -32,7 +31,6 @@ function ReadingPlanView () {
         setPlan(plansInState[i]); 
         setBook_data(plansInState[i].book_data);
         setScheme(extractSchemeForArray(plansInState[i].plan_scheme));
-        setEditedScheme(plansInState[i].plan_scheme);
       }
     }
   },[]);
@@ -43,24 +41,10 @@ function ReadingPlanView () {
     return schemeArray;
   }
 
-  function updateScheme(day, item, value) {
-    const newScheme = editedScheme;
-    newScheme[day][item] = value;
-    if(item === "date") {
-      //all subsequent days may need to changed to ensure days are chronological.
-      for(let i = day+1; i <= Object.keys(newScheme).length; i++) {
-        const yesterdayDate = formatDate(newScheme[i-1]['date']);
-        const todayDate = formatDate(newScheme[i]['date']);
-        if(todayDate <= todayDate) {
-          const newDate = new Date(yesterdayDate );
-          newDate.setDate(newDate.getDate() + 1)
-          newScheme[i]['date'] = newDate;
-        }
-      }
-    }
-    setEditedScheme(newScheme);
-    console.log(editedScheme)
-    forceUpdate();
+  function updateScheme(index, item, value) {
+    const newScheme = [...scheme];
+    newScheme[index][item] = value;
+    setScheme(newScheme);
   }
 
   
@@ -92,20 +76,20 @@ function ReadingPlanView () {
         <div className="RP-col5 bold RP-top-row">Status</div>
 
         {
-          scheme.map(item => {
+          scheme.map((item, index) => {
             //Finding whether the scheme has been amended
             const day = item.day;
-            let today = editedScheme[day]['date'];
-            const from = editedScheme[day]['from'];
-            const to = editedScheme[day]['to'];
-            const status = editedScheme[day]['completed']? 'Read':'Unread';
+            const today = item.date;
+            const from = item.from;
+            const to = item.to;
+            const status = item.completed? 'Read':'Unread';
             
             return(
             <Fragment>
               <div className="RP-col1">{item.day}</div>
-              <input type="date" className="RP-col2" defaultValue={today} onChange={(e)=>updateScheme(day,"date",e.target.value)}/>
-              <input className="RP-col3" defaultValue={from} onChange={(e)=>updateScheme(day,"from",Number(e.target.value))}/>
-              <input className="RP-col4" defaultValue={to} onChange={(e)=>updateScheme(day,"to",Number(e.target.value))}/>
+              <input type="date" className="RP-col2" value={formatDate(today)} onChange={(e)=>updateScheme(index,"date",e.target.value)}/>
+              <input className="RP-col3" defaultValue={from} onChange={(e)=>updateScheme(index,"from",Number(e.target.value))}/>
+              <input className="RP-col4" defaultValue={to} onChange={(e)=>updateScheme(index,"to",Number(e.target.value))}/>
               <div className="RP-col5">{status}</div>
               <img className="RP-col6 RP-icon" src={furthestReadIcon} alt="furthest read to"/>
               <img className="RP-col7 RP-icon" src={noReading} alt="no reading today"/>

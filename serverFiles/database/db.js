@@ -8,7 +8,7 @@ const devConfig = {
   port: process.env.SERVER_PORT,
   database: process.env.SERVER_DATABASE
 };
-
+ 
 const proConfig = {
   connectionString: process.env.DATABASE_URL,
   ssl: {
