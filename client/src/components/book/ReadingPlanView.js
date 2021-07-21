@@ -114,7 +114,7 @@ function ReadingPlanView () {
             }
           } else {throw Error}} catch {}}
       if(i > 1) {
-       if(formatDate(newScheme[i-1]['date']) <= formatDate(newScheme[i-2]['date'])) {
+       if(formatDate(newScheme[i-1]['date']) < formatDate(newScheme[i-2]['date'])) {
          const newDate = new Date(newScheme[i-2]['date']);
          newDate.setDate(newDate.getDate() + 1);
          newScheme[i-1]['date'] = newDate}
@@ -167,7 +167,7 @@ function ReadingPlanView () {
   };
 
   const handleReset = () => {
-    history.push(`/?redir=plan/${plan.id}`)
+    history.push(`/?redir=plan/?${plan.id}`)
   }
 
   const handleNoReadingToday = (day) => {
