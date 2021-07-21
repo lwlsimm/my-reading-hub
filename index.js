@@ -11,19 +11,37 @@ app.use(cors());
   //Json parses the body
 app.use(express.json({limit: '50mb'}));
 
-if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'production-test' ) {
+if(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'test' ) {
   app.use(express.static(path.join(__dirname, "client/build")));
 };
 
 const apiRouter = require('./serverFiles/api')
 app.use('/api', apiRouter);
 
-app.use('/verificationsuccess', (req, res) => {
-  res.redirect('/?redir=verificationsuccess')
-})
-app.use('/verificationfail', (req, res) => {
-  res.redirect('/?redir=verificationfail')
-})
+
+//Redirections for specific pages.
+
+//plan redirect
+app.use('/plan/*', (req, res) => {
+  const url = req.url;
+  res.redirect(`/?redir=plan/${url}`);
+});
+
+//all other redirects
+app.use('*', (req,res) => {
+  const url = req.url;
+  
+  switch(url) {
+    case '/verificationsuccess':
+      res.redirect('/?redir=verificationsuccess');
+    break;
+    case '/verificationfail':
+      res.redirect('/?redir=verificationfail');
+    break;
+    default:
+      res.redirect('/');
+  }
+});
 
 //Listener
 app.listen(PORT, () => {

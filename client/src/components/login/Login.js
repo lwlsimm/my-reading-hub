@@ -113,7 +113,7 @@ function Login () {
         <h2>Forgotten Password?</h2>
         <p className="login-para">Enter your email below.  If the email exists in our system, you will be sent a temporary password.</p>
         <form className='form' onSubmit={e=>handleResetPassword(e)}>
-            {resetEmailRequestSent? <h4>Check your email for the reset link</h4>:null}
+            {resetEmailRequestSent? <h4>Check your email for the reset password</h4>:null}
             <input className="input" name="email" id="login_email" placeholder="Enter email address" required/>
             <input type="submit" className="btn submit-btn"/>
           </form>

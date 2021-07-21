@@ -147,6 +147,7 @@ userRouter.post('/delete_account', authenticateToken, checkCurrentPasswordUsingC
       res.send(false);
     }
   } catch (error) {
+    console.log(error.message)
     res.send(false);
   }
 });
