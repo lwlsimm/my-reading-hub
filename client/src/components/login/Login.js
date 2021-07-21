@@ -62,7 +62,6 @@ function Login () {
     e.preventDefault();
     try {
       const response = await loginUser(e.target.login_email.value, e.target.login_password.value);
-      console.log(response.data['verified']);
       if(response.data['is_verified'] === 'reset') {
         history.push(resetPath + response.data['code']);
         return;

@@ -20,7 +20,6 @@ function App() {
     <Router>
     <div className="AppPage">
       <Nav/>
-      {console.log('hi')}
       <Switch>
         <Route path="/" exact component={LandingPage}/>
         <Route path="/about" exact component={About}/>

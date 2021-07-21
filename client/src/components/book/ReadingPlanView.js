@@ -213,7 +213,9 @@ function ReadingPlanView () {
     if(from > to) {
       errorMsg = `The 'to' value cannot be less than the 'from' value! `
     }
-    if(editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
+    if(from < plan.start_at) {
+      errorMsg = errorMsg + `The start page for this plan is ${plan.start_at}. The from value can never be less than this!`
+    } else if (editDay > 1 && from < findPageOfThePreviousDay(editDay)) {
       errorMsg = errorMsg + `The 'from' value of the day you are editing cannot be less than the 'to' value of the previous reading day.  Change the previous reading day first.`
     }
     if((to === 'None' || from === 'None') && (to !== 'None' || from !== 'None')) {
@@ -376,7 +378,7 @@ function ReadingPlanView () {
             if(item.day > 1 && item.from - yesterdayToValue >= 2) {
               fromClassNames = fromClassNames +' bg-yellow';
             }
-            if(item.day > 1 && yesterdayToValue === plan.start_at && item.to !== 'None' && scheme[index-1]['to'] === 'None' && item.to !== plan.start_at) {
+            if(item.day > 1 && yesterdayToValue === plan.start_at && item.to !== 'None' && scheme[index-1]['to'] === 'None' && item.from !== plan.start_at) {
               fromClassNames = fromClassNames +' bg-yellow';
             }
                 return (

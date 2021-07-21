@@ -19,7 +19,7 @@
 }
 .RP-form {
   display: grid;
-  grid-template-columns: 25px 50px 50px 50px 70px 25px 25px 25px;
+  grid-template-columns: 25px 75px 50px 50px 50px 25px 25px 25px;
   grid-auto-rows: min-content;
   row-gap: 5px;
   margin: 10px auto;
@@ -118,9 +118,17 @@
   font-size: 0.85em;
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 500px) {
   .RP-form {
-    grid-template-columns: 80px 200px 100px 100px 100px 60px 60px 60px;
+    grid-template-columns: 25px 120px 60px 60px 60px 40px 40px 40px;
+    margin: 10px auto;
+  }
+}
+
+
+@media only screen and (min-width: 700px) {
+  .RP-form {
+    grid-template-columns: 80px 160px 100px 100px 100px 60px 60px 60px;
     margin: 10px auto;
   }
   .RP-col1, .RP-col2, .RP-col3, .RP-col4, .RP-col5, .RP-col6, .RP-col7 {
@@ -139,6 +147,7 @@
   }
   
 }
+
 
 @media only screen and (max-width: 700px) {
   .editSchemeModal {
