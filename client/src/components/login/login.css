@@ -36,6 +36,18 @@
   background-color: var(--blue-selected);
 }
 
+.register-btn {
+  display: flex;
+  min-height: 75px;
+  white-space: normal;
+}
+
+.terms {
+  text-align: justify;
+  padding: 5px;
+  font-size: 0.8em;
+}
+
 .regIcon {
   background-color: var(--olive);
 }

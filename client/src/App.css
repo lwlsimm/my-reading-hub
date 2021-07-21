@@ -201,3 +201,8 @@ body{
     margin-top: 10px;
   }
 }
+@media only screen and (max-width: 800px) {
+  .AppPage {
+    max-width: 90vw;
+  }
+}

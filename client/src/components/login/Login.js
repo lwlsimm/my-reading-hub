@@ -100,7 +100,7 @@ function Login () {
             <label for="password">Password</label>
             <input className="input" name="login_password" id="password" type="password" placeholder="Enter password" required/>
             {inSubmitMode ?
-            <input type="submit" className="btn submit-btn btn-inSearchMode" disabled/>
+            <input type="submit" className="btn submit-btn btn-inSearchMode" value="...please wait..." disabled/>
             :
             <input type="submit" className="btn submit-btn"/>
             }
@@ -140,12 +140,20 @@ function Login () {
               <input className="input input-registration-pw" name="password" id="password" type="password" placeholder="Enter password" required minlength="8"/>
               <input className="input input-registration-pw" name="reenteredpassword" id="reenteredpassword" type="password" placeholder="Re-enter password" required minlength="8"/>
             </div>
+            <div>
+            <h4>Terms</h4>
+              <p className="terms">By accessing this website, you are agreeing to be bound by these website Terms, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.  Any claim or dispute relating to this website shall be governed solely by the laws of England & Wales.</p>
+              <p className="terms">Use of this site is free of charge and permission to use it can be withdrawn by a site administrator at any time for any lawful reason.</p>
+              <p className="terms">The only data that this site stores about you is the data you yourself input: i.e. your email address, your password, the books you are reading and the progress you have made in reading these books. All of the book data can be viewed by you from the 'My Account' section of this site. <span className="bold">Your data will never be sold and nor will it be used for any other purpose than allowing you to enjoy our website.</span> If you want to delete the data we hold about you then you can delete your account via the Settings page or you can delete individuals books via the 'My Account'. If you have any data concerns or questions, please use the contact form in the 'About' page.</p>
+              <p className="terms">The data held on this site may be deleted without warning at any time by the administrator.</p>
+            </div>  
             {inSubmitMode ?
-            <input type="submit" className="btn submit-btn btn-inSearchMode" disabled/>
+            <input type="submit" className="btn submit-btn btn-inSearchMode"  value="...please wait..." disabled/>
             :
-            <input type="submit" className="btn submit-btn"/>
+            <input type="submit" className="btn submit-btn register-btn" value="I consent to the above term and wish to register"/>
             }
           </form>
+          
         </div>
         
         {/* 

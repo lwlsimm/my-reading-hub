@@ -37,7 +37,7 @@ function About () {
 
 
   return (
-    <div className="Page about-page">
+    <div className="about-page">
       <h2 className="about-title">About</h2>
       <p className="about-para">This web-app was developed by Lee Simmons (me!) as a project at the end of a full-stack web development course.  That course was designed to teach me the fundamentals of front-end and back end web design and this site is aimed at show-casing the skills what I have learned so far.  My aim with this site was to keep it basic, to make it useful for people and for it to have a minimal, clean look.  This is the first public facing app that I have developed so please be gentle!</p>
       <p className="about-para">I hope that you are happy with the end results but if you have any constructive critism or if you have ideas for additional functionality/imporovements, please send me a message using the form below.</p>

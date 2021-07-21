@@ -23,6 +23,7 @@
   grid-auto-rows: min-content;
   row-gap: 5px;
   margin: 10px auto;
+  margin-bottom: 100px;
 }
 
 .RP-col1{
