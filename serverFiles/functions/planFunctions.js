@@ -42,6 +42,18 @@ async function updatePlan (plan_id, scheme) {
   }
 }
 
+async function getPlan (user_id, plan_id) {
+  try {
+    const serverQuery = await pool.query("SELECT * FROM reading_plans WHERE id = $1", [plan_id]);
+    const data = await serverQuery.rows[0];
+    if(data['customer_id'] === user_id) return data
+    throw Error;
+  } catch (error) {
+    console.log('getplanFunction', error.message)
+    return null
+  }
+}
 
 
-module.exports = { addNewPlan, updatePlan, deletePlan }
+
+module.exports = { addNewPlan, updatePlan, deletePlan, getPlan }

@@ -2,7 +2,7 @@ const userRouter = require('express').Router();
 require('dotenv').config();
 const { sendMail } = require('../email/email');
 const { authenticateToken, authenticateEmail } = require('../functions/authenticateFunctions');
-const { addNewPlan,updatePlan, deletePlan } = require('../functions/planFunctions');
+const { addNewPlan,updatePlan, deletePlan, getPlan } = require('../functions/planFunctions');
 const { contactFormToAdminPlanText,contactFormToAdminHTML, contactFormConfirmationPlanText, contactFormConfirmationHTML } = require('../email/emailText');
 const { changePassword, changeEmail, deletePlansForId, deleteAccount, } = require('../functions/settingsFunctions');
 const { checkCurrentPasswordUsingCustomerId   } = require('../functions/loginFunctions');
@@ -55,6 +55,20 @@ userRouter.post('/updatePlan', authenticateToken, async(req, res) => {
       if(await serverQuery) {
         res.status(200).send(true);
       }
+    } else {
+      throw new Error
+    }
+  } catch (err) {
+    res.status(403).send()
+  }
+})
+userRouter.post('/getPlan', authenticateToken, async(req, res) => {
+  try {
+    if(req.body.authenticated) {
+      const {plan_id } = req.body;
+      const user = req.body.user.id;
+      const serverQuery = await getPlan(user, plan_id);
+      res.send(serverQuery)
     } else {
       throw new Error
     }

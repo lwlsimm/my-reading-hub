@@ -20,11 +20,12 @@
 }
 .RP-form {
   display: grid;
-  grid-template-columns: 25px 75px 50px 50px 50px 25px 25px 25px;
+  grid-template-columns: 20px 105px 35px 35px 50px 25px 25px;
   grid-auto-rows: min-content;
   row-gap: 5px;
   margin: 10px auto;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
+  
 }
 
 .RP-col1{
@@ -32,6 +33,7 @@
 }
 .RP-col2{
   grid-column: 2 / span 1;
+  width: 90%;
 }
 .RP-col3{
   grid-column: 3 / span 1;
@@ -41,7 +43,7 @@
 }
 .RP-col3, .RP-col4 {
   margin: 2px;
-  width: 45px;
+  width: 80%;
 }
 .RP-col5{
   grid-column: 5 / span 1;
@@ -53,9 +55,7 @@
 .RP-col7{
   grid-column: 7 / span 1;
 }
-.RP-col8{
-  grid-column: 8 / span 1;
-}
+
 .RP-edit-doneBtn {
   grid-column: 6 / span 3;
   height: 20px;
@@ -78,7 +78,7 @@
   align-items: center;
   justify-self: center;
   padding: 0;
-  margin: 0
+  margin: 0 2px;
 }
 .RP-icon {
   width: 20px;
@@ -103,7 +103,7 @@
 }
 
 .RPM-input {
-  width: 30%;
+  width: 100px;
   padding: 5px 0;
   text-align: center;
 }
@@ -116,13 +116,48 @@
   background-color: Var(--yellow-selected);
   color: white;
 }
+.bg-green {
+  background-color: Var(--green-selected);
+  color: white;
+  width: 100%;
+  border-radius: 2px;
+}
+.RP-cancel {
+  width: 100%;
+}
+
 .key-box {
   font-size: 0.85em;
 }
 
+.recalcBox {
+  width: 90%;
+  max-width: 720px;
+  background-color: var(--yellow-light);
+  border-radius: 5px;
+  margin: 10px auto;
+  padding: 5px;
+  margin-bottom: 100px;
+  padding: 10px 15px;
+}
+
+.recalcRow {
+  display: flex;
+  margin: 10px auto;
+}
+
+.RPM-recalc-label {
+  width: 75%;
+}
+.RPM-recalc-input {
+  width: 25%;
+  margin: 0 5%;
+  text-align: center;
+}
+
 @media only screen and (min-width: 500px) {
   .RP-form {
-    grid-template-columns: 25px 120px 60px 60px 60px 40px 40px 40px;
+    grid-template-columns: 25px 120px 50px 60px 60px 40px 40px 40px;
     margin: 10px auto;
   }
 }
@@ -172,5 +207,12 @@
   }
   .editSchemeModal .btn {
     margin: 10px;
+  }
+  .recalcRow {
+    flex-direction: column;
+    align-items: center;
+  }
+  .RPM-recalc-label, .RPM-recalc-input {
+    width: 80%;
   }
 }

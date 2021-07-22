@@ -55,6 +55,25 @@ export async function sendNewPlanToServer (plan, token) {
   }
 }
 
+export async function getPlanFromServer (plan_id, token) {
+  try {
+    const data = await axios({
+      method: 'POST',
+      headers: {
+        authorization: `Bearer ${token}`
+      },
+      url: keys.GET_PLAN_ON_DB_PATH,
+      data: {
+        plan_id: plan_id,
+      }
+    });
+    const serverPlan = await data.data;
+    return JSON.parse(await serverPlan.plan_scheme)
+  } catch (error) {
+    return new Error;
+  }
+}
+
 export async function updateExistingPlan (plan_id, scheme, token) {
   const json_scheme = JSON.stringify(scheme)
   try {
@@ -152,3 +171,4 @@ export function extractReadingPlanVariables(e) {
     };
     return returnObject;
 }
+
