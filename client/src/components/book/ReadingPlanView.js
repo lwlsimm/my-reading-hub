@@ -110,9 +110,13 @@ function ReadingPlanView () {
     let {index, category, value} = typing;
     //Validation of inputs
     if((category === 'to' || category === 'from')) {
+      let otherCategory = category === 'to'? 'from':'to';
       if(!Number.isInteger(Number(value))) {
         value = "Error";
         setErrorMessage(`Only whole numbers can be used in the 'To' and 'From' columns!`)
+      } else if((scheme[index][otherCategory] !== "None" && value === "None")|| ( value !== 'None' && scheme[index][otherCategory] === "None")) {
+        setErrorMessage(`The 'From' and'To' values for day ${scheme[index]['day']} must both be 'None' or must both be whole numbers`)
+        value = Number(value)
       } else {
         value = Number(value)
       }
@@ -183,6 +187,7 @@ function ReadingPlanView () {
   }
 
   function noReadingForToday(index) {
+    setErrorMessage('')
     const newScheme = [...scheme];
     newScheme[index]['to'] = 'None';
     newScheme[index]['from'] = 'None';
@@ -190,10 +195,27 @@ function ReadingPlanView () {
     setScheme(newScheme);
   }
 
- async function handleUpdateSubmit() {
-  setInSubmitMode(true);
-  setErrorMessage('')
-  try {
+  async function updateSubmitValidation () {
+    const errorArray = [];
+    scheme.map((item, index) => {
+      if((item['to'] === 'None' && item['from'] !== 'None') ||(item['to'] !== 'None' && item['from'] === 'None')) {
+        errorArray.push(`The 'To' and 'From' values for day ${item['day']} must both be 'None' or be whole numbers`)
+      }
+      if(!Number.isInteger(item['to']) || item['to'] !== 'None') {
+        errorArray.push(`The 'To' value for day ${item['day']} is not a valid entry`)
+      }
+      if(!Number.isInteger(item['from']) || item['from'] !== 'None') {
+        errorArray.push(`The 'From' value for day ${item['day']} is not a valid entry`)
+      }
+    });
+    return errorArray;
+  }
+
+  async function handleUpdateSubmit() {
+    setInSubmitMode(true);
+    setErrorMessage('')
+    let errorReport = updateSubmitValidation();
+    try {
     const data_for_state = {};
     for(let i = 0; i < scheme.length; i++) {
       data_for_state[i+1] = scheme[i]

@@ -109,7 +109,7 @@
 }
 
 .bg-red {
-  background-color: Var(--danger);
+  background-color: Var(--danger) !important;
   color: white;
 }
 .bg-yellow {
