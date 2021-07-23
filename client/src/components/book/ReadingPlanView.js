@@ -44,7 +44,7 @@ function ReadingPlanView () {
   const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
   const isFirefox = /firefox/i.test(navigator.userAgent);
   const isSafari = !isChrome && !isFirefox
-ç
+
   const [plan, setPlan] = useState({});
   const [book_data,setBook_data] = useState({});
   const [scheme, setScheme] = useState([]);
