@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import './readingPlanView.css';
 import furthestReadIcon from '../../assets/images/furthestRead.png'
 import noReading from '../../assets/images/no-reading.png'
-import { updateScheme, updateEndDate } from '../../state/actions';
-import { extractItemFromObject, formatDate } from '../../functions/commonFunctions';
+import { updateScheme } from '../../state/actions';
+import { formatDate } from '../../functions/commonFunctions';
 import { updateExistingPlan, getPlanFromServer } from '../../functions/readingPlanFunctions';
 import { recalculate_plan } from '../../functions/recalculatePlanFunction'
 import { useHistory } from 'react-router-dom';
