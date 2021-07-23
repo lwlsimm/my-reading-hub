@@ -10,7 +10,7 @@ export const keys = {
   OL_ISBN_PATH: 'https://openlibrary.org/isbn/',
   ADD_NEW_PLAN_TO_DB_PATH: 'https://my-reading-hub.herokuapp.com/api/user/addPlan',
   UPATE_PLAN_ON_DB_PATH: 'https://my-reading-hub.herokuapp.com/api/user/updatePlan',
-  UPATE_PLAN_ON_DB_PATH: 'https://my-reading-hub.herokuapp.com/api/user/getPlan',
+  GET_PLAN_ON_DB_PATH: 'https://my-reading-hub.herokuapp.com/api/user/getPlan',
   DELETE_PLAN_ON_DB_PATH: 'https://my-reading-hub.herokuapp.com/api/user/deletePlan',
   ABOUT_CONTACT_PATH: 'https://my-reading-hub.herokuapp.com/api/user/contact',
   CHANGE_PW_PATH: 'https://my-reading-hub.herokuapp.com/api/user/changepw',
