@@ -271,6 +271,7 @@ function ReadingPlanView () {
     setInSubmitMode(false);
     setErrorMessage(`You must click 'Submit Changes' for your new plan to be saved!`)
     setScheme(newSchemeArray);
+    window.scrollTo(0, 0)
   }
 
   async function handleUpdateSubmit() {
