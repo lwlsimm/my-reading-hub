@@ -221,7 +221,9 @@ function ReadingPlanView () {
   function recalculationValidation (lastReadTo, startDate, endAt, per_day, end_date) {
     setRecalcErrors([]);
     const errorsFound = [];
-    const schemelastReadDate = findNextFreeDate(scheme);
+    const schemelastReadDate = new Date(findNextFreeDate(scheme));
+    schemelastReadDate.setHours(0,0,0,0);
+    startDate.setHours(0,0,0,0)
     const options = { weekday: 'short',day: 'numeric' , month: 'short'};
     const displayDate = new Date(schemelastReadDate).toLocaleDateString('en-UK', options);
     if(per_day && end_date) errorsFound.push(`You cannot supply values for both the end date and ${plan.measure} per day.  Please choose only one.`);
