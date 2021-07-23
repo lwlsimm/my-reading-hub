@@ -41,8 +41,9 @@ function ReadingPlanView () {
   const history = useHistory();
   const plansInState = useSelector(state => state.planReducer.plans);
   const token = useSelector(state => state.loginReducer.token);
-  const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
-
+  const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+  const isFirefox = typeof InstallTrigger !== 'undefined';
+  const isSafari = !isChrome && !isFirefox? true : false;
 
   const [plan, setPlan] = useState({});
   const [book_data,setBook_data] = useState({});
@@ -230,7 +231,7 @@ function ReadingPlanView () {
     if(startDate < schemelastReadDate) errorsFound.push(`The reclaculated start date must be after the last date that you marked as 'Read' above (i.e. it must begin or ${displayDate} or later).`)
     return errorsFound;
   }
-  
+
   async function handleRecalculatePlan (e) {
     e.preventDefault();
     setInSubmitMode(true);
