@@ -65,10 +65,8 @@ async function deletePlansForId (id) {
 
 async function deleteAccount (id) {
   try {
-    console.log('start')
     const emailData = await pool.query("SELECT email FROM users WHERE id = $1", [id]);
     const email = emailData.rows[0]['email'];
-    console.log(id)
     const planDelete = await pool.query("DELETE FROM reading_plans WHERE customer_id = $1", [id]);
     const passwordDelete = await pool.query("DELETE FROM passwords WHERE customer_id = $1", [id]);
     const verificationDelete = await pool.query("DELETE FROM email_verification WHERE user_email = $1", [email]);
