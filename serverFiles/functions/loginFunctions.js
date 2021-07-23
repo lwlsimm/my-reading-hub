@@ -8,7 +8,7 @@ const { sendMail } = require('../email/email');
 async function checkPassword (req, res, next) {
   try {
     const { email }  = req.body;
-    const passwordEntered = req.body.password;
+    const passwordEntered = req.body.password.trim();
     const userData = await pool.query("SELECT id, verified FROM users WHERE email = $1", [email]);
     const { id, verified} = await userData.rows[0];
     const passwordData = await pool.query("SELECT hashed_pw FROM passwords WHERE customer_id = $1", [id]);
@@ -89,7 +89,7 @@ async function updatePasswordAfterReset (email, password, code) {
 async function checkCurrentPasswordUsingCustomerId (req, res, next) {
   try {
     const { id } = req.body.user;
-    const { current_password } = req.body;
+    const  current_password  = req.body.current_password.trim();
     const serverQuery = await pool.query("SELECT hashed_pw FROM passwords WHERE customer_id  = $1", [id]);
     const dbPassword = await serverQuery.rows[0]['hashed_pw'];
     bcrypt.compare(current_password, await dbPassword, async function(err, result) {
