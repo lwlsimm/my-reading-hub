@@ -228,7 +228,7 @@ function ReadingPlanView () {
     if(!per_day && !end_date) errorsFound.push(`You must supply a value for either the end date and ${plan.measure} per day.`);
     if(end_date && end_date < startDate) errorsFound.push(`The new plans recalculation start date cannot be before the plan end date.`);
     if(lastReadTo > endAt) errorsFound.push(`You are reading from ${lastReadTo} to ${endAt}!  This app only allows you to read forwards!`);
-    if(startDate < schemelastReadDate) errorsFound.push(`The reclaculated start date must be after the last date that you marked as 'Read' above (i.e. it must begin or ${displayDate} or later).`)
+    if(startDate < schemelastReadDate) errorsFound.push(`The reclaculated start date must be after the last date that you marked as 'Read' above (i.e. it must begin on ${displayDate} or later).`)
     return errorsFound;
   }
 
