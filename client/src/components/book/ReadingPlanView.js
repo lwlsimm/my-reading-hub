@@ -48,6 +48,8 @@ function ReadingPlanView () {
   const [inSubmitMode, setInSubmitMode] = useState(false);
   const [typing,setTyping] = useState({index: 0, category: '', value: ''});
   const [errorMessage,setErrorMessage] = useState('');
+  const [updateErrorMessage, setUpdateErrorMessage] = useState([]);
+  const [recalcErrors, setRecalcErrors] = useState([]);
   const [recalcFromDate, setRecalcFromDate] = useState(plan.start_date);
   const queryParams = window.location.search.substring(1);
   
@@ -91,14 +93,18 @@ function ReadingPlanView () {
   }
 
   function findNextFreeDate (schemeToSearch) {
-    let furthestReadSoFar = schemeToSearch[0]['date'];
-    for(let i = 0; i < schemeToSearch.length; i++) {
-      if(schemeToSearch[i]['completed']) {
-        furthestReadSoFar = new Date(schemeToSearch[i]['date']);
-        furthestReadSoFar.setDate(furthestReadSoFar.getDate()+1)
+    try {
+      let furthestReadSoFar = schemeToSearch[0]['date'];
+      for(let i = 0; i < schemeToSearch.length; i++) {
+        if(schemeToSearch[i]['completed']) {
+          furthestReadSoFar = new Date(schemeToSearch[i]['date']);
+          furthestReadSoFar.setDate(furthestReadSoFar.getDate()+1)
+        } 
       } 
-    } 
-    return furthestReadSoFar 
+      return furthestReadSoFar 
+    } catch (error) {
+      return null;
+    }
   }
 
   function handleTypingUpdate(index, category, value) {
@@ -106,18 +112,16 @@ function ReadingPlanView () {
   }
 
   function updateSchemeLocally() {
-    setErrorMessage('')
+    setErrorMessage('');
     let {index, category, value} = typing;
     //Validation of inputs
     if((category === 'to' || category === 'from')) {
       let otherCategory = category === 'to'? 'from':'to';
-      if(!Number.isInteger(Number(value))) {
+      if(!Number.isInteger(Number(value)) && value !== 'None') {
         value = "Error";
-        setErrorMessage(`Only whole numbers can be used in the 'To' and 'From' columns!`)
       } else if((scheme[index][otherCategory] !== "None" && value === "None")|| ( value !== 'None' && scheme[index][otherCategory] === "None")) {
-        setErrorMessage(`The 'From' and'To' values for day ${scheme[index]['day']} must both be 'None' or must both be whole numbers`)
         value = Number(value)
-      } else {
+      } else if(Number(value)) {
         value = Number(value)
       }
     }
@@ -195,26 +199,85 @@ function ReadingPlanView () {
     setScheme(newScheme);
   }
 
-  async function updateSubmitValidation () {
+  function updateSubmitValidation () {
     const errorArray = [];
     scheme.map((item, index) => {
       if((item['to'] === 'None' && item['from'] !== 'None') ||(item['to'] !== 'None' && item['from'] === 'None')) {
         errorArray.push(`The 'To' and 'From' values for day ${item['day']} must both be 'None' or be whole numbers`)
       }
-      if(!Number.isInteger(item['to']) || item['to'] !== 'None') {
+      if(!Number.isInteger(item['to']) && item['to'] !== 'None') {
         errorArray.push(`The 'To' value for day ${item['day']} is not a valid entry`)
       }
-      if(!Number.isInteger(item['from']) || item['from'] !== 'None') {
+      if(!Number.isInteger(item['from']) && item['from'] !== 'None') {
         errorArray.push(`The 'From' value for day ${item['day']} is not a valid entry`)
       }
     });
     return errorArray;
   }
 
+  function recalculationValidation (lastReadTo, startDate, endAt, per_day, end_date) {
+    setRecalcErrors([]);
+    const errorsFound = [];
+    const schemelastReadDate = findNextFreeDate(scheme);
+    const options = { weekday: 'short',day: 'numeric' , month: 'short'};
+    const displayDate = new Date(schemelastReadDate).toLocaleDateString('en-UK', options);
+    if(per_day && end_date) errorsFound.push(`You cannot supply values for both the end date and ${plan.measure} per day.  Please choose only one.`);
+    if(!per_day && !end_date) errorsFound.push(`You must supply a value for either the end date and ${plan.measure} per day.`);
+    if(end_date && end_date < startDate) errorsFound.push(`The new plans recalculation start date cannot be before the plan end date.`);
+    if(lastReadTo > endAt) errorsFound.push(`You are reading from ${lastReadTo} to ${endAt}!  This app only allows you to read forwards!`);
+    if(startDate < schemelastReadDate) errorsFound.push(`The reclaculated start date must be after the last date that you marked as 'Read' above (i.e. it must begin or ${displayDate} or later).`)
+    return errorsFound;
+  }
+
+  async function handleRecalculatePlan (e) {
+    e.preventDefault();
+    setInSubmitMode(true);
+    setErrorMessage('');
+    setUpdateErrorMessage('');
+    let errorReport = updateSubmitValidation();
+    if(errorReport.length > 0) {
+      setUpdateErrorMessage(errorReport);
+      setInSubmitMode(false);
+      return;
+    }
+    const lastReadTo = Number(e.target.lastReadTo.value);
+    const startDate = new Date(recalcFromDate);
+    const endAt = Number(e.target.endAt.value);
+    const per_day = Number(e.target.per_day.value);
+    const end_date = e.target.end_date.value ? new Date(e.target.end_date.value) : null;
+    const per_day_type = per_day? 'per_day':'end_date';
+    const recalculationErrorMsgs = recalculationValidation(lastReadTo, startDate, endAt, per_day, end_date);
+    if(recalculationErrorMsgs.length > 0) {
+      setRecalcErrors(recalculationErrorMsgs);
+      setInSubmitMode(false);
+      return;
+    }
+    const data_for_new_plan = {
+      current_plan_scheme: scheme,
+      measure_last_read_to: lastReadTo,
+      end_at: endAt,
+      new_plan_start_date: startDate,
+      per_day_type: per_day_type,
+      end_date: end_date,
+      per_day: per_day,
+    }
+    const newScheme = recalculate_plan(data_for_new_plan); 
+    const newSchemeArray = extractSchemeForArray(newScheme);
+    setInSubmitMode(false);
+    setErrorMessage(`You must click 'Submit Changes' for your new plan to be saved!`)
+    setScheme(newSchemeArray);
+  }
+
   async function handleUpdateSubmit() {
     setInSubmitMode(true);
-    setErrorMessage('')
+    setErrorMessage('');
+    setUpdateErrorMessage([]);
     let errorReport = updateSubmitValidation();
+    if(errorReport.length > 0) {
+      setUpdateErrorMessage(errorReport);
+      setInSubmitMode(false);
+      return;
+    }
     try {
     const data_for_state = {};
     for(let i = 0; i < scheme.length; i++) {
@@ -256,7 +319,16 @@ function ReadingPlanView () {
     <div className="Page RP-page">
       <TopRow book_data={book_data} plan={plan}/>
       
-      {errorMessage? <h3 className="red-text">{errorMessage}</h3>:null}
+      {errorMessage? <h3 className="red-text bold">{errorMessage}</h3>:null}
+      {updateErrorMessage.length > 0? 
+      <ul>
+        <li className="RP-listItem bold red-text">The following critical errors were detected:</li>
+        {updateErrorMessage.map((item, index) => {
+          return(<li className="RP-listItem">{`${index+1}: ${item}`}</li>)
+        })} 
+        <li className="RP-listItem bold red-text">{`${updateErrorMessage.length===1? 'This error ':'These errors '}must be resolved to Submit your changes or recalculate your plan!`}</li>
+      </ul>
+      :null}
       <form className="RP-form">
         <div className="RP-col1 bold RP-top-row">Day</div>
         <div className="RP-col2 bold RP-top-row">Date</div>
@@ -309,28 +381,37 @@ function ReadingPlanView () {
          <div className="btn btn-red RP-submit" onClick={()=>handleCancelChanges()}>Cancel Changes</div>
       </form>
 
-      <form className="recalcBox">
+      <form className="recalcBox" onSubmit={e => handleRecalculatePlan(e)}>
         <h3>Recalculate Your Plan</h3>
+          {recalcErrors.length > 0? 
+            <ul>
+              <li className="RP-listItem bold red-text">The following critical errors were detected:</li>
+              {recalcErrors.map((item, index) => {
+                return(<li className="RP-listItem">{`${index+1}: ${item}`}</li>)
+              })} 
+              <li className="RP-listItem bold red-text">{`${updateErrorMessage.length===1? 'This error ':'These errors '}must be resolved to recalculate your plan!`}</li>
+            </ul>
+          :null}
         <p>{`In order to calculate a new plan, please fully update your plan progress in the table above.  You should ensure that the table reflects the ${plan.measure} that you last read to.  Currently, `}{findLastReadMeasure()===plan.start_at? `you have yet to start the plan. `: `you have this set to ${plan.measure} ${findLastReadMeasure()}.`}</p>
         <div className="recalcRow">
         <label className="RPM-recalc-label" for="lastReadTo">I want the scheme to start from {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="lastReadTo" defaultValue={findLastReadMeasure()} required/>
         </div>
         <div div className="recalcRow">
-        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from:</label><input type="date" className="RPM-recalc-input" id="recalcDate" value={formatDate(recalcFromDate)} required/>
+        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from:</label><input type="date" className="RPM-recalc-input" id="startDate" value={formatDate(recalcFromDate)} onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
         </div>
         <div div className="recalcRow">
-        <label className="RPM-recalc-label" for="lastReadTo">I will be reading up to and including {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="readTo" defaultValue={scheme[scheme.length-1]? scheme[scheme.length-1]['to']:null}/>
+        <label className="RPM-recalc-label" for="endAt">I will be reading up to and including {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="endAt" defaultValue={scheme[scheme.length-1]? scheme[scheme.length-1]['to']:null}/>
         </div>
         <h3>Select one of the following options:</h3>
         <div div className="recalcRow">
-          <label className="RPM-recalc-label" for="modal_end_date">I want to complete the plan by:</label>
-          <input className="RPM-recalc-input" type="date" id="modal_end_date" name="modal_end_date" placeholder="dd/mm/yyyy"/>
+          <label className="RPM-recalc-label" for="end_date">I want to complete the plan by:</label>
+          <input className="RPM-recalc-input" type="date" id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
         </div>
         <div div className="recalcRow">
           {plan.measure === "percentage"?
-            <label  className="RPM-recalc-label" for="modal_per_day">{`I want to read the following percentage per day:`}</label>
+            <label  className="RPM-recalc-label" for="per_day">{`I want to read the following percentage per day:`}</label>
             :
-            <label  className="RPM-recalc-label" for="modal_per_day">{`I want to read the following number of ${plan.measure}s per day:`}</label>
+            <label  className="RPM-recalc-label" for="per_day">{`I want to read the following number of ${plan.measure}s per day:`}</label>
           }
           <input className="RPM-recalc-input" type="text" id="modal_per_day" name="per_day"/>
         </div>
