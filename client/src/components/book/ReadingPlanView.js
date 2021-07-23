@@ -41,6 +41,8 @@ function ReadingPlanView () {
   const history = useHistory();
   const plansInState = useSelector(state => state.planReducer.plans);
   const token = useSelector(state => state.loginReducer.token);
+  const isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && window['safari'].pushNotification));
+
 
   const [plan, setPlan] = useState({});
   const [book_data,setBook_data] = useState({});
@@ -86,7 +88,7 @@ function ReadingPlanView () {
     for(let i = 1; i <= Object.keys(schemeToExtract).length;i++) schemeArray.push(schemeToExtract[i]);
     //ensures dates are in correct format to render
     const schemeArrayDatesAmended = schemeArray.filter(item => {
-      item.date = new Date(formatDate(item.date));
+      item.date = new Date(item.date);
       return item;
     })
     return schemeArrayDatesAmended;
@@ -228,7 +230,7 @@ function ReadingPlanView () {
     if(startDate < schemelastReadDate) errorsFound.push(`The reclaculated start date must be after the last date that you marked as 'Read' above (i.e. it must begin or ${displayDate} or later).`)
     return errorsFound;
   }
-
+  
   async function handleRecalculatePlan (e) {
     e.preventDefault();
     setInSubmitMode(true);
@@ -341,6 +343,7 @@ function ReadingPlanView () {
             //variables for the plan table
             const day = item.day;
             const today = item.date;
+            const safariDate = `${("0" + today.getDate()).slice(-2)}\\${("0" + (today.getMonth()+1)).slice(-2)}\\${today.getFullYear()}`
             const from = item.from;
             const to = item.to;
             const status = item.completed? 'Read':'Unread';
@@ -367,7 +370,9 @@ function ReadingPlanView () {
             return(
             <Fragment key={`${day}:${from}:${to}`}>
               <div className="RP-col1">{day}</div>
-              <input type="date" className="RP-col2" value={formatDate(today)} onChange={(e)=>handleTypingUpdate(index,"date",e.target.value)}/>
+              {isSafari?
+              <div className="RP-col2">{safariDate}</div>
+              :<input type="date" className="RP-col2" value={formatDate(today)} onChange={(e)=>handleTypingUpdate(index,"date",e.target.value)}/>}
               <input className={fromClassName} defaultValue={from} onChange={(e)=>handleTypingUpdate(index,"from",e.target.value)}/>
               <input className={toClassName} defaultValue={to} onChange={(e)=>handleTypingUpdate(index,"to",e.target.value)}/>
               <div className={statusClassName}>{status}</div>
@@ -397,7 +402,12 @@ function ReadingPlanView () {
         <label className="RPM-recalc-label" for="lastReadTo">I want the scheme to start from {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="lastReadTo" defaultValue={findLastReadMeasure()} required/>
         </div>
         <div div className="recalcRow">
-        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from:</label><input type="date" className="RPM-recalc-input" id="startDate" value={formatDate(recalcFromDate)} onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
+        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from:</label>
+        {isSafari?
+        <input type="date" className="RPM-recalc-input" id="startDate" onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
+        :
+        <input type="date" className="RPM-recalc-input" id="startDate" value={formatDate(recalcFromDate)} onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
+        }
         </div>
         <div div className="recalcRow">
         <label className="RPM-recalc-label" for="endAt">I will be reading up to and including {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="endAt" defaultValue={scheme[scheme.length-1]? scheme[scheme.length-1]['to']:null}/>
