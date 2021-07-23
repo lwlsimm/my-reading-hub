@@ -173,7 +173,7 @@ function ReadingPlanView () {
   function findLastReadMeasure () {
     let furthestReadSoFar = plan.start_at;
     for(let i = 0; i < scheme.length; i++) {
-      if(scheme[i]['completed']) {
+      if(scheme[i]['completed'] && scheme[i]['to'] !== "None") {
         furthestReadSoFar = scheme[i]['to']
       } 
     }
