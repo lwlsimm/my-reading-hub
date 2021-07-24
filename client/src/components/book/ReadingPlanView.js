@@ -416,7 +416,12 @@ function ReadingPlanView () {
         <h3>Select one of the following options:</h3>
         <div div className="recalcRow">
           <label className="RPM-recalc-label" for="end_date">I want to complete the plan by:</label>
+          {isSafari?
+          <input className="RPM-recalc-input" type="text" id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
+          :
           <input className="RPM-recalc-input" type="date" id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
+          }
+          
         </div>
         <div div className="recalcRow">
           {plan.measure === "percentage"?
