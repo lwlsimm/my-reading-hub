@@ -26,6 +26,34 @@ const validateEmail = (email) => {
    }
  }
 
+ function formatDateForSafari(inputDate) {
+   console.log('a')
+  const dateInput = String(inputDate);
+  let day = Number(dateInput.slice(0,2));
+  const month = Number(dateInput.slice(3,5));
+  const year = Number(dateInput.slice(6,10));
+  let max;
+  if(dateInput.length !== 10 || month > 12 || year < 2000 || year > 2100 || day === NaN || month === NaN|| year === NaN)  {
+    return null
+  }
+  switch(month) {
+    case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+      max = 31;
+    break;
+    case 2:
+      max = 29;
+    break;
+    default:
+      max = 30;
+  }
+  if(day > max)day = max;
+  const newDate = new Date();
+  newDate.setDate(day);newDate.setMonth(month-1);newDate.setFullYear(year);newDate.setHours(0,0,0,0);
+  if(isNaN(newDate.getTime())) return null;
+  return newDate;
+}
+
+
  function formatDate(date) {
   const options = {year: 'numeric', month: 'numeric', day: 'numeric'};
   const reformedDate = new Date(date).toLocaleDateString('en-UK', options).toString();
@@ -33,4 +61,4 @@ const validateEmail = (email) => {
   }
 
 
- export { validateEmail, extractItemFromObject, covertSearchString, formatDate  }
+ export { validateEmail, extractItemFromObject, covertSearchString, formatDate, formatDateForSafari }

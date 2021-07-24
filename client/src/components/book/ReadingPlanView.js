@@ -4,7 +4,7 @@ import './readingPlanView.css';
 import furthestReadIcon from '../../assets/images/furthestRead.png'
 import noReading from '../../assets/images/no-reading.png'
 import { updateScheme } from '../../state/actions';
-import { formatDate } from '../../functions/commonFunctions';
+import { formatDate, formatDateForSafari,  } from '../../functions/commonFunctions';
 import { updateExistingPlan, getPlanFromServer } from '../../functions/readingPlanFunctions';
 import { recalculate_plan } from '../../functions/recalculatePlanFunction'
 import { useHistory } from 'react-router-dom';
@@ -41,9 +41,9 @@ function ReadingPlanView () {
   const history = useHistory();
   const plansInState = useSelector(state => state.planReducer.plans);
   const token = useSelector(state => state.loginReducer.token);
-  const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-  const isFirefox = typeof InstallTrigger !== 'undefined';
-  const isSafari = !isChrome && !isFirefox? true : false;
+  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+  const isFirefox = /firefox/i.test(navigator.userAgent);
+  const isSafari = !isChrome && !isFirefox
 
   const [plan, setPlan] = useState({});
   const [book_data,setBook_data] = useState({});
@@ -221,7 +221,9 @@ function ReadingPlanView () {
   function recalculationValidation (lastReadTo, startDate, endAt, per_day, end_date) {
     setRecalcErrors([]);
     const errorsFound = [];
-    const schemelastReadDate = findNextFreeDate(scheme);
+    const schemelastReadDate = new Date(findNextFreeDate(scheme));
+    schemelastReadDate.setHours(0,0,0,0);
+    startDate.setHours(0,0,0,0)
     const options = { weekday: 'short',day: 'numeric' , month: 'short'};
     const displayDate = new Date(schemelastReadDate).toLocaleDateString('en-UK', options);
     if(per_day && end_date) errorsFound.push(`You cannot supply values for both the end date and ${plan.measure} per day.  Please choose only one.`);
@@ -244,10 +246,28 @@ function ReadingPlanView () {
       return;
     }
     const lastReadTo = Number(e.target.lastReadTo.value);
-    const startDate = new Date(recalcFromDate);
+    let startDate = new Date(recalcFromDate);
+    if(isSafari) {
+      const formatedStart = formatDateForSafari(recalcFromDate)
+      startDate = new Date(formatedStart);
+      if(!startDate) {
+
+        return
+      };
+    }
     const endAt = Number(e.target.endAt.value);
     const per_day = Number(e.target.per_day.value);
-    const end_date = e.target.end_date.value ? new Date(e.target.end_date.value) : null;
+    let end_date;
+    if(e.target.end_date.value)  {
+      if(isSafari) {
+        const formattedEnd = formatDateForSafari(String(e.target.end_date.value))
+        end_date = new Date(formattedEnd);
+      } else {
+        end_date = new Date(e.target.end_date.value);
+      }
+    } else {
+      end_date = null;
+    }
     const per_day_type = per_day? 'per_day':'end_date';
     const recalculationErrorMsgs = recalculationValidation(lastReadTo, startDate, endAt, per_day, end_date);
     if(recalculationErrorMsgs.length > 0) {
@@ -269,6 +289,7 @@ function ReadingPlanView () {
     setInSubmitMode(false);
     setErrorMessage(`You must click 'Submit Changes' for your new plan to be saved!`)
     setScheme(newSchemeArray);
+    window.scrollTo(0, 0)
   }
 
   async function handleUpdateSubmit() {
@@ -403,9 +424,9 @@ function ReadingPlanView () {
         <label className="RPM-recalc-label" for="lastReadTo">I want the scheme to start from {plan.measure}:</label><input type="text" className="RPM-recalc-input" id="lastReadTo" defaultValue={findLastReadMeasure()} required/>
         </div>
         <div div className="recalcRow">
-        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from:</label>
+        <label className="RPM-recalc-label" for="lastReadTo">I want my new plan to be recalculated from: {isSafari? '(dd/mm/yyyy)': null}</label>
         {isSafari?
-        <input type="date" className="RPM-recalc-input" id="startDate" onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
+        <input type="text" className="RPM-recalc-input" placeholder="dd/mm/yyyy" id="startDate" onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
         :
         <input type="date" className="RPM-recalc-input" id="startDate" value={formatDate(recalcFromDate)} onChange={(e)=>setRecalcFromDate(e.target.value)}required/>
         }
@@ -415,13 +436,8 @@ function ReadingPlanView () {
         </div>
         <h3>Select one of the following options:</h3>
         <div div className="recalcRow">
-          <label className="RPM-recalc-label" for="end_date">I want to complete the plan by:</label>
-          {isSafari?
-          <input className="RPM-recalc-input" type="text" id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
-          :
-          <input className="RPM-recalc-input" type="date" id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
-          }
-          
+          <label className="RPM-recalc-label" for="end_date">I want to complete the plan by: {isSafari?'(dd/mm/yyyy)':null}</label>
+          <input className="RPM-recalc-input" type={isSafari?"text":"date"} id="end_date" name="end_date" placeholder="dd/mm/yyyy"/>
         </div>
         <div div className="recalcRow">
           {plan.measure === "percentage"?
